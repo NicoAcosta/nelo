@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-21T23:43:06.422Z"
+last_updated: "2026-03-21T23:47:12.668Z"
 progress:
   total_phases: 8
   completed_phases: 0
   total_plans: 9
-  completed_plans: 12
+  completed_plans: 13
 ---
 
 # Project State: Nelo
@@ -16,7 +16,7 @@ progress:
 ## Current Position
 
 Phase: 08 (real-pricing-data-pipeline) — EXECUTING
-Plan: 4 of 5
+Plan: 5 of 5
 
 ## Project Reference
 
@@ -36,6 +36,8 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 | Test-driven development | Confirmed | Heavy testing required — spec-driven + TDD approach |
 | Zone supplement in UOCRA rates | Done (08-02) | effectiveRate = (base + zoneSupplementHourly) * 2.2, rates ~10-15% higher |
 | Variable wholesale discount | Done (08-02) | bulk=0.70, standard=0.75, specialty=0.80 (not flat 0.75) |
+| FALLBACK_BLUE_VENTA=1415 | Done (08-04) | March 2026 estimate when no blue-rate cache present |
+| pricingLastUpdated=2026-03-21 | Done (08-04) | Date AMBA unit costs calibrated, feeds D-10 freshness display |
 
 ## Blockers
 
@@ -81,4 +83,4 @@ Screens:
 - Phase 7: Bilingual i18n — EN/ES toggle, auto-detect, localStorage persistence, all UI + system prompt + engine labels bilingual
 
 ---
-*State updated: 2026-03-21 — Phase 08-02 complete: UOCRA rates corrected + composition formula engine built (73 tests passing)*
+*State updated: 2026-03-21 — Phase 08-04 complete: USD converter + Estimate USD fields (52 tests passing)*
