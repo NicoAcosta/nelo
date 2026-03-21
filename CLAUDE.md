@@ -14,7 +14,7 @@ An AI-powered chatbot that helps consumers and architects/engineers estimate con
 - **Pricing data**: Hardcoded reference table for AMBA (team is still defining exact values)
 - **Categories table**: Team is finalizing the options/criteria for each category (will be plugged in)
 - **Floor plan accuracy**: Limited to LLM vision capabilities (~approximate, not pixel-perfect)
-- **Language**: All UI text must be in English. The AI chatbot system prompt is in Spanish (talks to users in Spanish). All docs in English.
+- **Language**: UI is bilingual (English default, Spanish toggle). System prompt switches language based on user's locale preference. Browser auto-detects language; user can toggle EN/ES in header. Preference stored in localStorage. All docs in English.
 <!-- GSD:project-end -->
 
 <!-- GSD:stack-start source:research/STACK.md -->

@@ -15,8 +15,8 @@ progress:
 
 ## Current Position
 
-Phase: 07 (bilingual-i18n-english-default-with-spanish-english-language-toggle) — EXECUTING
-Plan: 4 of 4
+Phase: 07 (bilingual-i18n-english-default-with-spanish-english-language-toggle) — COMPLETE
+Plan: 4 of 4 (all complete)
 
 ## Project Reference
 
@@ -49,6 +49,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 | 4 | Chat API — Tool Calling and System Prompt | **Complete** | H8–H14 |
 | 5 | Cost Breakdown Display and Confidence Indicator | **Complete** | H12–H18 |
 | 6 | Floor Plan Upload and Vision Extraction | **Complete** | H14–H20 |
+| 7 | Bilingual i18n — EN default, ES toggle | **Complete** | — |
 | 8 | Real Pricing Data Pipeline | **Not planned** | — |
 
 ## Stitch Design Reference
@@ -66,7 +67,7 @@ Screens:
 
 - Phase 6 (floor plan) is intentionally last and can be cut if time runs short without breaking core product.
 - Pricing data research is running in parallel; placeholder values in `amba-unit-costs.ts` must be clearly marked with a disclaimer and `lastUpdated` field.
-- All docs in English; app UI in Spanish (primary).
+- All docs in English; app UI bilingual (EN default, ES toggle).
 - 77 tests passing (38 backend + 39 frontend).
 - Design corrected: light mode + fluorescent yellow-green (#ccff00) + English UI.
 
@@ -75,6 +76,7 @@ Screens:
 ### Roadmap Evolution
 
 - Phase 8 added: Real Pricing Data Pipeline — live/cached data from INDEC ICC, UOCRA, MercadoLibre, GCBA, Cifras Online, composition formulas
+- Phase 7: Bilingual i18n — EN/ES toggle, auto-detect, localStorage persistence, all UI + system prompt + engine labels bilingual
 
 ---
 *State updated: 2026-03-21 — Phase 8 added for pricing data pipeline*
