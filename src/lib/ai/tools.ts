@@ -18,8 +18,8 @@ export const collectProjectData = tool({
   description:
     "Recopila datos estructurados del proyecto de construcción. Llamar después de que el usuario responda una pregunta. Incluir todos los campos conocidos hasta el momento.",
   inputSchema: z.object({
-    totalFloorAreaM2: z.number().optional().describe("Superficie cubierta total en m²"),
-    stories: z.number().optional().describe("Cantidad de plantas"),
+    totalFloorAreaM2: z.number().positive().optional().describe("Superficie cubierta total en m²"),
+    stories: z.number().int().min(1).optional().describe("Cantidad de plantas"),
     structureType: z
       .enum(["hormigon_armado", "ladrillo_portante", "steel_frame", "wood_frame", "estructura_metalica"])
       .optional()
@@ -78,8 +78,8 @@ export const runEstimate = tool({
   description:
     "Calcula el presupuesto estimado de construcción. Llamar cuando se tengan suficientes datos (mínimo: superficie, plantas, estructura, cubierta, terminaciones, zona).",
   inputSchema: z.object({
-    totalFloorAreaM2: z.number().describe("Superficie cubierta total en m²"),
-    stories: z.number().describe("Cantidad de plantas"),
+    totalFloorAreaM2: z.number().positive().describe("Superficie cubierta total en m²"),
+    stories: z.number().int().min(1).describe("Cantidad de plantas"),
     structureType: z
       .enum(["hormigon_armado", "ladrillo_portante", "steel_frame", "wood_frame", "estructura_metalica"])
       .describe("Sistema estructural principal"),

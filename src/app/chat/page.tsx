@@ -90,7 +90,7 @@ function ChatContent() {
             const rendered = renderToolResult(toolName, (part as { output: unknown }).output);
             if (rendered) {
               toolResults.push(
-                <div key={`${message.id}-${toolName}`} className="mt-4">
+                <div key={`${message.id}-${toolName}-${toolResults.length}`} className="mt-4">
                   {rendered}
                 </div>
               );
