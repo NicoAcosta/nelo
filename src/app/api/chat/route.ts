@@ -21,11 +21,11 @@ export async function POST(req: Request) {
   }
 
   let messages: UIMessage[];
-  let locale: Locale = "en";
+  const headerLocale = req.headers.get("x-locale");
+  const locale: Locale = headerLocale === "es" ? "es" : "en";
   try {
     const body = await req.json();
     messages = body.messages;
-    locale = body.locale === "es" ? "es" : "en";
   } catch {
     return Response.json({ error: "Invalid JSON body" }, { status: 400 });
   }

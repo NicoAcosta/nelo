@@ -4,7 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import type { UIMessage } from "ai";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Sidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
 import { MobileNav } from "@/components/mobile-nav";
@@ -44,12 +44,15 @@ function ChatContent() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { locale, t } = useLocale();
 
-  const transport = useMemo(
+  // Use a ref so the transport reads the latest locale without being recreated
+  const localeRef = useRef(locale);
+  localeRef.current = locale;
+
+  const [transport] = useState(
     () => new DefaultChatTransport({
       api: "/api/chat",
-      headers: { "x-locale": locale },
+      headers: () => ({ "x-locale": localeRef.current }),
     }),
-    [locale],
   );
 
   const { messages, status, error, sendMessage } = useChat({ transport });
@@ -186,7 +189,7 @@ function ChatContent() {
                 }}
                 className="px-3 py-1.5 bg-error/10 hover:bg-error/20 rounded-lg text-xs font-bold text-error transition-colors whitespace-nowrap"
               >
-                Retry
+                {t("chat.retry")}
               </button>
             </div>
           )}

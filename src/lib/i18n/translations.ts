@@ -70,6 +70,7 @@ const en: Translations = {
   "chat.emptySubtitle":
     "Describe your construction project and I'll estimate the cost.",
   "chat.errorMessage": "Something went wrong. Please try again.",
+  "chat.retry": "Retry",
   "chat.promptSuggestion1": "Estimate a 120m2 house",
   "chat.promptSuggestion2": "Price per m2 in CABA",
 
@@ -207,6 +208,7 @@ const es: Translations = {
   "chat.emptySubtitle":
     "Describi tu proyecto de construccion y te estimo el costo.",
   "chat.errorMessage": "Algo salio mal. Por favor intenta de nuevo.",
+  "chat.retry": "Reintentar",
   "chat.promptSuggestion1": "Estimar una casa de 120m2",
   "chat.promptSuggestion2": "Precio por m2 en CABA",
 
@@ -273,4 +275,4 @@ const es: Translations = {
   "expressQuestion.locationZone": "En que zona de Buenos Aires?",
 };
 
-export const translations: Record<string, Translations> = { en, es };
+export const translations: Record<Locale, Translations> = { en, es };
