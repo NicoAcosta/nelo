@@ -22,6 +22,8 @@ import {
 } from "./derive-quantities";
 import { CATEGORIES } from "@/lib/pricing/categories-config";
 import { AMBA_UNIT_COSTS, ZONE_MULTIPLIERS, COST_STRUCTURE } from "@/lib/pricing/amba-unit-costs";
+import type { Locale } from "@/lib/i18n/types";
+import { translations } from "@/lib/i18n/translations";
 
 /**
  * Produces all line items with quantities and costs applied.
@@ -45,16 +47,19 @@ export function applyUnitCosts(inputs: ProjectInputs): LineItem[] {
         const laborCost = (unitCost?.laborCost ?? 0) * zoneMultiplier;
         const totalCost = materialCost + laborCost;
 
+        const safeQuantity = Number.isFinite(quantity) ? quantity : 0;
+        const subtotal = Math.round(safeQuantity * totalCost);
+
         lineItems.push({
           code: item.code,
           categoryId: category.id,
           description: item.description,
           unit: item.unit as Unit,
-          quantity: Math.round(quantity * 100) / 100,
+          quantity: Math.round(safeQuantity * 100) / 100,
           materialCostPerUnit: Math.round(materialCost),
           laborCostPerUnit: Math.round(laborCost),
           totalCostPerUnit: Math.round(totalCost),
-          subtotal: Math.round(quantity * totalCost),
+          subtotal: Number.isFinite(subtotal) ? subtotal : 0,
           isActive,
           source: unitCost ? (unitCost.isPlaceholder ? "placeholder" : "calculated") : "placeholder",
         });
@@ -68,7 +73,7 @@ export function applyUnitCosts(inputs: ProjectInputs): LineItem[] {
 /**
  * Groups line items by category and calculates subtotals + incidence %.
  */
-export function sumByCategory(lineItems: LineItem[]): CategoryTotal[] {
+export function sumByCategory(lineItems: LineItem[], locale: Locale = "en"): CategoryTotal[] {
   const activeItems = lineItems.filter((i) => i.isActive);
   const directCost = activeItems.reduce((sum, i) => sum + i.subtotal, 0);
 
@@ -98,7 +103,7 @@ export function sumByCategory(lineItems: LineItem[]): CategoryTotal[] {
     const catConfig = CATEGORIES.find((c) => c.id === id);
     return {
       id,
-      name: catConfig?.name ?? id,
+      name: locale === "en" ? (catConfig?.nameEn ?? catConfig?.name ?? id) : (catConfig?.name ?? id),
       subtotal: data.subtotal,
       incidencePercent: directCost > 0 ? (data.subtotal / directCost) * 100 : 0,
       lineItems: data.items,
@@ -129,28 +134,29 @@ const CONFIDENCE_RANGES: Record<ConfidenceLevel, { low: number; high: number }> 
 /**
  * Collects assumptions made due to missing inputs.
  */
-function collectAssumptions(inputs: ProjectInputs): Assumption[] {
+function collectAssumptions(inputs: ProjectInputs, locale: Locale = "en"): Assumption[] {
   const assumptions: Assumption[] = [];
+  const t = translations[locale];
 
   if (inputs.ceilingHeightM === undefined) {
-    assumptions.push({ field: "ceilingHeightM", label: "Altura de piso a techo", assumedValue: "2.60m", source: "default" });
+    assumptions.push({ field: "ceilingHeightM", label: t["engine.assumptionCeilingHeight"], assumedValue: "2.60m", source: "default" });
   }
   if (inputs.footprintM2 === undefined && inputs.totalFloorAreaM2 && inputs.stories) {
-    assumptions.push({ field: "footprintM2", label: "Superficie de pisada", assumedValue: `${Math.round(inputs.totalFloorAreaM2 / inputs.stories)}m² (total / plantas)`, source: "default" });
+    assumptions.push({ field: "footprintM2", label: t["engine.assumptionFootprint"], assumedValue: `${Math.round(inputs.totalFloorAreaM2 / inputs.stories)}m² (${t["engine.assumptionTotalDivStories"]})`, source: "default" });
   }
   if (inputs.perimeterMl === undefined && inputs.footprintM2) {
-    assumptions.push({ field: "perimeterMl", label: "Perímetro", assumedValue: `${Math.round(4 * Math.sqrt(inputs.footprintM2))}ml (estimado de planta cuadrada)`, source: "default" });
+    assumptions.push({ field: "perimeterMl", label: t["engine.assumptionPerimeter"], assumedValue: `${Math.round(4 * Math.sqrt(inputs.footprintM2))}ml (${t["engine.assumptionEstimatedSquare"]})`, source: "default" });
   } else if (inputs.perimeterMl === undefined) {
-    assumptions.push({ field: "perimeterMl", label: "Perímetro", assumedValue: "Estimado de planta cuadrada", source: "default" });
+    assumptions.push({ field: "perimeterMl", label: t["engine.assumptionPerimeter"], assumedValue: t["engine.assumptionEstimatedSquare"], source: "default" });
   }
   if (inputs.doorCount === undefined) {
-    assumptions.push({ field: "doorCount", label: "Cantidad de puertas", assumedValue: "0 (no especificado)", source: "default" });
+    assumptions.push({ field: "doorCount", label: t["engine.assumptionDoors"], assumedValue: `0 (${t["engine.assumptionNotSpecified"]})`, source: "default" });
   }
   if (inputs.windowCount === undefined) {
-    assumptions.push({ field: "windowCount", label: "Cantidad de ventanas", assumedValue: "0 (no especificado)", source: "default" });
+    assumptions.push({ field: "windowCount", label: t["engine.assumptionWindows"], assumedValue: `0 (${t["engine.assumptionNotSpecified"]})`, source: "default" });
   }
   if (inputs.bathroomCount === undefined) {
-    assumptions.push({ field: "bathroomCount", label: "Cantidad de baños", assumedValue: "0 (no especificado)", source: "default" });
+    assumptions.push({ field: "bathroomCount", label: t["engine.assumptionBathrooms"], assumedValue: `0 (${t["engine.assumptionNotSpecified"]})`, source: "default" });
   }
 
   return assumptions;
@@ -160,18 +166,19 @@ function collectAssumptions(inputs: ProjectInputs): Assumption[] {
  * Full estimation pipeline.
  * ProjectInputs → LineItems → CategoryTotals → Cost Structure → Estimate
  */
-export function computeEstimate(inputs: ProjectInputs): Estimate {
+export function computeEstimate(inputs: ProjectInputs, locale: Locale = "en"): Estimate {
   const lineItems = applyUnitCosts(inputs);
-  const categories = sumByCategory(lineItems);
+  const categories = sumByCategory(lineItems, locale);
   const confidence = computeConfidence(inputs);
-  const assumptions = collectAssumptions(inputs);
+  const assumptions = collectAssumptions(inputs, locale);
 
   const activeItems = lineItems.filter((i) => i.isActive);
   const directCost = activeItems.reduce((sum, i) => sum + i.subtotal, 0);
 
   // If direct cost is zero (no pricing data), use incidence-based estimation
   // This provides a rough estimate even with placeholder data
-  const effectiveDirectCost = directCost > 0 ? directCost : estimateFromIncidence(inputs);
+  const rawEffective = directCost > 0 ? directCost : estimateFromIncidence(inputs);
+  const effectiveDirectCost = Number.isFinite(rawEffective) ? rawEffective : 0;
 
   const overheadAmount = Math.round(effectiveDirectCost * COST_STRUCTURE.overheadPercent / 100);
   const profitAmount = Math.round(effectiveDirectCost * COST_STRUCTURE.profitPercent / 100);
@@ -179,8 +186,11 @@ export function computeEstimate(inputs: ProjectInputs): Estimate {
   const ivaAmount = Math.round(subtotalBeforeTax * COST_STRUCTURE.ivaPercent / 100);
   const totalPrice = subtotalBeforeTax + ivaAmount;
 
-  const floorArea = inputs.totalFloorAreaM2 || 1;
-  const pricePerM2 = Math.round(totalPrice / floorArea);
+  const floorArea = inputs.totalFloorAreaM2 && inputs.totalFloorAreaM2 > 0
+    ? inputs.totalFloorAreaM2
+    : 1;
+  const rawPricePerM2 = totalPrice / floorArea;
+  const pricePerM2 = Number.isFinite(rawPricePerM2) ? Math.round(rawPricePerM2) : 0;
 
   return {
     pricePerM2,

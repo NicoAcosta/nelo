@@ -1,22 +1,47 @@
 import { streamText, convertToModelMessages, stepCountIs } from "ai";
 import type { UIMessage } from "ai";
 import { chatModel } from "@/lib/ai/models";
-import { chatTools } from "@/lib/ai/tools";
+import { createChatTools } from "@/lib/ai/tools";
 import { buildSystemPrompt } from "@/lib/pricing/system-prompt-builder";
+import type { Locale } from "@/lib/i18n/types";
 
 export const maxDuration = 60;
 
+const MAX_MESSAGES = 100;
+const MAX_BODY_BYTES = 5 * 1024 * 1024; // 5MB
+
 export async function POST(req: Request) {
+  // Guard against oversized payloads
+  const contentLength = req.headers.get("content-length");
+  if (contentLength && Number(contentLength) > MAX_BODY_BYTES) {
+    return Response.json(
+      { error: "Request too large", maxBytes: MAX_BODY_BYTES },
+      { status: 413 },
+    );
+  }
+
   let messages: UIMessage[];
+  let locale: Locale = "en";
   try {
     const body = await req.json();
     messages = body.messages;
+    locale = body.locale === "es" ? "es" : "en";
   } catch {
-    return new Response("Invalid JSON body", { status: 400 });
+    return Response.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
   if (!Array.isArray(messages) || messages.length === 0) {
-    return new Response("messages must be a non-empty array", { status: 400 });
+    return Response.json(
+      { error: "messages must be a non-empty array" },
+      { status: 400 },
+    );
+  }
+
+  if (messages.length > MAX_MESSAGES) {
+    return Response.json(
+      { error: `Too many messages (max ${MAX_MESSAGES})` },
+      { status: 400 },
+    );
   }
 
   const userMode = detectUserMode(messages);
@@ -25,16 +50,20 @@ export async function POST(req: Request) {
   try {
     const result = streamText({
       model: chatModel,
-      system: buildSystemPrompt(userMode),
+      system: buildSystemPrompt(userMode, locale),
       messages: modelMessages,
-      tools: chatTools,
+      tools: createChatTools(locale),
       stopWhen: stepCountIs(5),
     });
 
     return result.toUIMessageStreamResponse();
   } catch (error) {
     console.error("Chat API error:", error);
-    return new Response("Internal server error", { status: 500 });
+    const message = error instanceof Error ? error.message : "Internal server error";
+    return Response.json(
+      { error: "Failed to process chat request", detail: message },
+      { status: 500 },
+    );
   }
 }
 
