@@ -1,7 +1,12 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { FloorPlanPanel } from "../floor-plan-panel";
+import { LocaleProvider } from "@/lib/i18n/context";
 import type { FloorPlanExtraction } from "@/lib/estimate/types";
+
+function renderWithLocale(ui: React.ReactElement) {
+  return render(<LocaleProvider>{ui}</LocaleProvider>);
+}
 
 const mockExtraction: FloorPlanExtraction = {
   rooms: [
@@ -22,33 +27,33 @@ const mockExtraction: FloorPlanExtraction = {
 
 describe("FloorPlanPanel", () => {
   it("renders extracted area", () => {
-    render(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
+    renderWithLocale(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
     expect(screen.getByDisplayValue("120")).toBeInTheDocument();
   });
 
   it("renders extracted room count", () => {
-    render(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
+    renderWithLocale(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
     expect(screen.getByDisplayValue("3")).toBeInTheDocument();
   });
 
   it("renders extracted bathroom count", () => {
-    render(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
+    renderWithLocale(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
     expect(screen.getByDisplayValue("2")).toBeInTheDocument();
   });
 
   it("renders extracted window count", () => {
-    render(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
+    renderWithLocale(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
     expect(screen.getByDisplayValue("8")).toBeInTheDocument();
   });
 
   it("renders confirm button", () => {
-    render(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
+    renderWithLocale(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
     expect(screen.getByRole("button", { name: /confirm/i })).toBeInTheDocument();
   });
 
   it("calls onConfirm with updated values when confirmed", () => {
     const onConfirm = vi.fn();
-    render(<FloorPlanPanel extraction={mockExtraction} onConfirm={onConfirm} />);
+    renderWithLocale(<FloorPlanPanel extraction={mockExtraction} onConfirm={onConfirm} />);
     fireEvent.click(screen.getByRole("button", { name: /confirm/i }));
     expect(onConfirm).toHaveBeenCalledWith({
       totalAreaM2: 120,
@@ -58,8 +63,8 @@ describe("FloorPlanPanel", () => {
     });
   });
 
-  it("renders the analysis phase badge", () => {
-    render(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
-    expect(screen.getByText("Analysis Phase")).toBeInTheDocument();
+  it("renders translated analysis complete heading", () => {
+    renderWithLocale(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
+    expect(screen.getByText("Floor Plan Analysis Complete")).toBeInTheDocument();
   });
 });

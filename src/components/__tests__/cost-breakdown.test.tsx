@@ -1,7 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { CostBreakdown } from "../cost-breakdown";
+import { LocaleProvider } from "@/lib/i18n/context";
 import type { Estimate } from "@/lib/estimate/types";
+
+function renderWithLocale(ui: React.ReactElement) {
+  return render(<LocaleProvider>{ui}</LocaleProvider>);
+}
 
 const mockEstimate: Estimate = {
   pricePerM2: 452000,
@@ -78,46 +83,53 @@ const mockEstimate: Estimate = {
 
 describe("CostBreakdown", () => {
   it("renders the total price prominently", () => {
-    render(<CostBreakdown estimate={mockEstimate} />);
+    renderWithLocale(<CostBreakdown estimate={mockEstimate} />);
     expect(screen.getByText(/45\.200\.000/)).toBeInTheDocument();
   });
 
   it("renders the price per m²", () => {
-    render(<CostBreakdown estimate={mockEstimate} />);
+    renderWithLocale(<CostBreakdown estimate={mockEstimate} />);
     expect(screen.getByText(/452\.000\/m²/)).toBeInTheDocument();
   });
 
   it("renders the confidence level", () => {
-    render(<CostBreakdown estimate={mockEstimate} />);
+    renderWithLocale(<CostBreakdown estimate={mockEstimate} />);
     expect(screen.getByText(/±20/)).toBeInTheDocument();
   });
 
   it("renders category rows", () => {
-    render(<CostBreakdown estimate={mockEstimate} />);
+    renderWithLocale(<CostBreakdown estimate={mockEstimate} />);
     expect(screen.getByText("Trabajos Preliminares")).toBeInTheDocument();
     expect(screen.getByText("Estructura de H.A.")).toBeInTheDocument();
     expect(screen.getByText("Albañilería")).toBeInTheDocument();
   });
 
   it("renders incidence percentages", () => {
-    render(<CostBreakdown estimate={mockEstimate} />);
+    renderWithLocale(<CostBreakdown estimate={mockEstimate} />);
     expect(screen.getByText("23.0%")).toBeInTheDocument();
     expect(screen.getByText("18.0%")).toBeInTheDocument();
   });
 
   it("renders assumption chips", () => {
-    render(<CostBreakdown estimate={mockEstimate} />);
+    renderWithLocale(<CostBreakdown estimate={mockEstimate} />);
     expect(screen.getByText(/2\.60m/)).toBeInTheDocument();
     expect(screen.getByText(/AMBA/)).toBeInTheDocument();
   });
 
   it("renders action buttons", () => {
-    render(<CostBreakdown estimate={mockEstimate} />);
+    renderWithLocale(<CostBreakdown estimate={mockEstimate} />);
     expect(screen.getByText(/recalculate/i)).toBeInTheDocument();
   });
 
   it("renders ICC disclaimer", () => {
-    render(<CostBreakdown estimate={mockEstimate} />);
+    renderWithLocale(<CostBreakdown estimate={mockEstimate} />);
     expect(screen.getByText(/construction cost index/i)).toBeInTheDocument();
+  });
+
+  it("renders translated labels", () => {
+    renderWithLocale(<CostBreakdown estimate={mockEstimate} />);
+    expect(screen.getByText("Estimated Budget")).toBeInTheDocument();
+    expect(screen.getByText("Confidence Level")).toBeInTheDocument();
+    expect(screen.getByText("Category")).toBeInTheDocument();
   });
 });

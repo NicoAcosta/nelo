@@ -1,4 +1,7 @@
+"use client";
+
 import type { Estimate } from "@/lib/estimate/types";
+import { useLocale } from "@/lib/i18n/use-locale";
 
 function formatARS(value: number): string {
   return new Intl.NumberFormat("es-AR", {
@@ -7,17 +10,19 @@ function formatARS(value: number): string {
   }).format(value);
 }
 
-const confidenceLabels: Record<string, string> = {
-  quick: "Quick",
-  standard: "Professional",
-  detailed: "Detailed",
-};
-
 interface CostBreakdownProps {
   estimate: Estimate;
 }
 
 export function CostBreakdown({ estimate }: CostBreakdownProps) {
+  const { t } = useLocale();
+
+  const confidenceLabels: Record<string, string> = {
+    quick: t("costBreakdown.confidenceQuick"),
+    standard: t("costBreakdown.confidenceProfessional"),
+    detailed: t("costBreakdown.confidenceDetailed"),
+  };
+
   const confidencePercent = estimate.inputsTotal > 0
     ? Math.round((estimate.inputsProvided / estimate.inputsTotal) * 100)
     : 0;
@@ -30,18 +35,18 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-[10px] font-black tracking-[0.2em] text-[#ccff00] uppercase font-headline">
-                Estimated Budget
+                {t("costBreakdown.estimatedBudget")}
               </span>
               <div className="h-[1px] w-8 bg-[#ccff00]/30" />
             </div>
-            <h2 className="text-5xl md:text-6xl font-black font-headline tracking-tighter">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black font-headline tracking-tighter">
               ${formatARS(estimate.totalPrice)}
               <span className="text-lg font-medium text-[#999] align-baseline ml-2">
                 ARS
               </span>
             </h2>
             <p className="mt-2 text-[#999] font-medium">
-              Price per m²:{" "}
+              {t("costBreakdown.pricePerM2")}:{" "}
               <span className="text-[#ccff00] font-bold">
                 ${formatARS(estimate.pricePerM2)}/m²
               </span>
@@ -52,7 +57,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
           <div className="bg-white/5 p-4 rounded-lg border border-white/5 min-w-[240px] backdrop-blur-sm">
             <div className="flex justify-between items-center mb-3">
               <span className="text-[10px] font-black text-[#999] uppercase tracking-wider">
-                Confidence Level
+                {t("costBreakdown.confidenceLevel")}
               </span>
               <span className="text-[10px] font-black text-[#ccff00]">
                 {confidenceLabels[estimate.confidence]} (±{estimate.confidenceRange.low}%)
@@ -72,25 +77,25 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
               />
             </div>
             <p className="text-[10px] mt-2 text-[#999] opacity-60 leading-tight">
-              Based on {estimate.activeLineItems} active data points in the selected area.
+              Based on {estimate.activeLineItems} cost items calculated for this project.
             </p>
           </div>
         </div>
       </div>
 
       {/* Assumptions bar */}
-      <div className="bg-white/5 px-6 py-3 flex flex-wrap gap-6 border-b border-white/5">
+      <div className="bg-white/5 px-4 sm:px-6 py-3 flex flex-wrap gap-3 sm:gap-6 border-b border-white/5">
         {estimate.assumptions.map((a) => (
-          <div key={a.field} className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-[#999] uppercase tracking-wider">{a.field}:</span>
-            <span className="text-xs font-bold text-white/80 uppercase tracking-tighter">
+          <div key={a.field} className="flex items-center gap-2 max-w-[280px] min-w-0">
+            <span className="text-[10px] font-bold text-[#999] uppercase tracking-wider shrink-0">{a.field}:</span>
+            <span className="text-xs font-bold text-white/80 uppercase tracking-tighter truncate" title={a.assumedValue}>
               {a.assumedValue}
             </span>
           </div>
         ))}
         <div className="ml-auto flex items-center gap-2">
           <span className="text-[9px] font-black text-[#999]/60 uppercase tracking-widest">
-            Updated: {new Date(estimate.priceBaseDate).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}
+            Prices as of {new Date(estimate.priceBaseDate).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}
           </span>
         </div>
       </div>
@@ -102,13 +107,13 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
           <thead>
             <tr className="bg-white/5">
               <th className="px-6 py-4 text-[10px] font-black text-[#999] uppercase tracking-[0.2em]">
-                Category
+                {t("costBreakdown.category")}
               </th>
               <th className="px-6 py-4 text-[10px] font-black text-[#999] uppercase tracking-[0.2em] text-right">
                 Subtotal (ARS)
               </th>
               <th className="px-6 py-4 text-[10px] font-black text-[#999] uppercase tracking-[0.2em] text-right">
-                Incidence (%)
+                {t("costBreakdown.incidence")} (%)
               </th>
             </tr>
           </thead>
@@ -120,8 +125,8 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
                   i % 2 === 1 ? "bg-white/[0.02]" : ""
                 }`}
               >
-                <td className="px-6 py-4">
-                  <span className="text-sm font-bold">{cat.name}</span>
+                <td className="px-6 py-4 max-w-[240px]">
+                  <span className="text-sm font-bold block truncate" title={cat.name}>{cat.name}</span>
                 </td>
                 <td className="px-6 py-4 text-right font-headline text-sm font-bold">
                   ${formatARS(cat.subtotal)}
@@ -147,34 +152,28 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
       </div>
 
       {/* Actions */}
-      <div className="p-6 bg-white/5 border-t border-white/5 flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="p-4 sm:p-6 bg-white/5 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-center justify-between">
         <div className="flex items-center gap-4">
-          <button type="button" disabled aria-label="Download PDF — coming soon" className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Coming soon">
+          <button type="button" disabled aria-label="Download PDF — available soon" className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Available soon">
             Download PDF
           </button>
-          <button type="button" disabled aria-label="Export Excel — coming soon" className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Coming soon">
+          <button type="button" disabled aria-label="Export to Excel — available soon" className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Available soon">
             Export Excel
           </button>
         </div>
-        <div className="flex items-center gap-4">
-          <span className="text-[10px] font-bold text-[#999] uppercase tracking-widest">
-            Adjust materials?
-          </span>
-          <button type="button" disabled aria-label="Recalculate — coming soon" className="bg-[#ccff00]/40 text-black/40 px-8 py-2 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] cursor-not-allowed" title="Coming soon">
-            Recalculate
-          </button>
-        </div>
+        <button type="button" disabled aria-label="Recalculate estimate — available soon" className="bg-[#ccff00]/40 text-black/40 px-8 py-2 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] cursor-not-allowed" title="Available soon">
+          Recalculate
+        </button>
       </div>
 
       {/* ICC disclaimer */}
       <div className="mx-6 mb-6 flex items-center gap-3 p-4 bg-[#ccff00]/5 rounded-lg border border-[#ccff00]/20 backdrop-blur-sm">
         <p className="text-xs text-[#999] leading-relaxed">
-          This budget incorporates the{" "}
+          Prices are adjusted using the{" "}
           <span className="text-[#ccff00] font-bold">
             Construction Cost Index (ICC)
-          </span>{" "}
-          updated to the date of issue. Values may vary based on final choice of
-          mid-to-high range finishes and fixtures.
+          </span>
+          . Final costs may vary depending on your choice of finishes, fixtures, and materials.
         </p>
       </div>
     </div>

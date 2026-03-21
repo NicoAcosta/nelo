@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { FloorPlanExtraction } from "@/lib/estimate/types";
+import { useLocale } from "@/lib/i18n/use-locale";
 
 interface FloorPlanPanelProps {
   extraction: FloorPlanExtraction;
@@ -19,6 +20,7 @@ export function FloorPlanPanel({
   imageUrl,
   onConfirm,
 }: FloorPlanPanelProps) {
+  const { t } = useLocale();
   const [area, setArea] = useState(extraction.totalAreaM2 ?? 0);
   const [rooms, setRooms] = useState(extraction.rooms.length);
   const [bathrooms, setBathrooms] = useState(extraction.bathroomCount ?? 0);
@@ -35,19 +37,12 @@ export function FloorPlanPanel({
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Phase badge */}
-      <div className="mb-6">
-        <span className="px-3 py-1 rounded-full bg-primary text-on-primary text-[10px] font-black uppercase tracking-[0.2em]">
-          Analysis Phase
-        </span>
-      </div>
-
       <h2 className="text-4xl md:text-5xl font-headline font-black text-on-surface tracking-tighter mb-4">
-        Floor Plan Analysis Complete
+        {t("floorPlanPanel.analysisComplete")}
       </h2>
       <p className="text-on-surface-variant max-w-2xl text-lg font-medium leading-relaxed mb-10">
-        Nelo has processed the floor plan. Vision AI identified perimeters and
-        openings based on current Argentine construction standards.
+        Nelo extracted measurements from your floor plan. Review the values
+        below and adjust if needed before calculating your estimate.
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -70,7 +65,7 @@ export function FloorPlanPanel({
           </div>
           <div className="flex items-center gap-4 px-5 py-4 bg-surface-container-high rounded-2xl">
             <p className="text-xs text-on-surface-variant font-medium">
-              {extraction.rawNotes || "AI detected standard construction patterns."}
+              {extraction.rawNotes || "No additional notes from the analysis."}
             </p>
           </div>
         </div>
@@ -83,24 +78,25 @@ export function FloorPlanPanel({
             </h3>
 
             <div className="space-y-6">
-              <InputField label="Total Area" value={area} onChange={setArea} unit="m²" />
+              <InputField label={t("floorPlanPanel.totalArea")} value={area} onChange={setArea} unit="m²" max={50000} />
               <div className="grid grid-cols-2 gap-6">
-                <InputField label="Rooms" value={rooms} onChange={setRooms} />
-                <InputField label="Bathrooms" value={bathrooms} onChange={setBathrooms} />
+                <InputField label={t("floorPlanPanel.rooms")} value={rooms} onChange={setRooms} max={100} />
+                <InputField label={t("floorPlanPanel.bathrooms")} value={bathrooms} onChange={setBathrooms} max={50} />
               </div>
-              <InputField label="Windows & Doors" value={windows} onChange={setWindows} />
+              <InputField label={t("floorPlanPanel.windows")} value={windows} onChange={setWindows} max={200} />
             </div>
 
             <div className="mt-10 space-y-4">
               <button
                 type="button"
                 onClick={handleConfirm}
-                className="w-full bg-primary py-5 rounded-2xl text-on-primary font-headline font-black text-lg uppercase tracking-widest shadow-lg shadow-primary/20 hover:brightness-95 active:scale-[0.98] transition-all"
+                disabled={area <= 0}
+                className="w-full bg-primary py-5 rounded-2xl text-on-primary font-headline font-black text-lg uppercase tracking-widest shadow-lg shadow-primary/20 hover:brightness-95 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                Confirm & Calculate
+                {area <= 0 ? "Enter area to calculate" : t("floorPlanPanel.confirm")}
               </button>
-              <button disabled className="w-full py-5 rounded-2xl text-on-surface/40 font-headline font-black text-sm uppercase tracking-widest border border-outline/20 cursor-not-allowed" title="Coming soon">
-                Edit Other Values
+              <button disabled className="w-full py-5 rounded-2xl text-on-surface/40 font-headline font-black text-sm uppercase tracking-widest border border-outline/20 cursor-not-allowed" title="Available soon">
+                {t("floorPlanPanel.edit")}
               </button>
             </div>
           </div>
@@ -115,25 +111,35 @@ function InputField({
   value,
   onChange,
   unit,
+  max,
 }: {
   label: string;
   value: number;
   onChange: (v: number) => void;
   unit?: string;
+  max?: number;
 }) {
   const inputId = `field-${label.toLowerCase().replace(/\s+/g, "-")}`;
+  const clamp = (v: number) => {
+    const clamped = Math.max(0, v);
+    return max !== undefined ? Math.min(clamped, max) : clamped;
+  };
   return (
     <div className="space-y-2">
       <label htmlFor={inputId} className="text-[10px] font-black text-on-surface/40 uppercase tracking-[0.2em] px-1">
         {label}
+        {max !== undefined && (
+          <span className="ml-2 text-on-surface/20 normal-case tracking-normal">max {max.toLocaleString()}{unit ? ` ${unit}` : ""}</span>
+        )}
       </label>
       <div className="relative">
         <input
           id={inputId}
           type="number"
           min={0}
+          max={max}
           value={value}
-          onChange={(e) => onChange(Math.max(0, Number(e.target.value)))}
+          onChange={(e) => onChange(clamp(Number(e.target.value)))}
           className="w-full bg-black/5 border-none rounded-2xl px-5 py-5 text-on-surface font-headline font-black text-2xl focus:ring-2 focus:ring-primary transition-all"
         />
         {unit && (

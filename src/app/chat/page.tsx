@@ -13,6 +13,7 @@ import { ChatInput } from "@/components/chat-input";
 import { CostBreakdown } from "@/components/cost-breakdown";
 import { FloorPlanPanel } from "@/components/floor-plan-panel";
 import { IconNelo } from "@/components/icons";
+import { useLocale } from "@/lib/i18n/use-locale";
 import type { Estimate, FloorPlanExtraction } from "@/lib/estimate/types";
 
 interface FloorPlanResult {
@@ -41,8 +42,15 @@ function ChatContent() {
   const initialQuery = searchParams.get("q");
   const [hasSentInitial, setHasSentInitial] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { locale, t } = useLocale();
 
-  const transport = useMemo(() => new DefaultChatTransport({ api: "/api/chat" }), []);
+  const transport = useMemo(
+    () => new DefaultChatTransport({
+      api: "/api/chat",
+      headers: { "x-locale": locale },
+    }),
+    [locale],
+  );
 
   const { messages, status, error, sendMessage } = useChat({ transport });
 
@@ -73,6 +81,11 @@ function ChatContent() {
       sendMessage({ text });
     }
   }
+
+  const promptSuggestions = [
+    t("chat.promptSuggestion1"),
+    t("chat.promptSuggestion2"),
+  ];
 
   function renderMessage(message: UIMessage) {
     const textParts: string[] = [];
@@ -123,7 +136,7 @@ function ChatContent() {
 
       <main className="flex-1 flex flex-col relative overflow-hidden bg-background">
         <h1 className="sr-only">Nelo Chat — Construction Cost Estimator</h1>
-        <Header projectName={messages.length > 0 ? "New Estimate" : undefined} />
+        <Header projectName={messages.length > 0 ? t("header.newEstimate") : undefined} />
 
         {/* Messages area */}
         <section
@@ -138,15 +151,16 @@ function ChatContent() {
                 <IconNelo className="w-7 h-7 text-on-surface" />
               </div>
               <p className="text-on-surface/40 text-sm font-medium mb-8">
-                Tell me about your construction project...
+                {t("chat.emptySubtitle")}
               </p>
               <div className="flex flex-wrap justify-center gap-3">
-                {["How much does a 100m² house cost?", "Price per m² in AMBA", "Full estimate with finishes", "Upload a floor plan for a detailed estimate"].map((s) => (
+                {promptSuggestions.map((s) => (
                   <button
                     key={s}
                     type="button"
+                    disabled={isStreaming}
                     onClick={() => handleSend(s)}
-                    className="px-4 py-2 glass-card rounded-xl text-xs font-semibold text-on-surface/60 hover:text-on-surface hover:bg-surface-container-high transition-all"
+                    className="px-4 py-2 glass-card rounded-xl text-xs font-semibold text-on-surface/60 hover:text-on-surface hover:bg-surface-container-high transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     {s}
                   </button>
@@ -158,7 +172,7 @@ function ChatContent() {
           {error && (
             <div role="alert" className="flex items-center gap-3 p-4 bg-error/10 rounded-xl border border-error/20 max-w-3xl mx-auto">
               <p className="text-sm text-error font-medium flex-1">
-                Something went wrong. Please try again.
+                {t("chat.errorMessage")}
               </p>
               <button
                 type="button"

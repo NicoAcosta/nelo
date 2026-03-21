@@ -7,22 +7,26 @@ import {
   IconBlueprints,
   IconProfile,
 } from "./icons";
+import { useLocale } from "@/lib/i18n/use-locale";
 
 type Tab = "chat" | "estimates" | "blueprints" | "profile";
 
-const tabs: { id: Tab; label: string; icon: typeof IconChat; href: string }[] = [
-  { id: "chat", label: "Chat", icon: IconChat, href: "/chat" },
-  { id: "estimates", label: "Estimates", icon: IconEstimates, href: "/chat" },
-  { id: "blueprints", label: "Blueprints", icon: IconBlueprints, href: "#" },
-  { id: "profile", label: "Profile", icon: IconProfile, href: "#" },
+const tabs: { id: Tab; labelKey: string; icon: typeof IconChat; href: string }[] = [
+  { id: "chat", labelKey: "mobileNav.chat", icon: IconChat, href: "/chat" },
+  { id: "estimates", labelKey: "mobileNav.estimates", icon: IconEstimates, href: "/chat" },
+  { id: "blueprints", labelKey: "mobileNav.blueprints", icon: IconBlueprints, href: "#" },
+  { id: "profile", labelKey: "mobileNav.profile", icon: IconProfile, href: "#" },
 ];
 
 export function MobileNav({ activeTab = "chat" }: { activeTab?: Tab }) {
+  const { t } = useLocale();
+
   return (
     <nav aria-label="Mobile navigation" className="md:hidden fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-outline/10 z-50 flex justify-around items-center py-4 px-2">
-      {tabs.map(({ id, label, icon: Icon, href }) => {
+      {tabs.map(({ id, labelKey, icon: Icon, href }) => {
         const isActive = id === activeTab;
         const isDisabled = href === "#";
+        const label = t(labelKey);
         return isDisabled ? (
           <span
             key={id}

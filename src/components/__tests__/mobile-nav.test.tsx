@@ -1,10 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { MobileNav } from "../mobile-nav";
+import { LocaleProvider } from "@/lib/i18n/context";
+
+function renderWithLocale(ui: React.ReactElement) {
+  return render(<LocaleProvider>{ui}</LocaleProvider>);
+}
 
 describe("MobileNav", () => {
   it("renders bottom navigation tabs", () => {
-    render(<MobileNav />);
+    renderWithLocale(<MobileNav />);
     expect(screen.getByText("Chat")).toBeInTheDocument();
     expect(screen.getByText("Estimates")).toBeInTheDocument();
     expect(screen.getByText("Blueprints")).toBeInTheDocument();
@@ -12,13 +17,13 @@ describe("MobileNav", () => {
   });
 
   it("is only visible on mobile", () => {
-    const { container } = render(<MobileNav />);
+    const { container } = renderWithLocale(<MobileNav />);
     const nav = container.querySelector("nav");
     expect(nav).toHaveClass("md:hidden");
   });
 
   it("highlights the active tab", () => {
-    render(<MobileNav activeTab="chat" />);
+    renderWithLocale(<MobileNav activeTab="chat" />);
     const chatTab = screen.getByText("Chat").closest("a");
     expect(chatTab).toHaveClass("text-on-surface");
   });

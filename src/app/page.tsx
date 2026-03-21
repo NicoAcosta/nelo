@@ -7,31 +7,33 @@ import { MobileNav } from "@/components/mobile-nav";
 import { ChatInput } from "@/components/chat-input";
 import { PromptCard } from "@/components/prompt-card";
 import { IconNelo } from "@/components/icons";
-
-const quickPrompts = [
-  {
-    icon: "cottage" as const,
-    text: "How much does it cost to build a 100m² house?",
-  },
-  {
-    icon: "location" as const,
-    text: "I want to know the price per m² in AMBA.",
-  },
-];
-
-const proPrompts = [
-  {
-    icon: "upload" as const,
-    text: "Upload a floor plan for a detailed estimate",
-  },
-  {
-    icon: "architect" as const,
-    text: "Full estimate with plaster, insulation and finishes.",
-  },
-];
+import { useLocale } from "@/lib/i18n/use-locale";
 
 export default function LandingPage() {
   const router = useRouter();
+  const { t } = useLocale();
+
+  const quickPrompts = [
+    {
+      icon: "cottage" as const,
+      text: t("landing.quickPrompt1"),
+    },
+    {
+      icon: "location" as const,
+      text: t("landing.quickPrompt2"),
+    },
+  ];
+
+  const proPrompts = [
+    {
+      icon: "upload" as const,
+      text: t("landing.proPrompt1"),
+    },
+    {
+      icon: "architect" as const,
+      text: t("landing.proPrompt2"),
+    },
+  ];
 
   function handleSend(message: string) {
     const encoded = encodeURIComponent(message);
@@ -58,17 +60,17 @@ export default function LandingPage() {
           </div>
 
           <h1 className="text-5xl md:text-6xl font-black font-headline tracking-tight text-on-surface mb-4 uppercase italic text-center">
-            Hi, I&apos;m <span className="bg-primary px-2">Nelo</span>.
+            {t("landing.greeting").replace("Nelo", "")}<span className="bg-primary px-2">Nelo</span>.
           </h1>
           <p className="text-lg md:text-xl font-bold text-on-surface/50 font-headline uppercase tracking-tight mb-16 text-center">
-            What do you want to build today?
+            {t("landing.subtitle")}
           </p>
 
           {/* Prompt cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <div className="space-y-4">
               <h3 className="text-[10px] uppercase tracking-[0.2em] text-on-surface/40 font-black px-1">
-                Quick Queries
+                {t("landing.sectionQuick")}
               </h3>
               {quickPrompts.map((p) => (
                 <PromptCard
@@ -81,7 +83,7 @@ export default function LandingPage() {
             </div>
             <div className="space-y-4">
               <h3 className="text-[10px] uppercase tracking-[0.2em] text-on-surface/40 font-black px-1">
-                Pro Tools
+                {t("landing.sectionPro")}
               </h3>
               {proPrompts.map((p) => (
                 <PromptCard

@@ -8,17 +8,20 @@ import {
   IconSettings,
   IconHelp,
 } from "./icons";
+import { useLocale } from "@/lib/i18n/use-locale";
 
 type NavItem = "dashboard" | "estimates" | "blueprints" | "settings";
 
-const navItems: { id: NavItem; label: string; icon: typeof IconDashboard; href: string }[] = [
-  { id: "dashboard", label: "Dashboard", icon: IconDashboard, href: "/" },
-  { id: "estimates", label: "Estimates", icon: IconEstimates, href: "/chat" },
-  { id: "blueprints", label: "Blueprints", icon: IconBlueprints, href: "#" },
-  { id: "settings", label: "Settings", icon: IconSettings, href: "#" },
+const navItems: { id: NavItem; labelKey: string; icon: typeof IconDashboard; href: string }[] = [
+  { id: "dashboard", labelKey: "sidebar.dashboard", icon: IconDashboard, href: "/" },
+  { id: "estimates", labelKey: "sidebar.estimates", icon: IconEstimates, href: "/chat" },
+  { id: "blueprints", labelKey: "sidebar.blueprints", icon: IconBlueprints, href: "#" },
+  { id: "settings", labelKey: "sidebar.settings", icon: IconSettings, href: "#" },
 ];
 
 export function Sidebar({ activeItem = "dashboard" }: { activeItem?: NavItem }) {
+  const { t } = useLocale();
+
   return (
     <aside className="h-screen w-64 hidden md:flex flex-col border-r border-outline/20 bg-white sticky top-0 overflow-y-auto">
       <div className="flex flex-col h-full py-6">
@@ -28,15 +31,16 @@ export function Sidebar({ activeItem = "dashboard" }: { activeItem?: NavItem }) 
             Nelo AI
           </div>
           <p className="text-[10px] text-secondary/60 font-bold uppercase tracking-widest">
-            Project Architect
+            {t("sidebar.brandSubtitle")}
           </p>
         </div>
 
         {/* Navigation */}
         <nav aria-label="Main navigation" className="flex-1 space-y-1">
-          {navItems.map(({ id, label, icon: Icon, href }) => {
+          {navItems.map(({ id, labelKey, icon: Icon, href }) => {
             const isActive = id === activeItem;
             const isDisabled = href === "#";
+            const label = t(labelKey);
             return isDisabled ? (
               <span
                 key={id}
@@ -45,7 +49,7 @@ export function Sidebar({ activeItem = "dashboard" }: { activeItem?: NavItem }) 
               >
                 <Icon aria-hidden="true" />
                 <span className="font-bold text-xs uppercase tracking-wider">{label}</span>
-                <span className="ml-auto text-[8px] uppercase tracking-widest opacity-60">Soon</span>
+                <span className="ml-auto text-[8px] uppercase tracking-widest opacity-60">{t("sidebar.soon")}</span>
               </span>
             ) : (
               <Link
@@ -72,7 +76,7 @@ export function Sidebar({ activeItem = "dashboard" }: { activeItem?: NavItem }) 
             className="w-full flex items-center justify-center gap-2 px-4 py-2 text-on-surface/30 cursor-not-allowed rounded-lg text-xs font-bold uppercase"
           >
             <IconHelp aria-hidden="true" />
-            Support
+            {t("sidebar.support")}
           </span>
         </div>
       </div>

@@ -2,6 +2,11 @@
 
 import { useState, useRef } from "react";
 import { IconSend, IconAttach } from "./icons";
+import { useLocale } from "@/lib/i18n/use-locale";
+
+const MAX_FILE_SIZE_MB = 10;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+const MAX_MESSAGE_LENGTH = 5000;
 
 interface ChatInputProps {
   onSend: (message: string, files?: FileList) => void;
@@ -12,10 +17,13 @@ interface ChatInputProps {
 export function ChatInput({
   onSend,
   disabled = false,
-  placeholder = "Write a message or upload a file...",
+  placeholder,
 }: ChatInputProps) {
+  const { t } = useLocale();
   const [value, setValue] = useState("");
+  const resolvedPlaceholder = placeholder ?? t("chatInput.placeholder");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -26,7 +34,7 @@ export function ChatInput({
     if (selectedFile) {
       const dt = new DataTransfer();
       dt.items.add(selectedFile);
-      onSend(trimmed || "Analyze this floor plan", dt.files);
+      onSend(trimmed || t("chatInput.analyzeFloorPlan"), dt.files);
       setSelectedFile(null);
     } else {
       onSend(trimmed);
@@ -45,7 +53,13 @@ export function ChatInput({
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        setFileError(`File too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Max ${MAX_FILE_SIZE_MB}MB.`);
+        setSelectedFile(null);
+      } else {
+        setFileError(null);
+        setSelectedFile(file);
+      }
     }
     e.target.value = "";
   }
@@ -53,6 +67,21 @@ export function ChatInput({
   return (
     <div className="w-full max-w-4xl mx-auto">
       <div className="glass-card border-2 border-white/50 rounded-2xl flex flex-col p-3">
+        {fileError && (
+          <div role="alert" className="flex items-center gap-2 px-4 py-2 mb-1">
+            <span className="text-xs font-bold text-error bg-error/10 px-3 py-1 rounded-lg">
+              {fileError}
+            </span>
+            <button
+              type="button"
+              onClick={() => setFileError(null)}
+              className="text-error/70 hover:text-error text-xs font-bold transition-colors"
+              aria-label="Dismiss error"
+            >
+              &times;
+            </button>
+          </div>
+        )}
         {selectedFile && (
           <div className="flex items-center gap-2 px-4 py-2 mb-1">
             <span className="text-xs font-bold text-on-surface/60 bg-white/40 px-3 py-1 rounded-lg truncate max-w-[200px]">
@@ -74,8 +103,9 @@ export function ChatInput({
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={disabled}
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           rows={1}
+          maxLength={MAX_MESSAGE_LENGTH}
           aria-label="Message input"
           className="w-full bg-transparent border-none focus:ring-0 focus:outline-none text-on-surface placeholder:text-on-surface/30 min-h-[60px] max-h-[200px] resize-none px-4 py-2 font-medium text-sm"
         />
@@ -110,7 +140,7 @@ export function ChatInput({
         </div>
       </div>
       <p className="text-center text-[9px] text-on-surface/30 mt-4 tracking-widest font-bold uppercase">
-        Nelo may make mistakes. Verify important information with a professional.
+        {t("chatInput.disclaimer")}
       </p>
     </div>
   );
