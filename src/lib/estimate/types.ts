@@ -252,6 +252,7 @@ export interface CategoryConfig {
   id: string;
   code: string; // e.g., "4"
   name: string; // Spanish, e.g., "Estructura Resistente"
+  nameEn: string; // English, e.g., "Structural System"
   subcategories: SubcategoryConfig[];
 }
 

@@ -19,6 +19,7 @@ export const CATEGORIES: CategoryConfig[] = [
     id: "trabajos_preliminares",
     code: "1",
     name: "Trabajos Preliminares",
+    nameEn: "Preliminary Work",
     subcategories: [
       {
         id: "preliminares",
@@ -38,6 +39,7 @@ export const CATEGORIES: CategoryConfig[] = [
     id: "procedimientos_cumplimientos",
     code: "2",
     name: "Procedimientos y Cumplimientos",
+    nameEn: "Procedures & Compliance",
     subcategories: [
       {
         id: "procedimientos",
@@ -57,6 +59,7 @@ export const CATEGORIES: CategoryConfig[] = [
     id: "movimiento_suelos",
     code: "3",
     name: "Movimiento de Suelos",
+    nameEn: "Earthwork",
     subcategories: [
       {
         id: "desmonte_excavacion",
@@ -84,6 +87,7 @@ export const CATEGORIES: CategoryConfig[] = [
     id: "estructura_resistente",
     code: "4",
     name: "Estructura Resistente",
+    nameEn: "Structural System",
     subcategories: [
       {
         id: "hormigon_armado_insitu",
@@ -122,6 +126,7 @@ export const CATEGORIES: CategoryConfig[] = [
     id: "mamposteria",
     code: "5",
     name: "Mampostería",
+    nameEn: "Masonry",
     subcategories: [
       {
         id: "ladrillo_comun",
@@ -163,27 +168,27 @@ export const CATEGORIES: CategoryConfig[] = [
   // Remaining categories with simplified structure for now
   // These will be expanded with full subcategories as the data map lands
   ...[
-    { id: "capas_aisladoras", code: "6", name: "Capas Aisladoras", referenceIncidence: 3.11 },
-    { id: "cubierta_techo", code: "7", name: "Cubierta y Techo", referenceIncidence: 2.29 },
-    { id: "revoques", code: "8", name: "Revoques", referenceIncidence: 8.84 },
-    { id: "yeseria", code: "9", name: "Yesería", referenceIncidence: 2.57 },
-    { id: "contrapisos", code: "10", name: "Contrapisos y Carpetas", referenceIncidence: 4.20 },
-    { id: "carpetas", code: "11", name: "Carpetas", referenceIncidence: 1.63 },
-    { id: "solados", code: "12", name: "Solados", referenceIncidence: 5.74 },
-    { id: "zocalos", code: "13", name: "Zócalos", referenceIncidence: 0.36 },
-    { id: "revestimientos", code: "14", name: "Revestimientos", referenceIncidence: 2.45 },
-    { id: "carpinteria_metalica", code: "15", name: "Carpinterías y Herrerías Metálicas", referenceIncidence: 4.71 },
-    { id: "carpinteria_aluminio", code: "16", name: "Carpintería de Aluminio", referenceIncidence: 3.20 },
-    { id: "carpinteria_madera", code: "17", name: "Carpintería de Madera", referenceIncidence: 2.30 },
-    { id: "escalera", code: "18", name: "Escalera", referenceIncidence: 1.61 },
-    { id: "amoblamientos", code: "19", name: "Amoblamientos", referenceIncidence: 3.31 },
-    { id: "instalacion_electrica", code: "20", name: "Instalaciones Eléctricas", referenceIncidence: 7.02 },
-    { id: "instalacion_sanitaria", code: "21", name: "Instalaciones Sanitarias", referenceIncidence: 6.55 },
-    { id: "instalacion_gas", code: "22", name: "Instalación de Gas", referenceIncidence: 3.54 },
-    { id: "espejos", code: "23", name: "Espejos", referenceIncidence: 0.08 },
-    { id: "pinturas", code: "24", name: "Pinturas", referenceIncidence: 1.86 },
-    { id: "marmoleria", code: "25", name: "Marmolería", referenceIncidence: 0.88 },
-    { id: "varios", code: "26", name: "Varios", referenceIncidence: 1.59 },
+    { id: "capas_aisladoras", code: "6", name: "Capas Aisladoras", nameEn: "Waterproofing & Insulation Layers", referenceIncidence: 3.11 },
+    { id: "cubierta_techo", code: "7", name: "Cubierta y Techo", nameEn: "Roofing", referenceIncidence: 2.29 },
+    { id: "revoques", code: "8", name: "Revoques", nameEn: "Plaster & Rendering", referenceIncidence: 8.84 },
+    { id: "yeseria", code: "9", name: "Yesería", nameEn: "Plasterwork", referenceIncidence: 2.57 },
+    { id: "contrapisos", code: "10", name: "Contrapisos y Carpetas", nameEn: "Subfloors & Screeds", referenceIncidence: 4.20 },
+    { id: "carpetas", code: "11", name: "Carpetas", nameEn: "Floor Screeds", referenceIncidence: 1.63 },
+    { id: "solados", code: "12", name: "Solados", nameEn: "Flooring", referenceIncidence: 5.74 },
+    { id: "zocalos", code: "13", name: "Zócalos", nameEn: "Baseboards", referenceIncidence: 0.36 },
+    { id: "revestimientos", code: "14", name: "Revestimientos", nameEn: "Wall Cladding", referenceIncidence: 2.45 },
+    { id: "carpinteria_metalica", code: "15", name: "Carpinterías y Herrerías Metálicas", nameEn: "Metal Joinery & Ironwork", referenceIncidence: 4.71 },
+    { id: "carpinteria_aluminio", code: "16", name: "Carpintería de Aluminio", nameEn: "Aluminum Joinery", referenceIncidence: 3.20 },
+    { id: "carpinteria_madera", code: "17", name: "Carpintería de Madera", nameEn: "Wood Joinery", referenceIncidence: 2.30 },
+    { id: "escalera", code: "18", name: "Escalera", nameEn: "Staircase", referenceIncidence: 1.61 },
+    { id: "amoblamientos", code: "19", name: "Amoblamientos", nameEn: "Furniture & Cabinetry", referenceIncidence: 3.31 },
+    { id: "instalacion_electrica", code: "20", name: "Instalaciones Eléctricas", nameEn: "Electrical Systems", referenceIncidence: 7.02 },
+    { id: "instalacion_sanitaria", code: "21", name: "Instalaciones Sanitarias", nameEn: "Plumbing & Sanitary", referenceIncidence: 6.55 },
+    { id: "instalacion_gas", code: "22", name: "Instalación de Gas", nameEn: "Gas Installation", referenceIncidence: 3.54 },
+    { id: "espejos", code: "23", name: "Espejos", nameEn: "Mirrors", referenceIncidence: 0.08 },
+    { id: "pinturas", code: "24", name: "Pinturas", nameEn: "Paint", referenceIncidence: 1.86 },
+    { id: "marmoleria", code: "25", name: "Marmolería", nameEn: "Marble & Stone", referenceIncidence: 0.88 },
+    { id: "varios", code: "26", name: "Varios", nameEn: "Miscellaneous", referenceIncidence: 1.59 },
   ].map((cat): CategoryConfig => ({
     ...cat,
     subcategories: [{
@@ -220,10 +225,10 @@ export function getAllItems(): ItemConfig[] {
 
 /** Express mode questions — the 5-8 key inputs */
 export const EXPRESS_QUESTIONS = [
-  { field: "totalFloorAreaM2", label: "¿Cuántos metros cuadrados tiene tu proyecto?", type: "number" as const, unit: "m²" },
-  { field: "stories", label: "¿Cuántas plantas tiene el edificio?", type: "select" as const, options: ["1", "2", "3", "Más de 3"] },
-  { field: "structureType", label: "¿Cuál es el sistema estructural principal?", type: "select" as const, options: ["H°A° tradicional", "Ladrillo portante", "Steel frame", "Wood frame", "Estructura metálica"] },
-  { field: "roofType", label: "¿Tipo de cubierta / techo?", type: "select" as const, options: ["Azotea inaccesible", "Azotea transitable", "Chapa trapezoidal", "Chapa prepintada", "Tejas cerámicas", "Panel sándwich"] },
-  { field: "finishLevel", label: "¿Nivel de terminaciones?", type: "select" as const, options: ["Económico", "Medio", "Premium"] },
-  { field: "locationZone", label: "¿En qué zona de Buenos Aires?", type: "select" as const, options: ["CABA", "GBA Norte", "GBA Sur", "GBA Oeste"] },
+  { field: "totalFloorAreaM2", label: "¿Cuántos metros cuadrados tiene tu proyecto?", labelEn: "How many square meters is your project?", type: "number" as const, unit: "m²" },
+  { field: "stories", label: "¿Cuántas plantas tiene el edificio?", labelEn: "How many stories does the building have?", type: "select" as const, options: ["1", "2", "3", "Más de 3"] },
+  { field: "structureType", label: "¿Cuál es el sistema estructural principal?", labelEn: "What is the main structural system?", type: "select" as const, options: ["H°A° tradicional", "Ladrillo portante", "Steel frame", "Wood frame", "Estructura metálica"] },
+  { field: "roofType", label: "¿Tipo de cubierta / techo?", labelEn: "Roof / ceiling type?", type: "select" as const, options: ["Azotea inaccesible", "Azotea transitable", "Chapa trapezoidal", "Chapa prepintada", "Tejas cerámicas", "Panel sándwich"] },
+  { field: "finishLevel", label: "¿Nivel de terminaciones?", labelEn: "Finish level?", type: "select" as const, options: ["Económico", "Medio", "Premium"] },
+  { field: "locationZone", label: "¿En qué zona de Buenos Aires?", labelEn: "In which area of Buenos Aires?", type: "select" as const, options: ["CABA", "GBA Norte", "GBA Sur", "GBA Oeste"] },
 ] as const;
