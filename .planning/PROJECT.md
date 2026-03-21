@@ -17,17 +17,19 @@ Accurate, transparent construction cost estimation through natural conversation 
 ### Active
 
 - [ ] AI chatbot collects project details through natural conversation
-- [ ] Two user modes: consumer (casual, ~8 questions) and professional (detailed, 15+ questions)
+- [ ] Three user modes: Express (5-8 key questions), Detailed (56-question full questionnaire), Professional (floor plan upload + auto-compute)
 - [ ] Floor plan upload and AI vision analysis (approximate extraction of rooms, area, doors, windows)
 - [ ] User confirmation/correction flow after floor plan analysis
 - [ ] Structured data collection via AI SDK tools with Zod validation
-- [ ] Calculation engine based on 21-category Argentine construction budget (~80 line items)
-- [ ] Quantity derivation from ~14 base measurements (area, perimeter, stories, etc.)
+- [ ] Calculation engine based on 26-category Argentine construction budget with subcategories (~130+ line items from FERES/PyOO reference)
+- [ ] Coefficient-based quantity derivation (e.g., m² of plaster = 2.5 × m² of floor area, calibrated from FERES data)
+- [ ] Conditional logic / exclusion tree (e.g., steel frame disables concrete items, no basement disables vertical waterproofing)
 - [ ] Price per square meter output
-- [ ] Total construction price output
-- [ ] Detailed category-by-category cost breakdown display
+- [ ] Total construction price output with full cost structure (direct cost + overhead 8-12% + profit 10-15% + taxes + IVA 21%)
+- [ ] Detailed category-by-category cost breakdown display with incidence percentages
 - [ ] Confidence level indicator (quick/standard/detailed based on inputs collected)
-- [ ] Hardcoded AMBA pricing reference table (MVP)
+- [ ] Reference pricing from FERES UT2 project data (Jul 2024, $90.2M ARS baseline) with ICC/CAC index update formula
+- [ ] 56-question decision tree covering: general project data, site prep, structure, masonry, roofing, insulation, finishes, carpentry, MEP, gas, HVAC, painting, exteriors, management
 - [ ] Dynamic system prompt built from configurable categories
 
 ### Out of Scope
