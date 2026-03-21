@@ -112,7 +112,28 @@ export const runEstimate = tool({
       .optional(),
   }),
   execute: async (inputs): Promise<Estimate> => {
-    return computeEstimate(inputs as ProjectInputs);
+    const projectInputs: ProjectInputs = {
+      totalFloorAreaM2: inputs.totalFloorAreaM2,
+      stories: inputs.stories,
+      structureType: inputs.structureType,
+      roofType: inputs.roofType,
+      finishLevel: inputs.finishLevel,
+      locationZone: inputs.locationZone,
+      footprintM2: inputs.footprintM2,
+      perimeterMl: inputs.perimeterMl,
+      ceilingHeightM: inputs.ceilingHeightM,
+      bedroomCount: inputs.bedroomCount,
+      bathroomCount: inputs.bathroomCount,
+      kitchenCount: inputs.kitchenCount,
+      doorCount: inputs.doorCount,
+      windowCount: inputs.windowCount,
+      hasBasement: inputs.hasBasement,
+      hasGarage: inputs.hasGarage,
+      hasGasInstallation: inputs.hasGasInstallation,
+      foundationType: inputs.foundationType,
+      slabType: inputs.slabType,
+    };
+    return computeEstimate(projectInputs);
   },
 });
 

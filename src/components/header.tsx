@@ -20,7 +20,7 @@ export function Header({ projectName }: { projectName?: string }) {
 
       <div className="flex items-center gap-6">
         <span className="hidden md:block text-[10px] text-on-surface/40 font-bold uppercase tracking-widest">
-          Updated: Oct 24
+          Base prices: Jul 2024
         </span>
         <Link
           href="/chat"

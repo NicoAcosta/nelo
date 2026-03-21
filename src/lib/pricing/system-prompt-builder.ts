@@ -48,7 +48,7 @@ ${modeInstructions}
 - Después de extraer datos del plano, presentalos para confirmación antes de usarlos.
 - Siempre indicá las suposiciones que hacés para campos faltantes.
 - Si el usuario corrige un valor, actualizalo y recalculá.
-- Presentá los resultados usando la herramienta computeEstimate.
+- Presentá los resultados usando la herramienta runEstimate.
 </behavior>
 
 <express_questions>

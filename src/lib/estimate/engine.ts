@@ -179,7 +179,7 @@ export function computeEstimate(inputs: ProjectInputs): Estimate {
   const ivaAmount = Math.round(subtotalBeforeTax * COST_STRUCTURE.ivaPercent / 100);
   const totalPrice = subtotalBeforeTax + ivaAmount;
 
-  const floorArea = inputs.totalFloorAreaM2 ?? 1;
+  const floorArea = inputs.totalFloorAreaM2 || 1;
   const pricePerM2 = Math.round(totalPrice / floorArea);
 
   return {
