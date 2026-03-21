@@ -124,13 +124,17 @@ Plans:
 
 ### Phase 8: Real Pricing Data Pipeline — Replace all placeholder pricing with live/cached data from INDEC ICC, UOCRA, MercadoLibre, GCBA, Cifras Online, and composition formulas
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Replace every placeholder unit cost with a real, composition-formula-derived price. Wire DolarAPI for blue rate USD conversion. Build cache infrastructure, manual override system, and daily cron refresh. Target: all ~130 line items priced with real data, USD/m2 display, price freshness metadata.
+**Requirements:** D-01, D-02, D-03, D-04, D-05, D-06, D-07, D-08, D-09, D-10, D-11, D-12, D-13, D-14, D-15, D-16, D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24
 **Depends on:** Phase 7
-**Plans:** 0 plans
+**Plans:** 5 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 8 to break down)
+- [ ] 08-01-PLAN.md — Cache infrastructure, blue rate adapter, manual override system (TDD)
+- [ ] 08-02-PLAN.md — UOCRA rates with zone supplement, composition formula engine (TDD)
+- [ ] 08-03-PLAN.md — Populate all ~130 items with real prices, ICC update, fallback replacement
+- [ ] 08-04-PLAN.md — USD conversion (blue rate), price freshness in Estimate output
+- [ ] 08-05-PLAN.md — Daily cron refresh endpoint + architect validation checkpoint
 
 ---
 
@@ -145,5 +149,6 @@ Plans:
 | Phase 5 | CALC-05, CALC-06, CHAT-05 (display layer) |
 | Phase 6 | PLAN-01, PLAN-02, PLAN-03, PLAN-04 |
 | Phase 7 | I18N-01 (Locale type), I18N-02 (translations dict), I18N-03 (context/hook), I18N-04 (system prompt), I18N-05 (category names), I18N-06 (API locale), I18N-07 (UI components), I18N-08 (header toggle), I18N-09 (docs/verification) |
+| Phase 8 | D-01 through D-24 (pricing data pipeline — sources, composition, caching, overrides, USD display, cron refresh) |
 
 *INFRA-02 spans Phase 1 (project setup) and Phase 3 (UI wiring). CALC-05 and CHAT-05 span Phase 2 (engine computation) and Phase 5 (display). DATA-04 is established in Phase 1 and consumed in Phase 4.*
