@@ -122,3 +122,63 @@ body {
 ::selection {
   background-color: rgba(204, 255, 0, 0.4);
 }
+
+/* --- Animations --- */
+
+/* Chat message entrance — fade + slide up */
+@keyframes message-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-message-in {
+  animation: message-in 0.3s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+/* Tool result entrance — fade + scale up slightly */
+@keyframes result-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-result-in {
+  animation: result-in 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+/* Subtle glow pulse on primary accent — used on cost total */
+@keyframes glow-pulse {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(204, 255, 0, 0.15);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(204, 255, 0, 0.3);
+  }
+}
+
+.animate-glow {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

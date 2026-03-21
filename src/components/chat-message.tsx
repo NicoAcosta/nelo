@@ -8,7 +8,7 @@ interface ChatMessageProps {
 export function ChatMessage({ role, content }: ChatMessageProps) {
   if (role === "user") {
     return (
-      <div className="flex gap-6 max-w-3xl ml-auto flex-row-reverse">
+      <div className="flex gap-6 max-w-3xl ml-auto flex-row-reverse animate-message-in">
         <div
           data-testid="user-avatar"
           className="w-10 h-10 rounded-full bg-black flex items-center justify-center flex-shrink-0 shadow-lg"
@@ -20,7 +20,7 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
         </div>
         <div className="flex flex-col items-end">
           <div className="glass-primary text-black rounded-2xl p-6 shadow-md border border-white/20">
-            <p className="text-lg font-bold font-headline">{content}</p>
+            <p className="text-lg font-bold font-headline break-words overflow-wrap-anywhere">{content}</p>
           </div>
         </div>
       </div>
@@ -28,7 +28,7 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
   }
 
   return (
-    <div className="flex gap-6 max-w-3xl">
+    <div className="flex gap-6 max-w-3xl animate-message-in">
       <div
         data-testid="assistant-avatar"
         className="w-10 h-10 rounded-lg bg-outline/30 flex items-center justify-center flex-shrink-0"
@@ -37,12 +37,7 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
       </div>
       <div className="space-y-4">
         <div className="glass-card rounded-2xl p-6 border border-white/40 shadow-sm">
-          <p className="text-on-surface text-lg leading-relaxed font-medium whitespace-pre-wrap">{content}</p>
-        </div>
-        <div className="flex gap-2">
-          <span className="text-[10px] text-on-surface/40 font-bold uppercase tracking-widest px-1">
-            AI Architect
-          </span>
+          <p className="text-on-surface text-lg leading-relaxed font-medium whitespace-pre-wrap break-words overflow-wrap-anywhere">{content}</p>
         </div>
       </div>
     </div>
