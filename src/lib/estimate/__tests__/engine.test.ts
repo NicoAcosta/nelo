@@ -1,6 +1,12 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { applyUnitCosts, sumByCategory, computeEstimate, computeConfidence } from "../engine";
 import type { ProjectInputs, LineItem } from "../types";
+
+// Mock usd-converter so engine tests are isolated from cache state
+vi.mock("@/lib/pricing/usd-converter", () => ({
+  getBlueRateVenta: () => 1425,
+  convertToUsd: (ars: number, rate: number) => (rate > 0 ? Math.round(ars / rate) : 0),
+}));
 
 const baseInputs: ProjectInputs = {
   totalFloorAreaM2: 100,
@@ -169,5 +175,18 @@ describe("computeEstimate", () => {
     expect(e.categories.length).toBeGreaterThan(0);
     const totalIncidence = e.categories.reduce((sum, c) => sum + c.incidencePercent, 0);
     expect(totalIncidence).toBeCloseTo(100, 0);
+  });
+
+  it("estimate includes USD prices (D-17, D-19)", () => {
+    const e = computeEstimate(baseInputs);
+    expect(e.pricePerM2Usd).toBeGreaterThan(0);
+    expect(e.totalPriceUsd).toBeGreaterThan(0);
+    expect(e.blueRateVenta).toBe(1425);
+    expect(e.blueRateDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+
+  it("estimate includes pricing freshness date (D-10)", () => {
+    const e = computeEstimate(baseInputs);
+    expect(e.pricingLastUpdated).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 });

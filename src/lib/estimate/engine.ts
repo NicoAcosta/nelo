@@ -24,6 +24,7 @@ import {
 import { CATEGORIES } from "@/lib/pricing/categories-config";
 import { AMBA_UNIT_COSTS, ZONE_MULTIPLIERS, COST_STRUCTURE } from "@/lib/pricing/amba-unit-costs";
 import { getLatestICC } from "@/lib/data-sources/indec-icc";
+import { getBlueRateVenta, convertToUsd } from "@/lib/pricing/usd-converter";
 import type { Locale } from "@/lib/i18n/types";
 import { translations } from "@/lib/i18n/translations";
 
@@ -206,6 +207,11 @@ export function computeEstimate(inputs: ProjectInputs, locale: Locale = "en"): E
 
   const latestICC = getLatestICC();
 
+  // USD conversion (D-17, D-18, D-19)
+  const blueVenta = getBlueRateVenta();
+  const pricePerM2Usd = convertToUsd(pricePerM2, blueVenta);
+  const totalPriceUsd = convertToUsd(totalPrice, blueVenta);
+
   return {
     pricePerM2,
     totalPrice,
@@ -230,6 +236,13 @@ export function computeEstimate(inputs: ProjectInputs, locale: Locale = "en"): E
     priceBaseDate: latestICC.date,
     iccBaseValue: latestICC.generalValue,
     iccCurrentValue: latestICC.generalValue,
+    // USD display (D-17, D-19)
+    pricePerM2Usd,
+    totalPriceUsd,
+    blueRateVenta: blueVenta,
+    blueRateDate: new Date().toISOString().split("T")[0],
+    // Price freshness (D-10)
+    pricingLastUpdated: "2026-03-21",
   };
 }
 
