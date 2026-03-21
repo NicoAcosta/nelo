@@ -3,26 +3,26 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-21T20:17:02.771Z"
+last_updated: "2026-03-21T20:49:30.085Z"
 progress:
   total_phases: 8
   completed_phases: 0
-  total_plans: 4
-  completed_plans: 9
+  total_plans: 9
+  completed_plans: 10
 ---
 
 # Project State: Nelo
 
 ## Current Position
 
-Phase: 07 (bilingual-i18n-english-default-with-spanish-english-language-toggle) — COMPLETE
-Plan: 4 of 4 (all complete)
+Phase: 08 (real-pricing-data-pipeline) — EXECUTING
+Plan: 2 of 5
 
 ## Project Reference
 
 See: .planning/PROJECT.md (updated 2026-03-20)
 **Core value:** Accurate, transparent construction cost estimation through natural conversation
-**Current focus:** Phase 07 — bilingual-i18n-english-default-with-spanish-english-language-toggle
+**Current focus:** Phase 08 — real-pricing-data-pipeline
 
 ## Active Decisions
 
@@ -34,6 +34,8 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 | OpenRouter instead of AI Gateway | Done | Team chose for model flexibility, OPENROUTER_API_KEY in .env.local |
 | Stitch "nelo v2" as final designs | Confirmed | Dark theme, construction orange, 5 screens in Stitch MCP project 16019953234318479213 |
 | Test-driven development | Confirmed | Heavy testing required — spec-driven + TDD approach |
+| Zone supplement in UOCRA rates | Done (08-02) | effectiveRate = (base + zoneSupplementHourly) * 2.2, rates ~10-15% higher |
+| Variable wholesale discount | Done (08-02) | bulk=0.70, standard=0.75, specialty=0.80 (not flat 0.75) |
 
 ## Blockers
 
@@ -79,4 +81,4 @@ Screens:
 - Phase 7: Bilingual i18n — EN/ES toggle, auto-detect, localStorage persistence, all UI + system prompt + engine labels bilingual
 
 ---
-*State updated: 2026-03-21 — Phase 8 added for pricing data pipeline*
+*State updated: 2026-03-21 — Phase 08-02 complete: UOCRA rates corrected + composition formula engine built (73 tests passing)*

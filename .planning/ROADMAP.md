@@ -127,11 +127,11 @@ Plans:
 **Goal:** Replace every placeholder unit cost with a real, composition-formula-derived price. Wire DolarAPI for blue rate USD conversion. Build cache infrastructure, manual override system, and daily cron refresh. Target: all ~130 line items priced with real data, USD/m2 display, price freshness metadata.
 **Requirements:** D-01, D-02, D-03, D-04, D-05, D-06, D-07, D-08, D-09, D-10, D-11, D-12, D-13, D-14, D-15, D-16, D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24
 **Depends on:** Phase 7
-**Plans:** 5 plans
+**Plans:** 1/5 plans executed
 
 Plans:
 - [ ] 08-01-PLAN.md — Cache infrastructure, blue rate adapter, manual override system (TDD)
-- [ ] 08-02-PLAN.md — UOCRA rates with zone supplement, composition formula engine (TDD)
+- [x] 08-02-PLAN.md — UOCRA rates with zone supplement, composition formula engine (TDD)
 - [ ] 08-03-PLAN.md — Populate all ~130 items with real prices, ICC update, fallback replacement
 - [ ] 08-04-PLAN.md — USD conversion (blue rate), price freshness in Estimate output
 - [ ] 08-05-PLAN.md — Daily cron refresh endpoint + architect validation checkpoint
