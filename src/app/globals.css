@@ -1,26 +1,124 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * Nelo Design System — Light mode, fluorescent yellow-green
+ * Corrected from Stitch "nelo v2" HTML exports
+ * Primary: #ccff00 / #E2FF00 (fluo yellow-green)
+ * Light surfaces, Helvetica/Arial font stack
+ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Surface hierarchy — light grays */
+  --color-surface: #ffffff;
+  --color-surface-dim: #f2f2f2;
+  --color-surface-container: rgba(204, 204, 204, 0.2);
+  --color-surface-container-high: rgba(0, 0, 0, 0.05);
+
+  /* Background */
+  --color-background: #f2f2f2;
+
+  /* Primary — fluorescent yellow-green */
+  --color-primary: #ccff00;
+  --color-on-primary: #000000;
+
+  /* Secondary */
+  --color-secondary: #333333;
+
+  /* Text */
+  --color-on-surface: #333333;
+  --color-on-surface-variant: #4d4d4d;
+
+  /* Outline */
+  --color-outline: #cccccc;
+  --color-outline-variant: #e6e6e6;
+
+  /* Error */
+  --color-error: #ba1a1a;
+
+  /* Fonts */
+  --font-headline: "Helvetica", "Arial", sans-serif;
+  --font-body: "Helvetica", "Arial", sans-serif;
+  --font-label: "Helvetica", "Arial", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glass effect — frosted panel */
+.glass {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(204, 204, 204, 0.3);
+}
+
+/* Glass card — content cards with subtle frosted look */
+.glass-card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(204, 204, 204, 0.15);
+  border: 1px solid rgba(204, 204, 204, 0.3);
+}
+
+/* Glass primary — user message bubble */
+.glass-primary {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(204, 255, 0, 0.85);
+}
+
+/* Fluo gradient for CTAs */
+.fluo-gradient {
+  background: linear-gradient(135deg, #E2FF00 0%, #D4EE00 100%);
+}
+
+/* Grid background — architectural dot pattern */
+.blueprint-grid {
+  background-image: radial-gradient(circle, #cccccc 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* SVG grid background (alternative) */
+.grid-lines {
+  position: relative;
+}
+.grid-lines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(#000 1px, transparent 1px),
+    linear-gradient(90deg, #000 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-outline);
+  border-radius: 3px;
+}
+
+/* Selection */
+::selection {
+  background-color: rgba(204, 255, 0, 0.4);
 }
