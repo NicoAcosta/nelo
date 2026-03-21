@@ -1,8 +1,8 @@
 # Roadmap: Nelo
 
 **Created:** 2026-03-20
-**Phases:** 6
-**Requirements covered:** 22/22
+**Phases:** 8
+**Requirements covered:** 22/22 (v1) + 9 i18n
 
 ---
 
@@ -109,6 +109,29 @@
 
 **Pricing data** (real AMBA unit costs from CAC/ICC/UOCRA research) feeds into Phase 4 at H8. Placeholder values in Phase 1 keep the engine buildable from H2.
 
+### Phase 7: Bilingual i18n — English default with Spanish/English language toggle
+
+**Goal:** Make the entire Nelo system bilingual (English/Spanish) with English as default, browser auto-detection, manual EN/ES toggle in header, and localStorage persistence. Covers UI strings, system prompt, category names, engine assumption labels, and API locale routing.
+**Requirements:** I18N-01, I18N-02, I18N-03, I18N-04, I18N-05, I18N-06, I18N-07, I18N-08, I18N-09
+**Depends on:** Phase 6
+**Plans:** 4 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — i18n infrastructure (types, translations dictionary, LocaleProvider, useLocale hook)
+- [ ] 07-02-PLAN.md — Backend bilingual (system prompt, category names, engine assumptions, API locale)
+- [ ] 07-03-PLAN.md — Frontend bilingual (all UI components use t(), header toggle, LocaleProvider wrap)
+- [ ] 07-04-PLAN.md — Documentation update + end-to-end verification checkpoint
+
+### Phase 8: Real Pricing Data Pipeline — Replace all placeholder pricing with live/cached data from INDEC ICC, UOCRA, MercadoLibre, GCBA, Cifras Online, and composition formulas
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 7
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 8 to break down)
+
 ---
 
 ## Requirement Coverage
@@ -121,5 +144,6 @@
 | Phase 4 | CHAT-02, CHAT-03, CHAT-04, CHAT-05, CHAT-06, CHAT-07, DATA-02 |
 | Phase 5 | CALC-05, CALC-06, CHAT-05 (display layer) |
 | Phase 6 | PLAN-01, PLAN-02, PLAN-03, PLAN-04 |
+| Phase 7 | I18N-01 (Locale type), I18N-02 (translations dict), I18N-03 (context/hook), I18N-04 (system prompt), I18N-05 (category names), I18N-06 (API locale), I18N-07 (UI components), I18N-08 (header toggle), I18N-09 (docs/verification) |
 
 *INFRA-02 spans Phase 1 (project setup) and Phase 3 (UI wiring). CALC-05 and CHAT-05 span Phase 2 (engine computation) and Phase 5 (display). DATA-04 is established in Phase 1 and consumed in Phase 4.*
