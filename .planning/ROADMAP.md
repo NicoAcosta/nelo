@@ -132,7 +132,7 @@ Plans:
 Plans:
 - [x] 08-01-PLAN.md — Cache infrastructure, blue rate adapter, manual override system (TDD)
 - [x] 08-02-PLAN.md — UOCRA rates with zone supplement, composition formula engine (TDD)
-- [ ] 08-03-PLAN.md — Populate all ~130 items with real prices, ICC update, fallback replacement
+- [x] 08-03-PLAN.md — Populate all ~130 items with real prices, ICC update, fallback replacement
 - [ ] 08-04-PLAN.md — USD conversion (blue rate), price freshness in Estimate output
 - [ ] 08-05-PLAN.md — Daily cron refresh endpoint + architect validation checkpoint
 
