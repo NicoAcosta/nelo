@@ -24,29 +24,41 @@ export function Sidebar({ activeItem = "dashboard" }: { activeItem?: NavItem }) 
       <div className="flex flex-col h-full py-6">
         {/* Branding */}
         <div className="px-6 mb-8">
-          <h1 className="text-xl font-bold text-on-surface font-headline tracking-tight uppercase">
+          <div className="text-xl font-bold text-on-surface font-headline tracking-tight uppercase">
             Nelo AI
-          </h1>
+          </div>
           <p className="text-[10px] text-secondary/60 font-bold uppercase tracking-widest">
             Project Architect
           </p>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1">
+        <nav aria-label="Main navigation" className="flex-1 space-y-1">
           {navItems.map(({ id, label, icon: Icon, href }) => {
             const isActive = id === activeItem;
-            return (
+            const isDisabled = href === "#";
+            return isDisabled ? (
+              <span
+                key={id}
+                aria-disabled="true"
+                className="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg text-on-surface/30 cursor-not-allowed"
+              >
+                <Icon aria-hidden="true" />
+                <span className="font-bold text-xs uppercase tracking-wider">{label}</span>
+                <span className="ml-auto text-[8px] uppercase tracking-widest opacity-60">Soon</span>
+              </span>
+            ) : (
               <Link
                 key={id}
                 href={href}
+                aria-current={isActive ? "page" : undefined}
                 className={`flex items-center gap-3 px-4 py-3 mx-2 rounded-lg transition-all ${
                   isActive
                     ? "bg-primary text-on-primary font-bold"
                     : "text-on-surface/60 hover:text-on-surface hover:bg-surface-container"
                 }`}
               >
-                <Icon />
+                <Icon aria-hidden="true" />
                 <span className="font-bold text-xs uppercase tracking-wider">{label}</span>
               </Link>
             );
@@ -55,21 +67,13 @@ export function Sidebar({ activeItem = "dashboard" }: { activeItem?: NavItem }) 
 
         {/* Footer */}
         <div className="mt-auto px-4 pt-6">
-          <div className="p-4 glass-card rounded-xl mb-4">
-            <p className="text-[9px] uppercase tracking-widest text-secondary/60 mb-2 font-bold">
-              Current Plan
-            </p>
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase">Pro Architect</span>
-            </div>
-          </div>
-          <Link
-            href="#"
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 text-on-surface/60 hover:text-on-surface hover:bg-surface-container rounded-lg transition-all text-xs font-bold uppercase"
+          <span
+            aria-disabled="true"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 text-on-surface/30 cursor-not-allowed rounded-lg text-xs font-bold uppercase"
           >
-            <IconHelp />
+            <IconHelp aria-hidden="true" />
             Support
-          </Link>
+          </span>
         </div>
       </div>
     </aside>

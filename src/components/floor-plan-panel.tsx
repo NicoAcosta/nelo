@@ -98,7 +98,7 @@ export function FloorPlanPanel({
               >
                 Confirm & Calculate
               </button>
-              <button className="w-full py-5 rounded-2xl text-on-surface font-headline font-black text-sm uppercase tracking-widest border border-outline/40 hover:bg-surface-container-high transition-colors">
+              <button disabled className="w-full py-5 rounded-2xl text-on-surface/40 font-headline font-black text-sm uppercase tracking-widest border border-outline/20 cursor-not-allowed" title="Coming soon">
                 Edit Other Values
               </button>
             </div>
@@ -120,13 +120,15 @@ function InputField({
   onChange: (v: number) => void;
   unit?: string;
 }) {
+  const inputId = `field-${label.toLowerCase().replace(/\s+/g, "-")}`;
   return (
     <div className="space-y-2">
-      <label className="text-[10px] font-black text-on-surface/40 uppercase tracking-[0.2em] px-1">
+      <label htmlFor={inputId} className="text-[10px] font-black text-on-surface/40 uppercase tracking-[0.2em] px-1">
         {label}
       </label>
       <div className="relative">
         <input
+          id={inputId}
           type="number"
           min={0}
           value={value}

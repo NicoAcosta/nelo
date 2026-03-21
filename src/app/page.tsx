@@ -57,9 +57,9 @@ export default function LandingPage() {
             <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full border-4 border-background" />
           </div>
 
-          <h2 className="text-5xl md:text-6xl font-black font-headline tracking-tight text-on-surface mb-4 uppercase italic text-center">
+          <h1 className="text-5xl md:text-6xl font-black font-headline tracking-tight text-on-surface mb-4 uppercase italic text-center">
             Hi, I&apos;m <span className="bg-primary px-2">Nelo</span>.
-          </h2>
+          </h1>
           <p className="text-lg md:text-xl font-bold text-on-surface/50 font-headline uppercase tracking-tight mb-16 text-center">
             What do you want to build today?
           </p>
@@ -96,7 +96,7 @@ export default function LandingPage() {
         </div>
 
         {/* Chat input footer */}
-        <footer className="p-6 md:p-10 w-full max-w-5xl mx-auto">
+        <footer className="p-6 pb-24 md:p-10 w-full max-w-5xl mx-auto">
           <ChatInput onSend={handleSend} />
         </footer>
       </main>

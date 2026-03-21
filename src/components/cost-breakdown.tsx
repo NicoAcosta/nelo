@@ -58,7 +58,14 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
                 {confidenceLabels[estimate.confidence]} (±{estimate.confidenceRange.low}%)
               </span>
             </div>
-            <div className="h-1.5 w-full bg-[#0d0d0d] rounded-full overflow-hidden">
+            <div
+              role="progressbar"
+              aria-valuenow={confidencePercent}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="Confidence level"
+              className="h-1.5 w-full bg-[#0d0d0d] rounded-full overflow-hidden"
+            >
               <div
                 className="h-full bg-[#ccff00] shadow-[0_0_15px_rgba(204,255,0,0.5)]"
                 style={{ width: `${confidencePercent}%` }}
@@ -75,6 +82,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
       <div className="bg-white/5 px-6 py-3 flex flex-wrap gap-6 border-b border-white/5">
         {estimate.assumptions.map((a) => (
           <div key={a.field} className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-[#999] uppercase tracking-wider">{a.field}:</span>
             <span className="text-xs font-bold text-white/80 uppercase tracking-tighter">
               {a.assumedValue}
             </span>
@@ -90,6 +98,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
       {/* Category table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
+          <caption className="sr-only">Construction cost breakdown by category</caption>
           <thead>
             <tr className="bg-white/5">
               <th className="px-6 py-4 text-[10px] font-black text-[#999] uppercase tracking-[0.2em]">
@@ -120,7 +129,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
                 <td className="px-6 py-4 text-right">
                   <div className="inline-flex items-center gap-2">
                     <span className="text-xs font-black">{cat.incidencePercent.toFixed(1)}%</span>
-                    <div className="w-12 h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div aria-hidden="true" className="w-12 h-1 bg-white/10 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-[#ccff00]"
                         style={{
@@ -140,10 +149,10 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
       {/* Actions */}
       <div className="p-6 bg-white/5 border-t border-white/5 flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="flex items-center gap-4">
-          <button disabled className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Coming soon">
+          <button type="button" disabled className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Coming soon">
             Download PDF
           </button>
-          <button disabled className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Coming soon">
+          <button type="button" disabled className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Coming soon">
             Export Excel
           </button>
         </div>
@@ -151,7 +160,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
           <span className="text-[10px] font-bold text-[#999] uppercase tracking-widest">
             Adjust materials?
           </span>
-          <button className="bg-[#ccff00] text-black px-8 py-2 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] hover:brightness-110 active:scale-95 transition-all shadow-[0_0_20px_rgba(204,255,0,0.2)]">
+          <button type="button" disabled className="bg-[#ccff00]/40 text-black/40 px-8 py-2 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] cursor-not-allowed" title="Coming soon">
             Recalculate
           </button>
         </div>

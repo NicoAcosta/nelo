@@ -4,8 +4,20 @@ import { chatModel } from "@/lib/ai/models";
 import { chatTools } from "@/lib/ai/tools";
 import { buildSystemPrompt } from "@/lib/pricing/system-prompt-builder";
 
+export const maxDuration = 60;
+
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  let messages: UIMessage[];
+  try {
+    const body = await req.json();
+    messages = body.messages;
+  } catch {
+    return new Response("Invalid JSON body", { status: 400 });
+  }
+
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return new Response("messages must be a non-empty array", { status: 400 });
+  }
 
   const userMode = detectUserMode(messages);
   const modelMessages = await convertToModelMessages(messages);

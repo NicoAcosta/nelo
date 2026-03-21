@@ -5,6 +5,18 @@ export const metadata: Metadata = {
   title: "Nelo — AI Construction Cost Estimator",
   description:
     "Estimate your construction costs in seconds with AI. Detailed budgets based on real AMBA pricing and advanced analytics.",
+  openGraph: {
+    title: "Nelo — AI Construction Cost Estimator",
+    description:
+      "Estimate your construction costs in seconds with AI. Detailed budgets based on real AMBA pricing.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Nelo — AI Construction Cost Estimator",
+    description:
+      "Estimate your construction costs in seconds with AI. Detailed budgets based on real AMBA pricing.",
+  },
 };
 
 export default function RootLayout({

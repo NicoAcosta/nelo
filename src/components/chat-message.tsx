@@ -13,7 +13,7 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
           data-testid="user-avatar"
           className="w-10 h-10 rounded-full bg-black flex items-center justify-center flex-shrink-0 shadow-lg"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="8" r="5" />
             <path d="M20 21a8 8 0 0 0-16 0" />
           </svg>
