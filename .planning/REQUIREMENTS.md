@@ -88,12 +88,37 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| *(populated during roadmap creation)* | | |
+| INFRA-01 | Phase 1 — Foundation | Not started |
+| INFRA-02 | Phase 1 — Foundation (setup) / Phase 3 — Chat UI Shell (wiring) | Not started |
+| INFRA-03 | Phase 1 — Foundation | Not started |
+| INFRA-04 | Phase 1 — Foundation | Not started |
+| DATA-01 | Phase 1 — Foundation | Not started |
+| DATA-03 | Phase 1 — Foundation | Not started |
+| DATA-04 | Phase 1 — Foundation (defined) / Phase 4 — Chat API (consumed) | Not started |
+| CALC-01 | Phase 2 — Calculation Engine | Not started |
+| CALC-02 | Phase 2 — Calculation Engine | Not started |
+| CALC-03 | Phase 2 — Calculation Engine | Not started |
+| CALC-04 | Phase 2 — Calculation Engine | Not started |
+| CALC-05 | Phase 2 — Calculation Engine (computed) / Phase 5 — Cost Breakdown Display (rendered) | Not started |
+| CALC-06 | Phase 2 — Calculation Engine (computed) / Phase 5 — Cost Breakdown Display (rendered) | Not started |
+| CALC-07 | Phase 2 — Calculation Engine | Not started |
+| CHAT-01 | Phase 3 — Chat UI Shell | Not started |
+| CHAT-02 | Phase 4 — Chat API | Not started |
+| CHAT-03 | Phase 4 — Chat API | Not started |
+| CHAT-04 | Phase 4 — Chat API | Not started |
+| CHAT-05 | Phase 4 — Chat API (stated in conversation) / Phase 5 — Cost Breakdown Display (shown in UI) | Not started |
+| CHAT-06 | Phase 4 — Chat API | Not started |
+| CHAT-07 | Phase 4 — Chat API | Not started |
+| DATA-02 | Phase 4 — Chat API | Not started |
+| PLAN-01 | Phase 6 — Floor Plan Upload | Not started |
+| PLAN-02 | Phase 6 — Floor Plan Upload | Not started |
+| PLAN-03 | Phase 6 — Floor Plan Upload | Not started |
+| PLAN-04 | Phase 6 — Floor Plan Upload | Not started |
 
 **Coverage:**
 - v1 requirements: 22 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 22
+- Mapped to phases: 22
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-20*
