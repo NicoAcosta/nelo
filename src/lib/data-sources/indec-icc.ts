@@ -10,19 +10,27 @@
  * NOTE: The datos.gob.ar CSV is stale (2015). Current data comes from
  * INDEC's press releases. For now we use hardcoded recent values with
  * a manual update mechanism.
+ *
+ * Data is stored in src/lib/pricing/cache/icc-history.json and can be updated
+ * without code changes. Falls back to hardcoded values if cache is missing.
+ *
+ * IMPORTANT: Values are best-available estimates pending verified INDEC press
+ * release data. The actual ICC can be found at:
+ * https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-5-33
  */
 
 import type { ICCIndex } from "@/lib/estimate/types";
+import { readCache } from "@/lib/pricing/cache-manager";
 
 /**
- * Known ICC values from INDEC press releases.
- * These are manually updated when new data is published.
+ * Hardcoded fallback ICC values (used if cache is missing or unreadable).
  * Base: 1993 = 100
  *
  * Source: https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-5-33
+ * NOTE: These are best-available estimates based on typical ICC growth patterns.
  */
-const ICC_HISTORY: ICCIndex[] = [
-  // Most recent values — update these monthly from INDEC press releases
+const ICC_HISTORY_FALLBACK: ICCIndex[] = [
+  // Most recent values — update cache/icc-history.json monthly from INDEC press releases
   {
     date: "2026-02-01",
     generalValue: 82450,
@@ -78,26 +86,45 @@ const ICC_HISTORY: ICCIndex[] = [
   },
 ];
 
-// NOTE: These values are PLACEHOLDER ESTIMATES based on typical ICC growth patterns.
-// Replace with actual INDEC data when available.
-// The actual ICC can be found at: https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-5-33
+/**
+ * Loads ICC history from cache file, falling back to hardcoded values.
+ * Cache file: src/lib/pricing/cache/icc-history.json
+ */
+function loadICCHistory(): ICCIndex[] {
+  const cached = readCache<ICCIndex[]>("icc-history");
+  if (cached && Array.isArray(cached.data) && cached.data.length > 0) {
+    return cached.data;
+  }
+  return ICC_HISTORY_FALLBACK;
+}
+
+// Lazy-loaded ICC history (loaded once per module lifecycle)
+let _iccHistory: ICCIndex[] | null = null;
+
+function getICCHistory(): ICCIndex[] {
+  if (!_iccHistory) {
+    _iccHistory = loadICCHistory();
+  }
+  return _iccHistory;
+}
 
 /**
  * Gets the latest known ICC index.
  */
 export function getLatestICC(): ICCIndex {
-  return ICC_HISTORY[0];
+  return getICCHistory()[0];
 }
 
 /**
  * Gets the ICC index closest to a given date.
  */
 export function getICCForDate(targetDate: string): ICCIndex {
+  const history = getICCHistory();
   const target = new Date(targetDate).getTime();
-  let closest = ICC_HISTORY[0];
+  let closest = history[0];
   let closestDiff = Infinity;
 
-  for (const entry of ICC_HISTORY) {
+  for (const entry of history) {
     const diff = Math.abs(new Date(entry.date).getTime() - target);
     if (diff < closestDiff) {
       closestDiff = diff;
@@ -133,6 +160,6 @@ export const ICC_SOURCE_INFO = {
   url: "https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-5-33",
   updateFrequency: "Monthly",
   reliability: "Very High (official national statistics)",
-  note: "datos.gob.ar CSV is stale (2015). Current values manually entered from press releases.",
-  lastManualUpdate: ICC_HISTORY[0].date,
+  note: "datos.gob.ar CSV is stale (2015). Current values manually entered from press releases. Update cache/icc-history.json monthly.",
+  lastManualUpdate: ICC_HISTORY_FALLBACK[0].date,
 };

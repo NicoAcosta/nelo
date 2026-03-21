@@ -14,6 +14,7 @@ import type {
   ConfidenceLevel,
   Unit,
 } from "./types";
+import { updatePrice } from "./types";
 import {
   deriveBaseQuantities,
   resolveItemQuantity,
@@ -22,6 +23,7 @@ import {
 } from "./derive-quantities";
 import { CATEGORIES } from "@/lib/pricing/categories-config";
 import { AMBA_UNIT_COSTS, ZONE_MULTIPLIERS, COST_STRUCTURE } from "@/lib/pricing/amba-unit-costs";
+import { getLatestICC } from "@/lib/data-sources/indec-icc";
 import type { Locale } from "@/lib/i18n/types";
 import { translations } from "@/lib/i18n/translations";
 
@@ -31,6 +33,7 @@ import { translations } from "@/lib/i18n/translations";
 export function applyUnitCosts(inputs: ProjectInputs): LineItem[] {
   const base = deriveBaseQuantities(inputs);
   const zoneMultiplier = ZONE_MULTIPLIERS[inputs.locationZone ?? "caba"] ?? 1.0;
+  const iccCurrent = getLatestICC().generalValue;
 
   const lineItems: LineItem[] = [];
 
@@ -43,8 +46,17 @@ export function applyUnitCosts(inputs: ProjectInputs): LineItem[] {
           : 0;
 
         const unitCost = AMBA_UNIT_COSTS[item.code];
-        const materialCost = (unitCost?.materialCost ?? 0) * zoneMultiplier;
-        const laborCost = (unitCost?.laborCost ?? 0) * zoneMultiplier;
+
+        // Per-item ICC adjustment: if iccBaseValue is set, adjust price to current ICC level
+        const rawTotalCost = unitCost?.totalCost ?? 0;
+        const iccAdjustedTotal = (unitCost?.iccBaseValue && unitCost.iccBaseValue > 0)
+          ? updatePrice(rawTotalCost, unitCost.iccBaseValue, iccCurrent)
+          : rawTotalCost;
+
+        // Proportionally split ICC-adjusted total back into material and labor
+        const rawMaterialFraction = rawTotalCost > 0 ? (unitCost?.materialCost ?? 0) / rawTotalCost : 0.5;
+        const materialCost = iccAdjustedTotal * rawMaterialFraction * zoneMultiplier;
+        const laborCost = iccAdjustedTotal * (1 - rawMaterialFraction) * zoneMultiplier;
         const totalCost = materialCost + laborCost;
 
         const safeQuantity = Number.isFinite(quantity) ? quantity : 0;
@@ -192,6 +204,8 @@ export function computeEstimate(inputs: ProjectInputs, locale: Locale = "en"): E
   const rawPricePerM2 = totalPrice / floorArea;
   const pricePerM2 = Number.isFinite(rawPricePerM2) ? Math.round(rawPricePerM2) : 0;
 
+  const latestICC = getLatestICC();
+
   return {
     pricePerM2,
     totalPrice,
@@ -213,18 +227,19 @@ export function computeEstimate(inputs: ProjectInputs, locale: Locale = "en"): E
     assumptions,
     locationZone: inputs.locationZone ?? "caba",
     floorAreaM2: floorArea,
-    priceBaseDate: "2024-07-01",
-    iccBaseValue: 1000,
-    iccCurrentValue: 1000,
+    priceBaseDate: latestICC.date,
+    iccBaseValue: latestICC.generalValue,
+    iccCurrentValue: latestICC.generalValue,
   };
 }
 
 /**
  * Fallback: estimate direct cost from incidence percentages when no unit costs exist.
- * Uses a rough market reference of ~$900,000 ARS/m² (mid-range, AMBA, Q1 2024).
+ * Reference: GCBA ICCBA Nov 2025 ~$1.1M/m2 adjusted to Mar 2026 via ICC (~1.2M)
+ * Per D-15: replaces the hardcoded $900K fallback.
  */
 function estimateFromIncidence(inputs: ProjectInputs): number {
   const area = inputs.totalFloorAreaM2 ?? 100;
-  const roughCostPerM2 = 900_000; // ARS — rough mid-range reference
+  const roughCostPerM2 = 1_200_000; // ARS — GCBA ICCBA Nov 2025 ~$1.1M/m2 adjusted to Mar 2026 via ICC (~1.2M)
   return Math.round(area * roughCostPerM2);
 }

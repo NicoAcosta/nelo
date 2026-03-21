@@ -308,6 +308,7 @@ export interface UnitCost {
   lastUpdated: string; // ISO date
   source: string; // e.g., "UOCRA + market research"
   isPlaceholder: boolean;
+  iccBaseValue?: number; // ICC general index when this price was set (per D-11), used for per-item ICC adjustment
 }
 
 /** ICC index values for price updates */

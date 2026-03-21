@@ -1,1 +1,58 @@
-{ "data": null, "lastFetched": "1970-01-01T00:00:00.000Z", "source": "seed" }
+{
+  "data": [
+    {
+      "date": "2026-02-01",
+      "generalValue": 82450,
+      "chapters": {
+        "estructura": 78200,
+        "mamposteria": 85100,
+        "revoques": 79800,
+        "pinturas": 88300,
+        "sanitaria": 84600,
+        "gas": 81200,
+        "electrica": 86900
+      }
+    },
+    {
+      "date": "2026-01-01",
+      "generalValue": 80100,
+      "chapters": {
+        "estructura": 76000,
+        "mamposteria": 82700,
+        "revoques": 77500,
+        "pinturas": 85800,
+        "sanitaria": 82200,
+        "gas": 78900,
+        "electrica": 84400
+      }
+    },
+    {
+      "date": "2025-12-01",
+      "generalValue": 78200,
+      "chapters": {
+        "estructura": 74200,
+        "mamposteria": 80700,
+        "revoques": 75600,
+        "pinturas": 83700,
+        "sanitaria": 80200,
+        "gas": 77000,
+        "electrica": 82300
+      }
+    },
+    {
+      "date": "2024-07-01",
+      "generalValue": 55800,
+      "chapters": {
+        "estructura": 52900,
+        "mamposteria": 57500,
+        "revoques": 53900,
+        "pinturas": 59700,
+        "sanitaria": 57200,
+        "gas": 54900,
+        "electrica": 58700
+      }
+    }
+  ],
+  "lastFetched": "2026-03-21",
+  "source": "INDEC press release estimates — best-available values pending verified INDEC press release data"
+}
