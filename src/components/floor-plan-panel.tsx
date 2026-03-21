@@ -128,8 +128,9 @@ function InputField({
       <div className="relative">
         <input
           type="number"
+          min={0}
           value={value}
-          onChange={(e) => onChange(Number(e.target.value))}
+          onChange={(e) => onChange(Math.max(0, Number(e.target.value)))}
           className="w-full bg-black/5 border-none rounded-2xl px-5 py-5 text-on-surface font-headline font-black text-2xl focus:ring-2 focus:ring-primary transition-all"
         />
         {unit && (

@@ -50,7 +50,12 @@ describe("FloorPlanPanel", () => {
     const onConfirm = vi.fn();
     render(<FloorPlanPanel extraction={mockExtraction} onConfirm={onConfirm} />);
     fireEvent.click(screen.getByRole("button", { name: /confirm/i }));
-    expect(onConfirm).toHaveBeenCalledTimes(1);
+    expect(onConfirm).toHaveBeenCalledWith({
+      totalAreaM2: 120,
+      roomCount: 3,
+      bathroomCount: 2,
+      windowCount: 8,
+    });
   });
 
   it("renders the analysis phase badge", () => {

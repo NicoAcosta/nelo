@@ -18,8 +18,9 @@ interface CostBreakdownProps {
 }
 
 export function CostBreakdown({ estimate }: CostBreakdownProps) {
-  const confidencePercent =
-    100 - (estimate.confidenceRange.low + estimate.confidenceRange.high) / 2;
+  const confidencePercent = estimate.inputsTotal > 0
+    ? Math.round((estimate.inputsProvided / estimate.inputsTotal) * 100)
+    : 0;
 
   return (
     <div className="bg-[#1a1a1a] text-[#f2f2f2] rounded-lg overflow-hidden shadow-2xl">
@@ -139,10 +140,10 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
       {/* Actions */}
       <div className="p-6 bg-white/5 border-t border-white/5 flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black hover:bg-[#ccff00] hover:text-black transition-all uppercase tracking-widest">
+          <button disabled className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Coming soon">
             Download PDF
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black hover:bg-[#ccff00] hover:text-black transition-all uppercase tracking-widest">
+          <button disabled className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Coming soon">
             Export Excel
           </button>
         </div>

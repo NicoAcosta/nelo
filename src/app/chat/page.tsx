@@ -3,7 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Sidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
 import { MobileNav } from "@/components/mobile-nav";
@@ -17,9 +17,9 @@ function ChatContent() {
   const [hasSentInitial, setHasSentInitial] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { messages, status, sendMessage } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
-  });
+  const transport = useMemo(() => new DefaultChatTransport({ api: "/api/chat" }), []);
+
+  const { messages, status, sendMessage } = useChat({ transport });
 
   const isStreaming = status === "streaming" || status === "submitted";
 
@@ -31,10 +31,10 @@ function ChatContent() {
     }
   }, [initialQuery, hasSentInitial, messages.length, sendMessage]);
 
-  // Auto-scroll on new messages
+  // Auto-scroll when new messages are added
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages.length]);
 
   function handleSend(text: string) {
     sendMessage({ text });
@@ -60,22 +60,24 @@ function ChatContent() {
             </div>
           )}
 
-          {messages.map((message) => {
-            const textContent = message.parts
-              .filter((p): p is { type: "text"; text: string } => p.type === "text")
-              .map((p) => p.text)
-              .join("");
+          {messages
+            .filter((m) => m.role === "user" || m.role === "assistant")
+            .map((message) => {
+              const textContent = message.parts
+                .filter((p): p is { type: "text"; text: string } => p.type === "text")
+                .map((p) => p.text)
+                .join("");
 
-            if (!textContent) return null;
+              if (!textContent) return null;
 
-            return (
-              <ChatMessage
-                key={message.id}
-                role={message.role as "user" | "assistant"}
-                content={textContent}
-              />
-            );
-          })}
+              return (
+                <ChatMessage
+                  key={message.id}
+                  role={message.role as "user" | "assistant"}
+                  content={textContent}
+                />
+              );
+            })}
 
           {isStreaming && messages.length > 0 && (
             <div className="flex gap-6 max-w-3xl">
