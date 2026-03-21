@@ -33,7 +33,7 @@ These must ship or users will distrust/abandon the product:
 
 ## Differentiators
 
-What ArquiCost offers that no Argentine/LatAm competitor does:
+What Nelo offers that no Argentine/LatAm competitor does:
 
 1. **Conversational input collection** — zero-friction, no form, no jargon; the AI maps natural language to structured fields. No Argentine competitor does this.
 2. **21-category presupuesto de obra output** — domain-specific Argentine professional taxonomy, not a generic template.

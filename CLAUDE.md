@@ -1,7 +1,7 @@
 <!-- GSD:project-start source:PROJECT.md -->
 ## Project
 
-**ArquiCost — AI Construction Cost Estimator**
+**Nelo — AI Construction Cost Estimator**
 
 An AI-powered chatbot that helps consumers and architects/engineers estimate construction costs in Buenos Aires (AMBA region). Users describe their project through conversation and upload floor plans. The app collects structured data progressively, analyzes uploaded plans with vision AI, and outputs a detailed cost breakdown with price per square meter and total construction price based on a 21-category Argentine construction budget (presupuesto de obra).
 

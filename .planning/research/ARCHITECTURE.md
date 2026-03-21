@@ -1,4 +1,4 @@
-# ArquiCost — System Architecture
+# Nelo — System Architecture
 
 *Research document for the hackathon build. Last updated: 2026-03-20.*
 

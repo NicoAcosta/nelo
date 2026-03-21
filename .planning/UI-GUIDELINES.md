@@ -1,4 +1,4 @@
-# ArquiCost — UI/UX Guidelines for Designers
+# Nelo — UI/UX Guidelines for Designers
 
 **Last updated:** 2026-03-21
 
@@ -6,7 +6,7 @@
 
 ## 1. Product Overview
 
-ArquiCost is an AI-powered construction cost estimation chatbot for the Argentine market (AMBA region). Users describe their project through natural conversation — or upload a floor plan — and receive a detailed cost breakdown with price per m² and total construction price. The product targets both homeowners who want a ballpark figure and architects/engineers who need a structured presupuesto de obra starting point.
+Nelo is an AI-powered construction cost estimation chatbot for the Argentine market (AMBA region). Users describe their project through natural conversation — or upload a floor plan — and receive a detailed cost breakdown with price per m² and total construction price. The product targets both homeowners who want a ballpark figure and architects/engineers who need a structured presupuesto de obra starting point.
 
 ---
 

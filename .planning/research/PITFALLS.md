@@ -1,4 +1,4 @@
-# ArquiCost — Common Pitfalls & Prevention Guide
+# Nelo — Common Pitfalls & Prevention Guide
 
 Research-based guide covering the most common failure modes for AI chatbot + construction estimation projects, mapped to this project's specific context: Next.js App Router, AI SDK v6, Claude via AI Gateway, 24-hour hackathon, Argentine construction domain, Spanish-first UX.
 
@@ -10,7 +10,7 @@ Research-based guide covering the most common failure modes for AI chatbot + con
 
 ### 1.1 Tool Calling Reliability
 
-**The problem**: Models sometimes skip tool calls entirely and answer in plain text, call the wrong tool, hallucinate tool arguments that don't match the Zod schema, or chain tool calls in an order the system didn't expect. In a data-collection chatbot like ArquiCost, a skipped tool call means the structured data never arrives — the calculation engine silently runs on incomplete input.
+**The problem**: Models sometimes skip tool calls entirely and answer in plain text, call the wrong tool, hallucinate tool arguments that don't match the Zod schema, or chain tool calls in an order the system didn't expect. In a data-collection chatbot like Nelo, a skipped tool call means the structured data never arrives — the calculation engine silently runs on incomplete input.
 
 **Warning signs**:
 - The model responds with a summary of what it "collected" rather than invoking a tool
@@ -53,7 +53,7 @@ Research-based guide covering the most common failure modes for AI chatbot + con
 
 ### 1.3 System Prompt Length and Effectiveness
 
-**The problem**: The ArquiCost system prompt must carry: role definition, conversation flow rules for two user modes (consumer/professional), tool invocation instructions for multiple tools, the 21-category budget structure, AMBA pricing context, and Spanish language instructions. That is a lot. Past roughly 2,000–3,000 tokens of dense instructions, models begin to weight earlier sections more heavily and silently ignore later ones.
+**The problem**: The Nelo system prompt must carry: role definition, conversation flow rules for two user modes (consumer/professional), tool invocation instructions for multiple tools, the 21-category budget structure, AMBA pricing context, and Spanish language instructions. That is a lot. Past roughly 2,000–3,000 tokens of dense instructions, models begin to weight earlier sections more heavily and silently ignore later ones.
 
 **Warning signs**:
 - The model ignores the professional mode branching logic (a lower section of the prompt)
@@ -107,7 +107,7 @@ Research-based guide covering the most common failure modes for AI chatbot + con
 - Use AI SDK's `useChat` with explicit `onToolCall` handling. Map each tool name to a dedicated result component (e.g., `FloorPlanConfirmation`, `CostBreakdownCard`).
 - Never render `tool-call` message parts as text. Filter them explicitly: `if (part.type === 'tool-call') return <ToolCallIndicator />`.
 - Test streaming with a slow network (Chrome DevTools throttling). Bugs that only appear during slow responses are common.
-- Add a visible processing indicator that persists from first token to last. A simple "ArquiCost está calculando..." banner works.
+- Add a visible processing indicator that persists from first token to last. A simple "Nelo está calculando..." banner works.
 - For the cost breakdown, do not stream the calculation results. Wait for the complete tool result, then render the full breakdown as a single non-streaming component. Partial cost tables confuse users.
 
 **Phase to address**: Chat UI implementation.
@@ -404,7 +404,7 @@ Research-based guide covering the most common failure modes for AI chatbot + con
 
 ### 4.4 No Feedback During Long AI Processing
 
-**The problem**: The AI processing pipeline for ArquiCost can be slow: floor plan vision analysis, multi-tool conversation turns, and final calculation can each take 3–10 seconds. Without visible feedback, users assume the app is broken and reload — which wastes the computation and restarts the conversation.
+**The problem**: The AI processing pipeline for Nelo can be slow: floor plan vision analysis, multi-tool conversation turns, and final calculation can each take 3–10 seconds. Without visible feedback, users assume the app is broken and reload — which wastes the computation and restarts the conversation.
 
 **Warning signs**:
 - No loading indicator during file upload and vision analysis
@@ -417,7 +417,7 @@ Research-based guide covering the most common failure modes for AI chatbot + con
 - During file upload: show a progress bar (even a faked one that fills over a realistic 3-second window).
 - During vision analysis: show "Analizando el plano... esto puede tardar unos segundos." with a spinner.
 - During calculation: show "Calculando el presupuesto..." — this can be a streaming message that names the categories as they are processed.
-- Disable the chat input with a visible reason: a subtle "ArquiCost está procesando..." label near the input.
+- Disable the chat input with a visible reason: a subtle "Nelo está procesando..." label near the input.
 - Set a maximum wait time in the UI. If no response arrives within 20 seconds, show: "Esto está tardando más de lo esperado. ¿Querés que lo intente de nuevo?"
 
 **Phase to address**: Chat UI implementation + UX polish pass.

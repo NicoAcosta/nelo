@@ -1,4 +1,4 @@
-# ArquiCost — Feature Research: Construction Cost Estimation Products
+# Nelo — Feature Research: Construction Cost Estimation Products
 
 *Research date: 2026-03-20. Context: 24-hour hackathon, AMBA region, AI chatbot estimator.*
 
@@ -44,7 +44,7 @@ Professional estimators (architects, engineers, contractors) using ProEst or RSM
 - Ability to override any value
 - A result that matches what a quantity surveyor would produce within ±20%
 
-ArquiCost serves this via the 21-category presupuesto de obra structure, which maps directly to Argentine professional conventions. The professional mode (15+ questions) targets this persona.
+Nelo serves this via the 21-category presupuesto de obra structure, which maps directly to Argentine professional conventions. The professional mode (15+ questions) targets this persona.
 
 ### 1.5 What Consumer Users (Handoff AI / Clear Estimates Users) Expect
 
@@ -60,7 +60,7 @@ This is the consumer mode (8 questions) persona.
 
 ## 2. Differentiators — Competitive Advantage
 
-These are features that ArquiCost can use to differentiate from existing products in the Argentine/LatAm market.
+These are features that Nelo can use to differentiate from existing products in the Argentine/LatAm market.
 
 ### 2.1 AI Chatbot Interface (Conversational Data Collection)
 
@@ -107,7 +107,7 @@ These are features that ArquiCost can use to differentiate from existing product
 
 ### 2.4 Real-Time Calculation Updates
 
-**Competitive gap:** Most tools require "submit" and show a static result. ArquiCost can update the estimate live as each conversation turn adds more data.
+**Competitive gap:** Most tools require "submit" and show a static result. Nelo can update the estimate live as each conversation turn adds more data.
 
 **Why it matters:** Users see the estimate improving in real time, which makes the conversation feel purposeful and demonstrates how each input affects cost. This is a UX advantage over form-based tools.
 

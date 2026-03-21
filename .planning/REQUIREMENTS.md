@@ -1,4 +1,4 @@
-# Requirements: ArquiCost
+# Requirements: Nelo
 
 **Defined:** 2026-03-20
 **Core Value:** Accurate, transparent construction cost estimation through natural conversation — the user gets a detailed price breakdown they can trust.
