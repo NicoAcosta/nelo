@@ -1,19 +1,17 @@
 import { streamText, convertToModelMessages, stepCountIs } from "ai";
 import type { UIMessage } from "ai";
+import { chatModel } from "@/lib/ai/models";
 import { chatTools } from "@/lib/ai/tools";
 import { buildSystemPrompt } from "@/lib/pricing/system-prompt-builder";
 
 export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
 
-  // Detect user mode from conversation context
-  // Default to consumer; switch to professional if technical terms detected
   const userMode = detectUserMode(messages);
-
   const modelMessages = await convertToModelMessages(messages);
 
   const result = streamText({
-    model: "anthropic/claude-sonnet-4.6",
+    model: chatModel,
     system: buildSystemPrompt(userMode),
     messages: modelMessages,
     tools: chatTools,
