@@ -101,7 +101,7 @@ function loadICCHistory(): ICCIndex[] {
 // Lazy-loaded ICC history (loaded once per module lifecycle)
 let _iccHistory: ICCIndex[] | null = null;
 
-function getICCHistory(): ICCIndex[] {
+export function getICCHistory(): ICCIndex[] {
   if (!_iccHistory) {
     _iccHistory = loadICCHistory();
   }
