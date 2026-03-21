@@ -141,7 +141,7 @@ function ChatContent() {
                 Tell me about your construction project...
               </p>
               <div className="flex flex-wrap justify-center gap-3">
-                {["How much does a 100m² house cost?", "Price per m² in AMBA", "Full estimate with finishes"].map((s) => (
+                {["How much does a 100m² house cost?", "Price per m² in AMBA", "Full estimate with finishes", "Upload a floor plan for a detailed estimate"].map((s) => (
                   <button
                     key={s}
                     type="button"
@@ -156,7 +156,7 @@ function ChatContent() {
           )}
 
           {error && (
-            <div className="flex items-center gap-3 p-4 bg-error/10 rounded-xl border border-error/20 max-w-3xl mx-auto">
+            <div role="alert" className="flex items-center gap-3 p-4 bg-error/10 rounded-xl border border-error/20 max-w-3xl mx-auto">
               <p className="text-sm text-error font-medium flex-1">
                 Something went wrong. Please try again.
               </p>
@@ -192,6 +192,7 @@ function ChatContent() {
                   <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:150ms]" />
                   <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:300ms]" />
                 </div>
+                <span className="sr-only">Nelo is typing...</span>
               </div>
             </div>
           )}

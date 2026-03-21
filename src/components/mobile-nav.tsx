@@ -12,7 +12,7 @@ type Tab = "chat" | "estimates" | "blueprints" | "profile";
 
 const tabs: { id: Tab; label: string; icon: typeof IconChat; href: string }[] = [
   { id: "chat", label: "Chat", icon: IconChat, href: "/chat" },
-  { id: "estimates", label: "Estimates", icon: IconEstimates, href: "#" },
+  { id: "estimates", label: "Estimates", icon: IconEstimates, href: "/chat" },
   { id: "blueprints", label: "Blueprints", icon: IconBlueprints, href: "#" },
   { id: "profile", label: "Profile", icon: IconProfile, href: "#" },
 ];
@@ -27,7 +27,7 @@ export function MobileNav({ activeTab = "chat" }: { activeTab?: Tab }) {
           <span
             key={id}
             aria-disabled="true"
-            className="flex flex-col items-center gap-1 text-on-surface/20 cursor-not-allowed"
+            className="flex flex-col items-center gap-1 text-on-surface/20 cursor-not-allowed min-w-[44px] min-h-[44px] justify-center"
           >
             <Icon aria-hidden="true" />
             <span className="text-[9px] font-black uppercase tracking-tighter">
@@ -39,7 +39,7 @@ export function MobileNav({ activeTab = "chat" }: { activeTab?: Tab }) {
             key={id}
             href={href}
             aria-current={isActive ? "page" : undefined}
-            className={`flex flex-col items-center gap-1 ${
+            className={`flex flex-col items-center gap-1 min-w-[44px] min-h-[44px] justify-center ${
               isActive ? "text-on-surface" : "text-on-surface/40"
             }`}
           >

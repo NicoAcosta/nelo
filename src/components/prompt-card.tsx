@@ -25,6 +25,7 @@ export function PromptCard({ icon, text, onClick }: PromptCardProps) {
 
   return (
     <button
+      type="button"
       onClick={onClick}
       className="w-full text-left p-5 glass-card hover:bg-surface-container-high rounded-xl transition-all duration-200 group flex items-start gap-4"
     >

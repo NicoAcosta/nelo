@@ -149,10 +149,10 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
       {/* Actions */}
       <div className="p-6 bg-white/5 border-t border-white/5 flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="flex items-center gap-4">
-          <button type="button" disabled className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Coming soon">
+          <button type="button" disabled aria-label="Download PDF — coming soon" className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Coming soon">
             Download PDF
           </button>
-          <button type="button" disabled className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Coming soon">
+          <button type="button" disabled aria-label="Export Excel — coming soon" className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Coming soon">
             Export Excel
           </button>
         </div>
@@ -160,7 +160,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
           <span className="text-[10px] font-bold text-[#999] uppercase tracking-widest">
             Adjust materials?
           </span>
-          <button type="button" disabled className="bg-[#ccff00]/40 text-black/40 px-8 py-2 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] cursor-not-allowed" title="Coming soon">
+          <button type="button" disabled aria-label="Recalculate — coming soon" className="bg-[#ccff00]/40 text-black/40 px-8 py-2 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] cursor-not-allowed" title="Coming soon">
             Recalculate
           </button>
         </div>

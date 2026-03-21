@@ -22,15 +22,20 @@ export async function POST(req: Request) {
   const userMode = detectUserMode(messages);
   const modelMessages = await convertToModelMessages(messages);
 
-  const result = streamText({
-    model: chatModel,
-    system: buildSystemPrompt(userMode),
-    messages: modelMessages,
-    tools: chatTools,
-    stopWhen: stepCountIs(5),
-  });
+  try {
+    const result = streamText({
+      model: chatModel,
+      system: buildSystemPrompt(userMode),
+      messages: modelMessages,
+      tools: chatTools,
+      stopWhen: stepCountIs(5),
+    });
 
-  return result.toUIMessageStreamResponse();
+    return result.toUIMessageStreamResponse();
+  } catch (error) {
+    console.error("Chat API error:", error);
+    return new Response("Internal server error", { status: 500 });
+  }
 }
 
 /**

@@ -93,6 +93,7 @@ export function FloorPlanPanel({
 
             <div className="mt-10 space-y-4">
               <button
+                type="button"
                 onClick={handleConfirm}
                 className="w-full bg-primary py-5 rounded-2xl text-on-primary font-headline font-black text-lg uppercase tracking-widest shadow-lg shadow-primary/20 hover:brightness-95 active:scale-[0.98] transition-all"
               >

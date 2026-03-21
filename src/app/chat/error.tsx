@@ -1,26 +1,20 @@
 "use client";
 
-import { useEffect } from "react";
-
-export default function GlobalError({
+export default function ChatError({
   error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    console.error("Unhandled error:", error);
-  }, [error]);
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-6">
       <div className="text-center max-w-md">
-        <h1 className="text-4xl font-black font-headline tracking-tight text-on-surface uppercase mb-4">
-          Something went wrong
+        <h1 className="text-3xl font-black font-headline tracking-tight text-on-surface uppercase mb-4">
+          Chat Error
         </h1>
         <p className="text-on-surface/60 mb-8 text-sm">
-          An unexpected error occurred. Please try again.
+          Something went wrong with the chat. Your conversation may have been interrupted.
         </p>
         <button
           type="button"

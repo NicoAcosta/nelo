@@ -33,11 +33,11 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
         data-testid="assistant-avatar"
         className="w-10 h-10 rounded-lg bg-outline/30 flex items-center justify-center flex-shrink-0"
       >
-        <IconNelo className="w-5 h-5 text-black" />
+        <IconNelo className="w-5 h-5 text-on-surface" />
       </div>
       <div className="space-y-4">
         <div className="glass-card rounded-2xl p-6 border border-white/40 shadow-sm">
-          <p className="text-on-surface text-lg leading-relaxed font-medium">{content}</p>
+          <p className="text-on-surface text-lg leading-relaxed font-medium whitespace-pre-wrap">{content}</p>
         </div>
         <div className="flex gap-2">
           <span className="text-[10px] text-on-surface/40 font-bold uppercase tracking-widest px-1">
