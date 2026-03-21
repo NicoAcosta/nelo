@@ -190,10 +190,9 @@ describe("resolveUnitCost", () => {
   it("returns AMBA_UNIT_COSTS entry when no override exists", () => {
     const result = resolveUnitCost("4.1.1", overridesPath);
     expect(result).not.toBeNull();
-    // source contains "placeholder" or "FERES" (from the base AMBA_UNIT_COSTS)
-    expect(
-      result!.source.includes("placeholder") || result!.source.includes("FERES"),
-    ).toBe(true);
+    // source should be non-empty and not "placeholder" (real prices now populated)
+    expect(result!.source).toBeTruthy();
+    expect(result!.isPlaceholder).toBe(false);
   });
 
   it("returns null for a non-existent item code with no override", () => {
