@@ -1,0 +1,205 @@
+<!-- Nelo Chat Empty (My Design System) -->
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ccff00",
+              "on-primary": "#000000",
+              "background": "#f5f5f5",
+              "surface": "#ffffff",
+              "gray-base": "#cccccc",
+              "gray-dark": "#333333",
+              "outline": "#cccccc",
+            },
+            fontFamily: {
+              "headline": ["Helvetica", "Arial", "sans-serif"],
+              "body": ["Helvetica", "Arial", "sans-serif"],
+              "label": ["Helvetica", "Arial", "sans-serif"]
+            },
+            borderRadius: {
+                "DEFAULT": "0.5rem",
+                "lg": "0.75rem",
+                "xl": "1rem",
+                "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-effect {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background-color: rgba(204, 204, 204, 0.1);
+      }
+      .glass-primary {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background-color: rgba(204, 255, 0, 0.85);
+      }
+      body {
+        font-family: 'Helvetica', 'Arial', sans-serif;
+      }
+    </style>
+</head>
+<body class="bg-background text-gray-dark font-body selection:bg-primary selection:text-black">
+<div class="flex h-screen overflow-hidden">
+<aside class="h-screen w-64 hidden md:flex flex-col border-r border-gray-base bg-white py-6">
+<div class="px-6 mb-8">
+<h1 class="text-xl font-bold text-gray-dark font-headline">Nelo AI</h1>
+<p class="text-xs text-gray-dark/60 font-label">Project Architect</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-gray-dark/60 hover:text-gray-dark mx-2 hover:bg-gray-base/20 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary text-black rounded-lg mx-2 transition-transform" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-medium">Estimates</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-gray-dark/60 hover:text-gray-dark mx-2 hover:bg-gray-base/20 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">architecture</span>
+<span class="font-medium">Blueprints</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-gray-dark/60 hover:text-gray-dark mx-2 hover:bg-gray-base/20 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-2 space-y-4">
+<button class="w-full bg-black text-white font-bold py-3 px-4 rounded-lg text-sm transition-transform active:scale-95">View Summary</button>
+<div class="border-t border-gray-base pt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-gray-dark/60 hover:text-gray-dark mx-2 hover:bg-gray-base/20 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-medium">Support</span>
+</a>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col relative overflow-hidden bg-[#eeeeee]">
+<header class="bg-white/80 backdrop-blur-md border-b border-gray-base sticky top-0 z-50 flex justify-between items-center w-full px-6 py-4">
+<div class="flex items-center gap-4">
+<span class="text-2xl font-black text-black tracking-tight font-headline">Nelo</span>
+<div class="h-6 w-px bg-gray-base mx-2 hidden md:block"></div>
+<span class="hidden md:inline text-gray-dark/60 font-medium text-sm">Active Project: Vivienda Unifamiliar</span>
+</div>
+<div class="flex items-center gap-6">
+<span class="text-xs text-gray-dark/40 font-medium tracking-wide uppercase">Updated: Oct 24</span>
+<button class="bg-primary text-black px-5 py-2 rounded-full text-sm font-bold transition-all hover:shadow-lg active:scale-95">Start New Chat</button>
+</div>
+</header>
+<section class="flex-1 overflow-y-auto p-6 md:p-12 space-y-12 max-w-5xl mx-auto w-full">
+<!-- AI Message -->
+<div class="flex gap-6 max-w-3xl">
+<div class="w-10 h-10 rounded-lg bg-gray-base flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-black">precision_manufacturing</span>
+</div>
+<div class="space-y-4">
+<div class="glass-effect rounded-2xl p-6 border border-white/40 shadow-sm">
+<p class="text-gray-dark text-lg leading-relaxed font-medium">Perfecto, vamos con una estimación rápida. ¿Cuántos pisos tendrá la casa? Esto afecta el costo de estructura y la cantidad de escalera.</p>
+</div>
+<div class="flex gap-2">
+<span class="text-[10px] text-gray-dark/40 font-bold uppercase tracking-widest px-1">AI Architect • Analizando Variables</span>
+</div>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-6 max-w-3xl ml-auto flex-row-reverse">
+<div class="w-10 h-10 rounded-full bg-black flex items-center justify-center flex-shrink-0 shadow-lg">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<div class="space-y-2 flex flex-col items-end">
+<div class="glass-primary text-black rounded-2xl p-6 shadow-md border border-white/20">
+<p class="text-xl font-bold font-headline">Dos pisos.</p>
+</div>
+</div>
+</div>
+<!-- AI Message with Options -->
+<div class="flex gap-6 max-w-4xl">
+<div class="w-10 h-10 rounded-lg bg-gray-base flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-black">precision_manufacturing</span>
+</div>
+<div class="space-y-6 flex-1">
+<div class="glass-effect rounded-2xl p-6 border border-white/40 shadow-sm">
+<p class="text-gray-dark text-lg leading-relaxed font-medium mb-6">Entendido. Voy a asumir una altura de piso a techo de 2,60 m — avisame si es diferente. ¿Qué tipo de techo tenés en mente? (Chapa, Teja, Losa plana).</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<button class="group relative overflow-hidden p-4 rounded-xl bg-white/60 hover:bg-primary transition-all border border-gray-base/30 text-left">
+<div class="mb-3 w-8 h-8 rounded bg-gray-base flex items-center justify-center"><span class="material-symbols-outlined text-black">layers</span></div>
+<h4 class="font-bold text-black mb-1">Chapa</h4>
+<p class="text-xs text-gray-dark/60 leading-tight group-hover:text-black">Ideal para climas húmedos y presupuesto optimizado.</p>
+</button>
+<button class="group relative overflow-hidden p-4 rounded-xl bg-white/60 hover:bg-primary transition-all border border-gray-base/30 text-left">
+<div class="mb-3 w-8 h-8 rounded bg-gray-base flex items-center justify-center"><span class="material-symbols-outlined text-black">grid_view</span></div>
+<h4 class="font-bold text-black mb-1">Teja</h4>
+<p class="text-xs text-gray-dark/60 leading-tight group-hover:text-black">Estética tradicional con excelente aislación térmica.</p>
+</button>
+<button class="group relative overflow-hidden p-4 rounded-xl bg-white/60 hover:bg-primary transition-all border border-gray-base/30 text-left">
+<div class="mb-3 w-8 h-8 rounded bg-gray-base flex items-center justify-center"><span class="material-symbols-outlined text-black">square_foot</span></div>
+<h4 class="font-bold text-black mb-1">Losa plana</h4>
+<p class="text-xs text-gray-dark/60 leading-tight group-hover:text-black">Minimalismo moderno y posibilidad de terraza accesible.</p>
+</button>
+</div>
+</div>
+<!-- Assumption Badge -->
+<div class="bg-black text-white p-4 rounded-xl flex items-center justify-between shadow-lg">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">info</span>
+<div>
+<p class="text-xs font-bold text-gray-base uppercase">Parámetro Automático</p>
+<p class="text-sm font-medium">Altura estandarizada: 2.60m</p>
+</div>
+</div>
+<button class="text-xs font-bold text-primary hover:underline px-3 py-1">EDITAR</button>
+</div>
+</div>
+</div>
+</section>
+<div class="p-6 bg-transparent relative z-10">
+<div class="max-w-4xl mx-auto flex items-end gap-4 glass-effect p-2 rounded-2xl border border-gray-base/50 focus-within:border-primary transition-all">
+<button class="p-3 text-gray-dark/60 hover:text-black transition-colors"><span class="material-symbols-outlined">attach_file</span></button>
+<textarea class="flex-1 bg-transparent border-none focus:ring-0 text-gray-dark placeholder:text-gray-dark/30 py-3 resize-none font-medium" placeholder="Escribe tu respuesta aquí..." rows="1"></textarea>
+<button class="bg-primary text-black h-12 w-12 rounded-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Right Stats Sidebar -->
+<aside class="w-80 hidden xl:flex flex-col border-l border-gray-base bg-white p-6 space-y-8 overflow-y-auto">
+<div>
+<h3 class="text-xs font-bold text-gray-dark/40 uppercase tracking-widest mb-6">Resumen de Estimación</h3>
+<div class="space-y-6">
+<div><p class="text-[10px] text-gray-dark/60 font-bold mb-1">SUPERFICIE ESTIMADA</p><p class="text-3xl font-black font-headline text-black">180 <span class="text-sm font-medium">m²</span></p></div>
+<div><p class="text-[10px] text-gray-dark/60 font-bold mb-1">COSTO ESTRUCTURAL</p><p class="text-3xl font-black font-headline text-black border-b-4 border-primary inline-block">USD 42K</p></div>
+</div>
+</div>
+<div class="bg-gray-base/20 p-5 rounded-xl border border-gray-base">
+<h4 class="text-xs font-bold text-gray-dark mb-4 uppercase">AI Confidence</h4>
+<div class="h-2 w-full bg-gray-base rounded-full overflow-hidden mb-2"><div class="h-full bg-black w-3/4"></div></div>
+<div class="flex justify-between items-center text-[10px] font-bold text-gray-dark/60"><span>VARIANZA</span><span class="text-black">±12.4%</span></div>
+</div>
+<div class="space-y-4">
+<h3 class="text-xs font-bold text-gray-dark/40 uppercase tracking-widest">Configuración Actual</h3>
+<ul class="space-y-3">
+<li class="flex justify-between items-center text-xs py-2 border-b border-gray-base/50"><span class="text-gray-dark/60">Niveles</span><span class="font-bold">2 Plantas</span></li>
+<li class="flex justify-between items-center text-xs py-2 border-b border-gray-base/50"><span class="text-gray-dark/60">Entrepiso</span><span class="font-bold">Vigueta Pretensada</span></li>
+<li class="flex justify-between items-center text-xs py-2 border-b border-gray-base/50 opacity-40"><span class="text-gray-dark/60">Techo</span><span class="font-bold">Pendiente...</span></li>
+</ul>
+</div>
+</aside>
+</div>
+</body></html>

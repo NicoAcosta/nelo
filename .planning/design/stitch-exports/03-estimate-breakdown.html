@@ -1,0 +1,23 @@
+<!-- Nelo Active Chat - Estimate Breakdown (Dark Mode) -->
+<!-- See full HTML in chat history - this is the dark mode estimate card screen -->
+<!-- Key design elements:
+  - Dark mode: bg-surface #1a1a1a, text #f2f2f2
+  - Hero: $45.200.000 ARS, $452.000/m²
+  - Confidence bar: 88% with glow effect
+  - Assumptions bar: height 2.60m, sin sótano, zona AMBA
+  - 26-category table with incidence % progress bars
+  - Actions: Download PDF, Export Excel, Recalculate
+  - ICC disclaimer note
+  - 3-column layout: sidebar + main + (no right panel in this view)
+-->
+<!-- NOTE: Full HTML preserved in chat history. Design tokens extracted to design-tokens.md -->
+
+<!-- Key CSS classes for dark estimate card: -->
+<!--
+  .card-transparency { background: rgba(38,38,38,0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+  Hero price: text-5xl md:text-6xl font-black font-headline tracking-tighter
+  Category rows: hover:bg-white/5, incidence bars w-12 h-1 bg-white/10 with bg-primary fill
+  Assumption chips: flex items-center gap-2 + material icon + text-xs font-bold uppercase
+  Actions: bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest
+  Recalculate CTA: bg-primary shadow-[0_0_20px_rgba(204,255,0,0.2)]
+-->
