@@ -1,13 +1,28 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
+last_updated: "2026-03-21T20:06:31.878Z"
+progress:
+  total_phases: 8
+  completed_phases: 0
+  total_plans: 4
+  completed_plans: 7
+---
+
 # Project State: Nelo
 
 ## Current Position
-- Phase: All 6 phases complete
-- Last action: All phases done — 77 tests passing, build clean
+
+Phase: 07 (bilingual-i18n-english-default-with-spanish-english-language-toggle) — EXECUTING
+Plan: 2 of 4
 
 ## Project Reference
+
 See: .planning/PROJECT.md (updated 2026-03-20)
 **Core value:** Accurate, transparent construction cost estimation through natural conversation
-**Current focus:** Phase 3 — Frontend implementation from Stitch designs
+**Current focus:** Phase 07 — bilingual-i18n-english-default-with-spanish-english-language-toggle
 
 ## Active Decisions
 
@@ -21,6 +36,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 | Test-driven development | Confirmed | Heavy testing required — spec-driven + TDD approach |
 
 ## Blockers
+
 - Pricing data: real AMBA prices not yet sourced (research in progress — feeds into Phase 4 at H8)
 
 ## Phase Status
@@ -33,10 +49,13 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 | 4 | Chat API — Tool Calling and System Prompt | **Complete** | H8–H14 |
 | 5 | Cost Breakdown Display and Confidence Indicator | **Complete** | H12–H18 |
 | 6 | Floor Plan Upload and Vision Extraction | **Complete** | H14–H20 |
+| 8 | Real Pricing Data Pipeline | **Not planned** | — |
 
 ## Stitch Design Reference
+
 Project: "nelo v2" (ID: 16019953234318479213)
 Screens:
+
 - Landing: `dfdb197e5de0451fbacf088fcee55a10`
 - Chat Empty: `1ca93da6d721411b97fb089e13375a4d`
 - Active Chat: `e7ad68a0298e426cb7514bc232f400ed`
@@ -44,11 +63,18 @@ Screens:
 - Floor Plan Analysis: `0deebcf88f7f4ad9993bf729caf086bc`
 
 ## Notes
+
 - Phase 6 (floor plan) is intentionally last and can be cut if time runs short without breaking core product.
 - Pricing data research is running in parallel; placeholder values in `amba-unit-costs.ts` must be clearly marked with a disclaimer and `lastUpdated` field.
 - All docs in English; app UI in Spanish (primary).
 - 77 tests passing (38 backend + 39 frontend).
 - Design corrected: light mode + fluorescent yellow-green (#ccff00) + English UI.
 
+## Accumulated Context
+
+### Roadmap Evolution
+
+- Phase 8 added: Real Pricing Data Pipeline — live/cached data from INDEC ICC, UOCRA, MercadoLibre, GCBA, Cifras Online, composition formulas
+
 ---
-*State updated: 2026-03-21 — retroactive summaries for phases 1, 2, 4; starting phase 3*
+*State updated: 2026-03-21 — Phase 8 added for pricing data pipeline*
