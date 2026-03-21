@@ -205,6 +205,15 @@ export interface Estimate {
   inputsProvided: number;
   inputsTotal: number;
 
+  // USD display (D-17, D-19)
+  pricePerM2Usd: number;     // USD/m2 at blue rate
+  totalPriceUsd: number;     // USD total at blue rate
+  blueRateVenta: number;     // ARS/USD rate used
+  blueRateDate: string;      // when the rate was fetched
+
+  // Price freshness (D-10)
+  pricingLastUpdated: string; // ISO date of most recent price data
+
   // Metadata
   assumptions: Assumption[];
   locationZone: LocationZone;
