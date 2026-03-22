@@ -30,15 +30,12 @@ export default async function EstimatePage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const { data: project } = await supabase
-    .from("projects")
-    .select("id, title")
-    .eq("id", id)
-    .single();
+  const [{ data: project }, messages] = await Promise.all([
+    supabase.from("projects").select("id, title").eq("id", id).single(),
+    loadConversation(id, ""),
+  ]);
 
   if (!project) notFound();
-
-  const messages = await loadConversation(id, "");
   if (!messages) notFound();
 
   const estimateData = extractEstimateFromMessages(messages);
