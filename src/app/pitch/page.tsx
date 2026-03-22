@@ -354,21 +354,21 @@ const team = [
   {
     name: "Juan Cruz Feres",
     role: "Architect",
-    desc: "Uses this budget structure every day. Has dealt with this exact problem throughout his career.",
+    desc: "Domain expert and product lead. Drove requirements from years of firsthand experience with construction estimation.",
     initial: "JC",
     photo: "/images/team/jc.jpg",
   },
   {
     name: "Sebastian Maldonado",
     role: "Designer",
-    desc: "Made it look like a product, not a hackathon project.",
+    desc: "Led product design, user research, and interface strategy. Shaped the experience from user interviews to final UI.",
     initial: "SM",
     photo: "/images/team/sm.jpg",
   },
   {
     name: "Nicolas Acosta",
     role: "Software Engineer",
-    desc: "Built the AI pipeline, calculation engine, and document processing.",
+    desc: "Built the AI pipeline, calculation engine, document processing, and infrastructure. Full-stack development and system architecture.",
     initial: "NA",
     photo: "/images/team/na.jpg",
   },
@@ -439,11 +439,11 @@ function Slide7() {
       <div className="flex flex-col md:flex-row items-center md:items-end gap-8 md:gap-12 mb-16 max-w-3xl">
         <div className="text-center md:text-left">
           <div className="text-6xl md:text-7xl font-black text-[#1a1a1a] leading-none mb-2" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>
-            24h
+            400+
           </div>
-          <p className="text-xs text-[#1a1a1a]/60 uppercase tracking-[0.15em] font-bold">shipped</p>
+          <p className="text-xs text-[#1a1a1a]/60 uppercase tracking-[0.15em] font-bold">line items</p>
           <p className="text-sm text-[#1a1a1a]/60 mt-2 leading-relaxed max-w-[200px]">
-            Full estimation engine, vision, bilingual UI, real pricing
+            Real Argentine pricing across 26 construction categories
           </p>
         </div>
 
@@ -451,12 +451,12 @@ function Slide7() {
 
         <div className="flex flex-col gap-6">
           <div>
-            <div className="text-2xl font-black text-[#1a1a1a]/70 mb-1" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>Real pain</div>
-            <p className="text-xs text-[#1a1a1a]/60">our architect has dealt with this problem his entire career</p>
+            <div className="text-2xl font-black text-[#1a1a1a]/70 mb-1" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>Founded on real pain</div>
+            <p className="text-xs text-[#1a1a1a]/60">Our architect has dealt with this problem his entire career</p>
           </div>
           <div>
             <div className="text-2xl font-black text-[#1a1a1a]/70 mb-1" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>Waitlist</div>
-            <p className="text-xs text-[#1a1a1a]/60">of architects ready to use it before we even launched</p>
+            <p className="text-xs text-[#1a1a1a]/60">Professionals ready to use it before we even launched</p>
           </div>
         </div>
       </div>

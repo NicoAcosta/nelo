@@ -62,7 +62,7 @@ Nelo handles two critical stages of construction estimation:
 ### Format
 
 - 3-minute video pitch
-- General hackathon with AI track
+- General audience with AI track
 - Judges value real, practical AI use cases
 - English language
 - Mix of slides and embedded demo clips
@@ -178,7 +178,7 @@ Nelo handles two critical stages of construction estimation:
 | Juan Cruz Feres | Sebastian Maldonado | Nicolas Acosta |
 |----------------|--------------------|--------------------|
 | Architect | Designer | Software Engineer |
-| Uses this budget structure daily. Built Nelo to solve his own problem. | Made it look like a product, not a hackathon project. | Built the AI pipeline, engine, and document processing. |
+| Domain expert and product lead. Drove requirements from firsthand experience. | Led product design, user research, and interface strategy. | Built the AI pipeline, calculation engine, document processing, and infrastructure. |
 
 **Visual direction:** Professional photos or clean avatars. Consistent framing. The architect being first (leftmost) is intentional — he's the domain credibility.
 
@@ -194,7 +194,7 @@ Nelo handles two critical stages of construction estimation:
 **Content on slide:**
 - **Built from real pain** — Our architect co-founder has spent his career dealing with this problem
 - **Waitlist ready** — Architects we've talked to want to use it
-- **Shipped in 24h** — Full estimation engine, vision analysis, bilingual UI, real pricing data
+- **400+ line items** — Real Argentine pricing across 26 construction categories, vision analysis, bilingual UI
 
 Right side: QR code to try it live, or the app URL.
 
@@ -307,11 +307,11 @@ Right side: QR code to try it live, or the app URL.
 
 ### [SLIDE 7 — TRACTION & CLOSE] (2:40 - 3:00)
 
-> Nelo isn't a hackathon idea. Juan Cruz has spent his career burning time on estimates — this is the tool he needed.
+> Nelo was born from real frustration. Juan Cruz has spent his career burning time on estimates — this is the tool he needed.
 >
 > We've already talked to other architects. They want to use it. We have a waitlist of professionals ready to try it the moment we open access.
 >
-> We shipped this in twenty-four hours — a working AI estimator with vision analysis, a twenty-six-category engine, bilingual UI, and real pricing data from the Argentine market.
+> Nelo is a working AI estimator with vision analysis, a twenty-six-category engine with over four hundred line items, bilingual UI, and real pricing data from the Argentine market.
 >
 > Construction cost transparency for everyone — not just those who can afford an architect.
 >
