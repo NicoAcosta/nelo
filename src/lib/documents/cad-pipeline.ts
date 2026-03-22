@@ -1,5 +1,6 @@
 import { Helper } from "dxf";
-import { Resvg } from "@resvg/resvg-js";
+// Dynamic import — @resvg/resvg-js is a native Node addon that must be
+// marked as serverExternalPackages in next.config.ts for Turbopack.
 import type { DocumentAnalysis, ExtractedData } from "./types";
 
 /** Room-type keywords to match in TEXT/MTEXT strings */
@@ -112,12 +113,7 @@ interface DxfEntity {
   [key: string]: unknown;
 }
 
-interface ParsedDxf {
-  header: Record<string, unknown>;
-  entities: DxfEntity[];
-  tables: { layers: Record<string, unknown> };
-  blocks: unknown[];
-}
+// ParsedDxf type is declared in dxf.d.ts module declaration
 
 /**
  * Extract construction-relevant data from a DXF string.
@@ -129,7 +125,7 @@ export async function extractFromDxf(
   dxfContent: string,
 ): Promise<DocumentAnalysis> {
   const helper = new Helper(dxfContent);
-  const parsed = helper.parsed as ParsedDxf;
+  const parsed = helper.parsed;
   const entities = parsed.entities;
 
   // Collect unique layer names from the TABLES section
@@ -268,6 +264,7 @@ export async function extractFromDxf(
   let renderedImage = "";
   try {
     const svgString = helper.toSVG();
+    const { Resvg } = await import("@resvg/resvg-js");
     const resvg = new Resvg(svgString, {
       fitTo: { mode: "width", value: 1024 },
       background: "white",

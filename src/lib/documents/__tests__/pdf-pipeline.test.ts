@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 
 // Mock pdfjs-dist — the actual module requires specific Node.js setup
-vi.mock("pdfjs-dist/build/pdf.mjs", () => ({
+vi.mock("pdfjs-dist/legacy/build/pdf.mjs", () => ({
   getDocument: vi.fn().mockReturnValue({
     promise: Promise.resolve({
       numPages: 1,
@@ -39,7 +39,7 @@ describe("extractFromPdf", () => {
   });
 
   it("returns valid structure even with empty text", async () => {
-    const { getDocument } = await import("pdfjs-dist/build/pdf.mjs");
+    const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
     (getDocument as ReturnType<typeof vi.fn>).mockReturnValueOnce({
       promise: Promise.resolve({
         numPages: 1,

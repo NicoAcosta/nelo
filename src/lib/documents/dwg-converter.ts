@@ -1,20 +1,27 @@
-import { convert } from "@mlightcad/libredwg-converter";
+/**
+ * Nelo — DWG to DXF Converter
+ *
+ * Wraps @mlightcad/libredwg-converter WASM for DWG→DXF conversion.
+ *
+ * The package exports AcDbLibreDwgConverter which converts DWG binary data
+ * into an in-memory drawing database. Full DXF serialization would require
+ * additional work with @mlightcad/data-model.
+ *
+ * Current status: This module provides the interface but DWG conversion
+ * is not yet fully wired. The processor router will fall back to suggesting
+ * the user export as DXF from AutoCAD.
+ */
 
 /**
- * Converts a DWG file buffer to a DXF string using the LibreDWG WASM converter.
- *
- * NOTE: The @mlightcad/libredwg-converter package's native API uses AcDbLibreDwgConverter
- * to produce an in-memory drawing database, not a DXF string directly. This wrapper uses
- * a `convert` export that is expected to handle the full DWG → DXF string pipeline.
- * In production, if the package does not expose `convert`, this wrapper will need to be
- * updated to use AcDbLibreDwgConverter + a DXF serializer from @mlightcad/data-model.
+ * Convert a DWG file buffer to DXF string.
+ * Throws on unsupported DWG versions or corrupt files.
  */
 export async function convertDwgToDxf(dwgBuffer: ArrayBuffer): Promise<string> {
-  try {
-    const dxf = await convert(dwgBuffer);
-    return dxf;
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : "Unknown error";
-    throw new Error(`DWG conversion failed: ${msg}`);
-  }
+  // The @mlightcad/libredwg-converter package exports AcDbLibreDwgConverter
+  // which produces an in-memory database, not a DXF string directly.
+  // Full DWG→DXF requires additional serialization work.
+  // For now, throw a descriptive error so the processor's degradation chain kicks in.
+  throw new Error(
+    "DWG conversion failed: Direct DWG parsing is not yet supported. Please export your file as DXF from AutoCAD.",
+  );
 }

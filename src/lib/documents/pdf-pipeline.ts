@@ -1,4 +1,4 @@
-import { getDocument } from "pdfjs-dist/build/pdf.mjs";
+import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
 import type { DocumentAnalysis, ExtractedData } from "./types";
 
 /** Room-type keywords to match in PDF text items — same as CAD pipeline */
