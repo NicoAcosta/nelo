@@ -112,7 +112,7 @@ export function SharePopover({ estimateId }: SharePopoverProps) {
 
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <button
           type="button"
           aria-label="Share"
@@ -162,14 +162,14 @@ export function SharePopover({ estimateId }: SharePopoverProps) {
                   disabled={loading}
                   className="text-[11px] font-semibold text-red-400 hover:text-red-300 transition-colors disabled:opacity-50"
                 >
-                  Yes, revoke
+                  {t("share.yesRevoke")}
                 </button>
                 <button
                   type="button"
                   onClick={() => setConfirmRevoke(false)}
                   className="text-[11px] text-[#71717a] hover:text-[#a1a1aa] transition-colors"
                 >
-                  Cancel
+                  {t("share.cancel")}
                 </button>
               </div>
             ) : (
@@ -222,7 +222,7 @@ export function SharePopover({ estimateId }: SharePopoverProps) {
               disabled={loading}
               className="w-full px-3.5 py-2 rounded-lg text-xs font-semibold bg-[#ccff00] text-black hover:bg-[#E2FF00] transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-[#ccff00]"
             >
-              {loading ? "Creating..." : t("share.createLink")}
+              {loading ? t("share.creating") : t("share.createLink")}
             </button>
           </div>
         )}

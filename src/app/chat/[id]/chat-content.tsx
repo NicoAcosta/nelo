@@ -191,11 +191,11 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
         // Build floor-plan-refs for Storage paths (D-18)
         // Stored in message metadata so loadConversation can inject signed URLs on reload
         const floorPlanRefs = results
-          .filter((r: DocumentAnalysis & { storagePath?: string }) => r.storagePath)
           .map((r: DocumentAnalysis & { storagePath?: string }, i: number) => ({
             name: files[i]?.name ?? `file-${i}`,
-            storagePath: r.storagePath!,
-          }));
+            storagePath: r.storagePath,
+          }))
+          .filter((ref): ref is { name: string; storagePath: string } => !!ref.storagePath);
         const floorPlanMetadata =
           floorPlanRefs.length > 0 ? { floorPlanRefs } : undefined;
 
