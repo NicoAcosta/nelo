@@ -94,13 +94,17 @@ Nelo handles two critical stages of construction estimation:
 
 **Title:** Meet Nelo — your AI construction estimator
 
-**Layout:** Product screenshot taking up most of the slide. Tagline above or below.
+**Layout:** Dark background (#0a0a0a). Centered. Large Nelo logo mark + giant "NELO" highlight. Tagline + analogy below.
 
 **Content on slide:**
-- Tagline: "Describe your project. Upload your plan. Get a detailed estimate in minutes."
-- Screenshot of the Nelo landing page ("HI, I'M NELO.")
+- Nelo N mark with green status dot
+- Giant "NELO" text in #ccff00 highlight
+- Tagline: "Your AI construction cost estimator."
+- Subtitle: "Describe your project. Upload your plan. Get a detailed estimate in minutes."
+- Analogy: *"Think TurboTax for construction budgets."* (italic, font-medium)
+- Footer: "Built by architects, for architects"
 
-**Visual direction:** Let the product speak. The green-on-black landing page is visually distinctive. Full-width screenshot with the tagline overlaid or adjacent.
+**Visual direction:** The NELO highlight is the visual anchor — huge scale (10rem on desktop). The TurboTax analogy gives judges an instant mental model.
 
 ---
 
@@ -152,9 +156,16 @@ Nelo handles two critical stages of construction estimation:
 
 **Title:** AI that actually saves professionals time
 
-**Layout:** Three rows or three panels, each with a bold label and one sentence. No paragraphs.
+**Layout:** Dark background (#0a0a0a). Asymmetric two-column grid — headline + "Why Now" on left, three capabilities on right with dot indicators.
 
 **Content on slide:**
+
+Left column:
+- Headline: "AI that actually saves professionals time."
+- Subtitle: "Not a ChatGPT wrapper. A tool that replaces hours of professional work with a 5-minute conversation."
+- **Why Now** label + "AI vision can finally interpret floor plans accurately. Real-time pricing data makes static spreadsheets obsolete."
+
+Right column:
 
 | Capability | Description |
 |-----------|------------|
@@ -162,7 +173,7 @@ Nelo handles two critical stages of construction estimation:
 | **Vision understanding** | Reads AutoCAD, Revit IFC, PDFs, spreadsheets, and photos. Extracts rooms, dimensions, openings. Asks to confirm. |
 | **Domain-expert computation** | 400+ line items. 26 categories. UOCRA labor, MercadoLibre + supplier pricing, blue-rate USD, INDEC inflation-adjusted. Updated daily. |
 
-**Visual direction:** Could use icons for each row (chat bubble, eye, calculator). Keep it scannable — judges should get this in 3 seconds of looking at the slide.
+**Visual direction:** Green dot indicators (full, 60%, 30% opacity) next to each capability. "Why Now" is a secondary element below the main copy on the left — it's on screen but doesn't need to be spoken (the narration covers the three capabilities instead).
 
 ---
 
@@ -171,7 +182,7 @@ Nelo handles two critical stages of construction estimation:
 
 **Title:** Built by people who know the problem
 
-**Layout:** Three headshots/avatars in a row with name, role, and one line underneath each.
+**Layout:** Light background (#f2f2f0). Three equal columns with photos, names + LinkedIn icons, roles, descriptions.
 
 **Content on slide:**
 
@@ -180,7 +191,9 @@ Nelo handles two critical stages of construction estimation:
 | Architect | Designer | Software Engineer |
 | Domain expert and product lead. Drove requirements from firsthand experience. | Led product design, user research, and interface strategy. | Built the AI pipeline, calculation engine, document processing, and infrastructure. |
 
-**Visual direction:** Professional photos or clean avatars. Consistent framing. The architect being first (leftmost) is intentional — he's the domain credibility.
+Each name has a LinkedIn icon link next to it. Photos at `/images/team/jc.jpg`, `sm.jpg`, `na.jpg` with initials fallback.
+
+**Visual direction:** Professional photos, equal sizing (96x96px rounded). The architect being first (leftmost) is intentional — he's the domain credibility.
 
 ---
 
@@ -189,7 +202,7 @@ Nelo handles two critical stages of construction estimation:
 
 **Title:** Already validated
 
-**Layout:** Left side: three bullet points. Right side: large QR code or URL.
+**Layout:** Light background (#f2f2f0). Asymmetric stats — large "400+" left, three secondary stats right with divider. CTA button + nelo.archi below.
 
 **Content on slide:**
 - **Built from real pain** — Our architect co-founder has spent his career dealing with this problem
@@ -238,9 +251,9 @@ Right side: QR code to try it live, or the app URL.
 
 ### [SLIDE 2 — MEET NELO] (0:25 - 0:40)
 
-> This is Nelo — an AI construction cost estimator.
+> This is Nelo — an AI construction cost estimator. Think TurboTax for construction budgets.
 >
-> Describe your project, upload your floor plan, and get a detailed cost breakdown in minutes instead of weeks. Built by architects, for architects.
+> Describe your project, upload your floor plan, and get a detailed cost breakdown in minutes instead of weeks.
 
 ---
 
@@ -300,9 +313,7 @@ Right side: QR code to try it live, or the app URL.
 
 ### [SLIDE 6 — THE TEAM] (2:30 - 2:40)
 
-> We're three people who know this problem.
->
-> Juan Cruz is an architect — he uses this type of estimate every day. Sebastian is our designer — he made it look and feel like a real product. And I'm Nico, the engineer — I built the AI pipeline, the calculation engine, and the document processing.
+> Juan Cruz is an architect who lives this problem. Sebastian designed the product. I'm Nico — I built the AI and the engine.
 
 ---
 
