@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     "@mlightcad/geometry-engine",
     "@mlightcad/graphic-interface",
     "@mlightcad/dxf-json",
+    "pdfjs-dist",
   ],
 };
 
