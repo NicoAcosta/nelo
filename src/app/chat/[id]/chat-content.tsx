@@ -361,7 +361,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
                 </div>
                 <div className="glass-card rounded-2xl p-6 border border-white/40">
                   <p className="text-sm text-on-surface/60 font-medium animate-pulse">
-                    {t("chat.processingDocument") ?? "Processing document..."}
+                    {t("chat.processingDocument")}
                   </p>
                 </div>
               </div>

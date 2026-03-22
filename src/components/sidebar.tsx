@@ -3,7 +3,7 @@
 import Link from "next/link";
 import {
   IconDashboard,
-  IconEstimates,
+  IconProjects,
   IconBlueprints,
   IconSettings,
   IconHelp,
@@ -15,7 +15,7 @@ type NavItem = "dashboard" | "projects" | "blueprints" | "settings";
 
 const navItems: { id: NavItem; labelKey: string; icon: typeof IconDashboard; href: string }[] = [
   { id: "dashboard", labelKey: "sidebar.dashboard", icon: IconDashboard, href: "/" },
-  { id: "projects", labelKey: "sidebar.projects", icon: IconEstimates, href: "/projects" },
+  { id: "projects", labelKey: "sidebar.projects", icon: IconProjects, href: "/projects" },
   { id: "blueprints", labelKey: "sidebar.blueprints", icon: IconBlueprints, href: "#" },
   { id: "settings", labelKey: "sidebar.settings", icon: IconSettings, href: "#" },
 ];
