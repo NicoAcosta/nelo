@@ -2,6 +2,7 @@
 
 import type { Estimate } from "@/lib/estimate/types";
 import { formatARS } from "@/components/estimate/format";
+import { useLocale } from "@/lib/i18n/use-locale";
 
 interface EstimatePreviewProps {
   estimate: Estimate;
@@ -9,6 +10,7 @@ interface EstimatePreviewProps {
 }
 
 export function EstimatePreview({ estimate, chatId }: EstimatePreviewProps) {
+  const { t } = useLocale();
   const confidencePercent =
     estimate.inputsTotal > 0
       ? Math.round((estimate.inputsProvided / estimate.inputsTotal) * 100)
@@ -26,27 +28,27 @@ export function EstimatePreview({ estimate, chatId }: EstimatePreviewProps) {
       {/* Header */}
       <div className="p-5 border-b border-white/5">
         <div className="flex items-center gap-2 mb-3">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M3 2h6l6 10V2h6v20h-6L9 12v10H3z" fill="#ccff00" stroke="#000" strokeWidth="1.5" strokeLinejoin="round" />
           </svg>
           <span className="text-[10px] font-black tracking-[0.2em] text-[#ccff00] uppercase">
-            Estimated Budget
+            {t("costBreakdown.estimatedBudget")}
           </span>
         </div>
         <div className="flex items-end justify-between">
           <div>
-            <div className="font-mono text-3xl font-extrabold tracking-tight">
+            <div className="font-mono text-3xl font-extrabold tracking-tight tabular-nums">
               ${formatARS(estimate.totalPrice)}
             </div>
-            <div className="font-mono text-sm text-[#ccff00] mt-1">
+            <div className="font-mono text-sm text-[#ccff00] mt-1 tabular-nums">
               ${formatARS(estimate.pricePerM2)} /m²
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-[#888]">
-              {confidencePercent}% confidence
+            <div className="text-xs text-[#888] tabular-nums">
+              {confidencePercent}% {t("estimate.confidence").toLowerCase()}
             </div>
-            <div className="font-mono text-sm text-[#666] mt-0.5">
+            <div className="font-mono text-sm text-[#666] mt-0.5 tabular-nums">
               ≈ USD {formatARS(estimate.totalPriceUsd)}
             </div>
           </div>
@@ -66,7 +68,7 @@ export function EstimatePreview({ estimate, chatId }: EstimatePreviewProps) {
                 style={{ width: `${(cat.subtotal / maxCost) * 100}%` }}
               />
             </div>
-            <span className="font-mono text-[10px] text-[#666] w-[50px] text-right flex-shrink-0">
+            <span className="font-mono text-[10px] text-[#666] w-[50px] text-right flex-shrink-0 tabular-nums">
               {cat.incidencePercent.toFixed(1)}%
             </span>
           </div>
@@ -76,9 +78,9 @@ export function EstimatePreview({ estimate, chatId }: EstimatePreviewProps) {
       {/* View Full Estimate link */}
       <a
         href={`/estimate/${chatId}`}
-        className="block text-center py-3 border-t border-white/5 text-sm font-semibold text-[#ccff00] hover:bg-white/5 transition-colors"
+        className="block text-center py-3 border-t border-white/5 text-sm font-semibold text-[#ccff00] hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:ring-[#ccff00] focus-visible:ring-inset"
       >
-        View Full Estimate →
+        {t("estimate.viewFull")}
       </a>
     </div>
   );
