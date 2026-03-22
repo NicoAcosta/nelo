@@ -83,7 +83,7 @@ export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
           const displayValue =
             activeTab === "percent"
               ? formatPercent(cat.incidencePercent)
-              : `$${formatARS(cat.subtotal)}`;
+              : `ARS ${formatARS(cat.subtotal)}`;
 
           return (
             <div key={cat.id}>
@@ -128,7 +128,7 @@ export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
                           {li.code} — {li.description}
                         </span>
                         <span className="font-mono text-[#52525b] flex-shrink-0 tabular-nums">
-                          ${formatARS(li.subtotal)}
+                          ARS {formatARS(li.subtotal)}
                         </span>
                       </div>
                     ))}

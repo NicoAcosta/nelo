@@ -29,7 +29,7 @@ export function CostBuildUp({ estimate }: CostBuildUpProps) {
               className={`h-[30px] rounded-md flex items-center px-3 font-mono text-xs font-semibold tabular-nums ${row.color} ${row.textColor}`}
               style={{ width: `${Math.max((row.value / maxVal) * 100, 8)}%` }}
             >
-              ${formatARS(row.value)}
+              ARS {formatARS(row.value)}
             </div>
           </div>
         ))}
@@ -44,7 +44,7 @@ export function CostBuildUp({ estimate }: CostBuildUpProps) {
             className="h-[30px] rounded-md flex items-center px-3 font-mono text-xs font-semibold tabular-nums bg-[rgba(168,85,247,0.15)] text-[#a855f7]"
             style={{ width: `${Math.max((estimate.ivaAmount / maxVal) * 100, 8)}%` }}
           >
-            ${formatARS(estimate.ivaAmount)}
+            ARS {formatARS(estimate.ivaAmount)}
           </div>
         </div>
 
@@ -58,7 +58,7 @@ export function CostBuildUp({ estimate }: CostBuildUpProps) {
             className="h-[30px] rounded-md flex items-center px-3 font-mono text-xs font-semibold tabular-nums border-2 border-[#ccff00] bg-[rgba(204,255,0,0.15)] text-[#ccff00]"
             style={{ width: "100%" }}
           >
-            ${formatARS(estimate.totalPrice)}
+            ARS {formatARS(estimate.totalPrice)}
           </div>
         </div>
       </div>
