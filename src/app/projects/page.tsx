@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Header } from "@/components/header";
@@ -5,6 +6,11 @@ import { Sidebar } from "@/components/sidebar";
 import { MobileNav } from "@/components/mobile-nav";
 import { listProjects } from "@/lib/db/conversations";
 import { ProjectList } from "./project-list";
+
+export const metadata: Metadata = {
+  title: "Projects — Nelo",
+};
+
 
 export default async function ProjectsPage() {
   const supabase = await createClient();

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "@/components/providers";
 import "./globals.css";
 
@@ -8,6 +10,9 @@ export const metadata: Metadata = {
   title: "Nelo — AI Construction Cost Estimator",
   description:
     "Estimate your construction costs in seconds with AI. Detailed budgets based on real AMBA pricing and advanced analytics.",
+  other: {
+    "theme-color": "#f2f2f2",
+  },
   openGraph: {
     title: "Nelo — AI Construction Cost Estimator",
     description:
@@ -31,6 +36,8 @@ export default function RootLayout({
     <html lang="en" className={`h-full ${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="min-h-full flex">
         <Providers>{children}</Providers>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

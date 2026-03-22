@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import type { FloorPlanExtraction } from "@/lib/estimate/types";
 import { useLocale } from "@/lib/i18n/use-locale";
 
@@ -49,10 +50,12 @@ export function FloorPlanPanel({
         <div className="lg:col-span-7 space-y-6">
           <div className="relative aspect-[4/3] glass rounded-2xl overflow-hidden shadow-sm border border-outline/30">
             {imageUrl ? (
-              <img
+              <Image
                 alt="Floor plan preview"
                 className="w-full h-full object-cover opacity-80"
                 src={imageUrl}
+                fill
+                unoptimized
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-background">
@@ -90,7 +93,7 @@ export function FloorPlanPanel({
                 type="button"
                 onClick={handleConfirm}
                 disabled={area <= 0}
-                className="w-full bg-primary py-5 rounded-2xl text-on-primary font-headline font-black text-lg uppercase tracking-widest shadow-lg shadow-primary/20 hover:brightness-95 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-full bg-primary py-5 rounded-2xl text-on-primary font-headline font-black text-lg uppercase tracking-widest shadow-lg shadow-primary/20 hover:brightness-95 active:scale-[0.98] transition disabled:opacity-40 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 {area <= 0 ? t("floorPlanPanel.enterArea") : t("floorPlanPanel.confirm")}
               </button>
@@ -139,7 +142,7 @@ function InputField({
           max={max}
           value={value}
           onChange={(e) => onChange(clamp(Number(e.target.value)))}
-          className="w-full bg-black/5 border-none rounded-2xl px-5 py-5 text-on-surface font-headline font-black text-2xl focus:ring-2 focus:ring-primary transition-all"
+          className="w-full bg-black/5 border-none rounded-2xl px-5 py-5 text-on-surface font-headline font-black text-2xl tabular-nums focus:ring-2 focus:ring-primary transition"
         />
         {unit && (
           <span className="absolute right-5 top-1/2 -translate-y-1/2 text-on-surface/30 font-bold text-sm">

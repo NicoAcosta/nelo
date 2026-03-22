@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { redirect, notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -5,6 +6,15 @@ import { loadConversation } from "@/lib/db/conversations";
 import { ChatContent } from "./chat-content";
 import { IconNelo } from "@/components/icons";
 import type { UIMessage } from "ai";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  return { title: `Chat ${id.slice(0, 8)} — Nelo` };
+}
 
 export default async function ChatPage({
   params,
