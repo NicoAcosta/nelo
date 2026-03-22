@@ -1,3 +1,4 @@
+import ReactMarkdown from "react-markdown";
 import { IconNelo } from "./icons";
 
 interface ChatMessageProps {
@@ -37,7 +38,9 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
       </div>
       <div className="space-y-4">
         <div className="glass-card rounded-2xl p-6 border border-white/40 shadow-sm">
-          <p className="text-on-surface text-lg leading-relaxed font-medium whitespace-pre-wrap break-words overflow-wrap-anywhere">{content}</p>
+          <div className="text-on-surface text-lg leading-relaxed font-medium break-words overflow-wrap-anywhere [&_strong]:font-bold [&_em]:italic [&_p]:my-3 first:[&_p]:mt-0 last:[&_p]:mb-0 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:my-1 [&_code]:bg-black/10 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-base">
+            <ReactMarkdown>{content}</ReactMarkdown>
+          </div>
         </div>
       </div>
     </div>
