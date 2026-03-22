@@ -8,7 +8,7 @@ import type { Locale } from "@/lib/i18n/types";
 export const maxDuration = 60;
 
 const MAX_MESSAGES = 100;
-const MAX_BODY_BYTES = 5 * 1024 * 1024; // 5MB
+const MAX_BODY_BYTES = 10 * 1024 * 1024; // 10MB
 
 export async function POST(req: Request) {
   // Guard against oversized payloads

@@ -14,6 +14,8 @@ import { ChatOptions } from "@/components/chat-options";
 import { CostBreakdown } from "@/components/cost-breakdown";
 import { FloorPlanPanel } from "@/components/floor-plan-panel";
 import { IconNelo } from "@/components/icons";
+import { buildPreamble } from "@/lib/documents/preamble";
+import type { DocumentAnalysis } from "@/lib/documents/types";
 import { getSelectedValue } from "./get-selected-value";
 import { useLocale } from "@/lib/i18n/use-locale";
 import type { Estimate, FloorPlanExtraction } from "@/lib/estimate/types";
@@ -43,6 +45,7 @@ function ChatContent() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q");
   const [hasSentInitial, setHasSentInitial] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { locale, t } = useLocale();
 
@@ -79,9 +82,63 @@ function ChatContent() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages.length, lastMessageContent]);
 
-  function handleSend(text: string, files?: FileList) {
+  async function handleSend(text: string, files?: FileList) {
     if (files && files.length > 0) {
-      sendMessage({ text, files });
+      setIsProcessing(true);
+      try {
+        // Upload to document processing route
+        const formData = new FormData();
+        for (const file of Array.from(files)) {
+          formData.append("files", file);
+        }
+        const response = await fetch("/api/documents/process", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          // Fall back to sending files directly (image-only path)
+          sendMessage({ text, files });
+          return;
+        }
+
+        const { results } = await response.json();
+
+        // Build preamble from all results with structured data
+        const preambles = results
+          .map((r: DocumentAnalysis) => buildPreamble(r))
+          .filter(Boolean);
+        const preambleText = preambles.length > 0
+          ? preambles.join("\n\n") + "\n\n" + text
+          : text;
+
+        // Convert rendered images from base64 data URLs to File objects
+        // so useChat sends the RENDERED PNGs to Claude (not the original DWG/DXF)
+        const renderedFiles: File[] = results
+          .filter((r: DocumentAnalysis) => r.renderedImage)
+          .map((r: DocumentAnalysis, i: number) => {
+            const base64 = r.renderedImage.split(",")[1];
+            if (!base64) return null;
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let j = 0; j < binary.length; j++) bytes[j] = binary.charCodeAt(j);
+            return new File([bytes], `rendered-${i}.png`, { type: "image/png" });
+          })
+          .filter(Boolean) as File[];
+
+        if (renderedFiles.length > 0) {
+          const dt = new DataTransfer();
+          for (const f of renderedFiles) dt.items.add(f);
+          sendMessage({ text: preambleText, files: dt.files });
+        } else {
+          sendMessage({ text: preambleText });
+        }
+      } catch {
+        // Fallback: send files directly
+        sendMessage({ text, files });
+      } finally {
+        setIsProcessing(false);
+      }
     } else {
       sendMessage({ text });
     }
@@ -219,6 +276,19 @@ function ChatContent() {
             .filter((m) => m.role === "user" || m.role === "assistant")
             .map((message) => renderMessage(message))}
 
+          {isProcessing && (
+            <div className="flex gap-6 max-w-3xl">
+              <div className="w-10 h-10 rounded-lg bg-outline/30 flex items-center justify-center flex-shrink-0">
+                <IconNelo className="w-5 h-5 text-on-surface animate-pulse" />
+              </div>
+              <div className="glass-card rounded-2xl p-6 border border-white/40">
+                <p className="text-sm text-on-surface/60 font-medium animate-pulse">
+                  {t("chat.processingDocument") ?? "Processing document..."}
+                </p>
+              </div>
+            </div>
+          )}
+
           {isStreaming && messages.length > 0 && !lastMessageContent && (
             <div className="flex gap-6 max-w-3xl">
               <div className="w-10 h-10 rounded-lg bg-outline/30 flex items-center justify-center flex-shrink-0">
@@ -241,7 +311,7 @@ function ChatContent() {
 
         {/* Input */}
         <div className="p-6 pb-24 md:pb-6 bg-transparent relative z-10">
-          <ChatInput onSend={handleSend} disabled={isStreaming} />
+          <ChatInput onSend={handleSend} disabled={isStreaming || isProcessing} />
         </div>
       </main>
 
