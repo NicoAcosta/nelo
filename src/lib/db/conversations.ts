@@ -1,5 +1,6 @@
 import { createClient, type SupabaseServerClient } from "@/lib/supabase/server";
 import type { UIMessage } from "ai";
+import type { Estimate, ProjectInputs } from "@/lib/estimate/types";
 
 export type ProjectSummary = {
   id: string;
@@ -33,24 +34,19 @@ export async function loadConversation(
 ): Promise<UIMessage[] | null> {
   const supabase = await createClient();
 
-  // First check the project exists (RLS will block if wrong user)
+  // Single query: fetch project with its conversation via FK relationship
   const { data: project } = await supabase
     .from("projects")
-    .select("id")
+    .select("id, conversations(messages)")
     .eq("id", projectId)
     .single();
 
-  if (!project) return null;
+  if (!project) return null; // RLS blocked or doesn't exist
 
-  // Load the conversation row
-  const { data: conversation } = await supabase
-    .from("conversations")
-    .select("messages")
-    .eq("project_id", projectId)
-    .single();
-
-  if (!conversation) return []; // New project, no conversation yet
-  return (conversation.messages as UIMessage[]) ?? [];
+  const conversations = project.conversations as
+    | { messages: UIMessage[] }[]
+    | undefined;
+  return (conversations?.[0]?.messages as UIMessage[]) ?? [];
 }
 
 /**
@@ -133,4 +129,40 @@ export function getTextFromMessage(message: UIMessage): string {
     .map((p) => p.text)
     .join("")
     .trim();
+}
+
+export interface EstimateData {
+  estimate: Estimate;
+  inputs: ProjectInputs;
+}
+
+/**
+ * Extract the most recent runEstimate tool result from conversation messages.
+ * Returns both the Estimate output and the ProjectInputs that were passed as args.
+ * Returns null if no runEstimate tool call exists.
+ */
+export function extractEstimateFromMessages(
+  messages: UIMessage[],
+): EstimateData | null {
+  let lastResult: EstimateData | null = null;
+
+  for (const message of messages) {
+    if (message.role !== "assistant" || !message.parts) continue;
+    for (const part of message.parts) {
+      if (
+        part.type === "tool-runEstimate" &&
+        "state" in part &&
+        part.state === "output-available" &&
+        "output" in part &&
+        part.output
+      ) {
+        lastResult = {
+          estimate: part.output as Estimate,
+          inputs: ("args" in part ? part.args : {}) as ProjectInputs,
+        };
+      }
+    }
+  }
+
+  return lastResult;
 }
