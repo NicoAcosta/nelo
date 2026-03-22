@@ -2,7 +2,7 @@ import type { Locale, Translations } from "./types";
 
 const en: Translations = {
   // header
-  "header.basePrices": "Base prices: Jul 2024",
+  "header.basePrices": "Base prices: 22 Mar 2026",
   "header.newEstimate": "New Estimate",
 
   // sidebar
@@ -299,7 +299,7 @@ const en: Translations = {
 
 const es: Translations = {
   // header
-  "header.basePrices": "Precios base: Jul 2024",
+  "header.basePrices": "Precios base: 22 Mar 2026",
   "header.newEstimate": "Nueva Estimacion",
 
   // sidebar

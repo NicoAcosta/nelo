@@ -13,7 +13,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  return { title: `Chat ${id.slice(0, 8)} — Nelo` };
+  return { title: `Chat ${id.slice(0, 8)} — Nelo`, robots: { index: false, follow: false } };
 }
 
 export default async function ChatPage({

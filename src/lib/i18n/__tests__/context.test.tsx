@@ -24,7 +24,7 @@ describe("LocaleProvider + useLocale", () => {
   it("t('header.basePrices') returns English when locale is 'en'", () => {
     const { result } = renderHook(() => useLocale(), { wrapper });
     expect(result.current.t("header.basePrices")).toBe(
-      "Base prices: Jul 2024",
+      "Base prices: 22 Mar 2026",
     );
   });
 
@@ -34,7 +34,7 @@ describe("LocaleProvider + useLocale", () => {
       result.current.setLocale("es");
     });
     expect(result.current.t("header.basePrices")).toBe(
-      "Precios base: Jul 2024",
+      "Precios base: 22 Mar 2026",
     );
   });
 

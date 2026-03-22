@@ -32,8 +32,8 @@ describe("translations", () => {
   });
 
   it("has correct header translations", () => {
-    expect(translations.en["header.basePrices"]).toBe("Base prices: Jul 2024");
-    expect(translations.es["header.basePrices"]).toBe("Precios base: Jul 2024");
+    expect(translations.en["header.basePrices"]).toBe("Base prices: 22 Mar 2026");
+    expect(translations.es["header.basePrices"]).toBe("Precios base: 22 Mar 2026");
   });
 
   it("has correct landing translations", () => {

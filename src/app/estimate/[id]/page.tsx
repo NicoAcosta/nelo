@@ -21,7 +21,7 @@ export async function generateMetadata({
     .select("title")
     .eq("id", id)
     .single();
-  return { title: `${project?.title || "Estimate"} — Nelo` };
+  return { title: `${project?.title || "Estimate"} — Nelo`, robots: { index: false, follow: false } };
 }
 
 export default async function EstimatePage({

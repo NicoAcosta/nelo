@@ -37,7 +37,7 @@ describe("Header", () => {
 
   it("renders base prices text using translations", () => {
     renderWithLocale(<Header />);
-    expect(screen.getByText("Base prices: Jul 2024")).toBeInTheDocument();
+    expect(screen.getByText("Base prices: 22 Mar 2026")).toBeInTheDocument();
   });
 
   it("renders EN/ES language toggle button", () => {
