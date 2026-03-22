@@ -3,20 +3,20 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-21T23:47:12.668Z"
+last_updated: "2026-03-22T00:18:53.339Z"
 progress:
   total_phases: 8
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 9
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # Project State: Nelo
 
 ## Current Position
 
-Phase: 08 (real-pricing-data-pipeline) — EXECUTING
-Plan: 5 of 5
+Phase: 08 (real-pricing-data-pipeline) — COMPLETE
+Plan: 5 of 5 (all plans complete)
 
 ## Project Reference
 
@@ -38,10 +38,11 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 | Variable wholesale discount | Done (08-02) | bulk=0.70, standard=0.75, specialty=0.80 (not flat 0.75) |
 | FALLBACK_BLUE_VENTA=1415 | Done (08-04) | March 2026 estimate when no blue-rate cache present |
 | pricingLastUpdated=2026-03-21 | Done (08-04) | Date AMBA unit costs calibrated, feeds D-10 freshness display |
+| Pricing accuracy fixes applied | Done (08-05) | greater_than operator, smart room-count defaults, escalera/amoblamientos/espejos/revoques formula corrections from architect validation |
 
 ## Blockers
 
-- Pricing data: real AMBA prices not yet sourced (research in progress — feeds into Phase 4 at H8)
+None — Phase 8 complete. All pricing data pipeline goals achieved.
 
 ## Phase Status
 
@@ -54,7 +55,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 | 5 | Cost Breakdown Display and Confidence Indicator | **Complete** | H12–H18 |
 | 6 | Floor Plan Upload and Vision Extraction | **Complete** | H14–H20 |
 | 7 | Bilingual i18n — EN default, ES toggle | **Complete** | — |
-| 8 | Real Pricing Data Pipeline | **Not planned** | — |
+| 8 | Real Pricing Data Pipeline | **Complete** | — |
 
 ## Stitch Design Reference
 
@@ -83,4 +84,4 @@ Screens:
 - Phase 7: Bilingual i18n — EN/ES toggle, auto-detect, localStorage persistence, all UI + system prompt + engine labels bilingual
 
 ---
-*State updated: 2026-03-21 — Phase 08-04 complete: USD converter + Estimate USD fields (52 tests passing)*
+*State updated: 2026-03-21 — Phase 08-05 complete: cron refresh endpoint + manual script + architect pricing validation (all 8 phases complete)*
