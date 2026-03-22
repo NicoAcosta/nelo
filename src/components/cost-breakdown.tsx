@@ -5,19 +5,14 @@ import type { Estimate } from "@/lib/estimate/types";
 import { useLocale } from "@/lib/i18n/use-locale";
 import { VersionHistorySheet } from "@/components/version-history-sheet";
 
-function formatARS(value: number): string {
-  return new Intl.NumberFormat("es-AR", {
-    style: "decimal",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+import { formatARS } from "@/components/estimate/format";
 
 interface CostBreakdownProps {
   estimate: Estimate;
   persistedId?: string;
   version?: number;
   totalVersions?: number;
-  conversationId?: string;
+  projectId?: string;
 }
 
 export function CostBreakdown({
@@ -25,7 +20,7 @@ export function CostBreakdown({
   persistedId,
   version,
   totalVersions,
-  conversationId,
+  projectId,
 }: CostBreakdownProps) {
   const { locale, t } = useLocale();
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -234,11 +229,9 @@ export function CostBreakdown({
       </div>
 
       {/* Version history sheet — only rendered when estimate is persisted */}
-      {conversationId && persistedId && (
+      {projectId && persistedId && (
         <VersionHistorySheet
-          projectId={conversationId}
-          currentVersion={version ?? 1}
-          totalVersions={totalVersions ?? version ?? 1}
+          projectId={projectId}
           open={sheetOpen}
           onOpenChange={setSheetOpen}
         />

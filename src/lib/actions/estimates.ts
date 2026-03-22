@@ -17,16 +17,28 @@ export async function listEstimatesAction(
   conversationId: string,
 ): Promise<EstimateSummary[] | { error: string }> {
   if (!UUID_RE.test(conversationId)) return { error: "Invalid conversation ID" };
-  const supabase = await createClient();
-  return listEstimates(conversationId, supabase);
+  try {
+    const supabase = await createClient();
+    return await listEstimates(conversationId, supabase);
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : "Failed to list estimates",
+    };
+  }
 }
 
 export async function getEstimateAction(
   estimateId: string,
 ): Promise<EstimateRow | { error: string } | null> {
   if (!UUID_RE.test(estimateId)) return { error: "Invalid estimate ID" };
-  const supabase = await createClient();
-  return getEstimate(estimateId, supabase);
+  try {
+    const supabase = await createClient();
+    return await getEstimate(estimateId, supabase);
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : "Failed to get estimate",
+    };
+  }
 }
 
 export async function updateEstimateLabelAction(
@@ -53,6 +65,10 @@ export async function getConversationIdAction(
   projectId: string,
 ): Promise<string | null> {
   if (!UUID_RE.test(projectId)) return null;
-  const supabase = await createClient();
-  return getConversationId(projectId, supabase);
+  try {
+    const supabase = await createClient();
+    return await getConversationId(projectId, supabase);
+  } catch {
+    return null;
+  }
 }

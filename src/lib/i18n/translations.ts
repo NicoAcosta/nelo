@@ -258,6 +258,9 @@ const en: Translations = {
   "versionHistory.labelSaveFailed": "Could not save -- try again",
   "versionHistory.historyLoadFailed": "Could not load version history. Refresh and try again.",
   "versionHistory.labelPlaceholder": "e.g. with pool, steel frame...",
+  "versionHistory.categoryHeader": "Category",
+  "versionHistory.deltaHeader": "Delta",
+  "versionHistory.comparisonCaption": "Cost comparison between version {a} and version {b}",
 
   // projects
   "projects.title": "Projects",
@@ -529,6 +532,9 @@ const es: Translations = {
   "versionHistory.labelSaveFailed": "No se pudo guardar, intenta de nuevo",
   "versionHistory.historyLoadFailed": "No se pudo cargar el historial. Actualiza e intenta de nuevo.",
   "versionHistory.labelPlaceholder": "ej. con pileta, steel frame...",
+  "versionHistory.categoryHeader": "Rubro",
+  "versionHistory.deltaHeader": "Diferencia",
+  "versionHistory.comparisonCaption": "Comparacion de costos entre version {a} y version {b}",
 
   // projects
   "projects.title": "Proyectos",

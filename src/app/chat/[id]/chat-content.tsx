@@ -40,7 +40,7 @@ function renderToolResult(toolName: string, result: unknown, id: string) {
         persistedId={estimate._persistedId}
         version={estimate._version}
         totalVersions={estimate._version}
-        conversationId={id}
+        projectId={id}
       />
     );
   }
@@ -309,7 +309,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
     if (!textContent && toolResults.length === 0) return null;
 
     return (
-      <div key={message.id}>
+      <>
         {textContent && (
           <ChatMessage
             role={message.role as "user" | "assistant"}
@@ -317,7 +317,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
           />
         )}
         {toolResults}
-      </div>
+      </>
     );
   }
 
@@ -399,7 +399,16 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
 
             {messages
               .filter((m) => m.role === "user" || m.role === "assistant")
-              .map((message) => renderMessage(message))}
+              .map((message, i) => {
+                const node = renderMessage(message);
+                if (!node) return null;
+                // Ensure a stable key even if message.id is empty
+                return (
+                  <div key={message.id || `msg-${i}`}>
+                    {node}
+                  </div>
+                );
+              })}
 
             {isProcessing && (
               <div className="flex gap-6 max-w-3xl">

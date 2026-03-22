@@ -16,15 +16,17 @@ vi.mock("@/lib/db/estimates", () => ({
   listEstimates: vi.fn(),
   getEstimate: vi.fn(),
   updateEstimateLabel: vi.fn(),
+  getConversationId: vi.fn(),
 }));
 
 import {
   listEstimatesAction,
   getEstimateAction,
   updateEstimateLabelAction,
+  getConversationIdAction,
 } from "../estimates";
 import { revalidatePath } from "next/cache";
-import { listEstimates, getEstimate, updateEstimateLabel } from "@/lib/db/estimates";
+import { listEstimates, getEstimate, updateEstimateLabel, getConversationId } from "@/lib/db/estimates";
 import type { EstimateSummary, EstimateRow } from "@/lib/db/estimates";
 import type { Estimate, ProjectInputs } from "@/lib/estimate/types";
 
@@ -217,5 +219,69 @@ describe("updateEstimateLabelAction", () => {
     const result = await updateEstimateLabelAction(VALID_UUID, "label");
 
     expect(result).toEqual({ error: "Failed to update label" });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// getConversationIdAction
+// ---------------------------------------------------------------------------
+
+describe("getConversationIdAction", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("returns conversation ID for valid project ID", async () => {
+    vi.mocked(getConversationId).mockResolvedValueOnce(VALID_UUID);
+
+    const result = await getConversationIdAction(VALID_UUID);
+
+    expect(result).toBe(VALID_UUID);
+    expect(getConversationId).toHaveBeenCalledWith(VALID_UUID, mockSupabase);
+  });
+
+  it("returns null for invalid project ID (non-UUID)", async () => {
+    const result = await getConversationIdAction(INVALID_UUID);
+
+    expect(result).toBeNull();
+    expect(getConversationId).not.toHaveBeenCalled();
+  });
+
+  it("returns null when no conversation found", async () => {
+    vi.mocked(getConversationId).mockResolvedValueOnce(null);
+
+    const result = await getConversationIdAction(VALID_UUID);
+    expect(result).toBeNull();
+  });
+
+  it("returns null when DB throws", async () => {
+    vi.mocked(getConversationId).mockRejectedValueOnce(new Error("timeout"));
+
+    const result = await getConversationIdAction(VALID_UUID);
+    expect(result).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Error wrapping in listEstimatesAction and getEstimateAction
+// ---------------------------------------------------------------------------
+
+describe("listEstimatesAction error handling", () => {
+  it("returns error when DB throws", async () => {
+    vi.mocked(listEstimates).mockRejectedValueOnce(new Error("DB timeout"));
+
+    const result = await listEstimatesAction(VALID_UUID);
+
+    expect(result).toEqual({ error: "DB timeout" });
+  });
+});
+
+describe("getEstimateAction error handling", () => {
+  it("returns error when DB throws", async () => {
+    vi.mocked(getEstimate).mockRejectedValueOnce(new Error("Connection refused"));
+
+    const result = await getEstimateAction(VALID_UUID);
+
+    expect(result).toEqual({ error: "Connection refused" });
   });
 });

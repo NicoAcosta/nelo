@@ -13,6 +13,7 @@ import {
   listEstimatesAction,
   getEstimateAction,
   updateEstimateLabelAction,
+  getConversationIdAction,
 } from "@/lib/actions/estimates";
 import { compareEstimates } from "@/lib/estimate/compare";
 import type { EstimateSummary, EstimateRow } from "@/lib/db/estimates";
@@ -23,12 +24,7 @@ import { useLocale } from "@/lib/i18n/use-locale";
 // Helpers
 // ---------------------------------------------------------------------------
 
-function formatARS(value: number): string {
-  return new Intl.NumberFormat("es-AR", {
-    style: "decimal",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+import { formatARS } from "@/components/estimate/format";
 
 function formatRelativeTime(dateStr: string, locale: string): string {
   const now = Date.now();
@@ -309,21 +305,21 @@ function CompareView({ selectedIds, versions, onBack, t }: CompareViewProps) {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-left">
                 <caption className="sr-only">
-                  Cost comparison between version {vANum} and version {vBNum}
+                  {t("versionHistory.comparisonCaption").replace("{a}", String(vANum)).replace("{b}", String(vBNum))}
                 </caption>
                 <thead>
                   <tr className="bg-surface-container">
-                    <th className="px-3 py-2 text-[10px] font-black text-[#999] uppercase tracking-[0.2em] w-[40%]">
-                      Category
+                    <th className="px-3 py-2 text-[10px] font-bold text-[#999] uppercase tracking-[0.2em] w-[40%]">
+                      {t("versionHistory.categoryHeader")}
                     </th>
-                    <th className="px-3 py-2 text-[10px] font-black text-[#999] uppercase tracking-[0.2em] text-right w-[20%]">
+                    <th className="px-3 py-2 text-[10px] font-bold text-[#999] uppercase tracking-[0.2em] text-right w-[20%]">
                       v{vANum}
                     </th>
-                    <th className="px-3 py-2 text-[10px] font-black text-[#999] uppercase tracking-[0.2em] text-right w-[20%]">
+                    <th className="px-3 py-2 text-[10px] font-bold text-[#999] uppercase tracking-[0.2em] text-right w-[20%]">
                       v{vBNum}
                     </th>
-                    <th className="px-3 py-2 text-[10px] font-black text-[#999] uppercase tracking-[0.2em] text-right w-[20%]">
-                      Delta
+                    <th className="px-3 py-2 text-[10px] font-bold text-[#999] uppercase tracking-[0.2em] text-right w-[20%]">
+                      {t("versionHistory.deltaHeader")}
                     </th>
                   </tr>
                 </thead>
@@ -423,9 +419,8 @@ function SummaryCell({
 // ---------------------------------------------------------------------------
 
 interface VersionHistorySheetProps {
-  conversationId: string;
-  currentVersion: number;
-  totalVersions: number;
+  /** Project ID (UUID) — resolved to conversation ID lazily on sheet open */
+  projectId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -433,7 +428,7 @@ interface VersionHistorySheetProps {
 const SHEET_TITLE_ID = "version-history-sheet-title";
 
 export function VersionHistorySheet({
-  conversationId,
+  projectId,
   open,
   onOpenChange,
 }: VersionHistorySheetProps) {
@@ -445,26 +440,34 @@ export function VersionHistorySheet({
   const [loadError, setLoadError] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-  // Load versions when sheet opens
+  // Load versions when sheet opens — resolve projectId -> conversationId first
   useEffect(() => {
     if (!open) return;
     setView("list");
     setSelectedIds([]);
     setLoadError(null);
     setLoading(true);
-    listEstimatesAction(conversationId)
-      .then((result) => {
-        if ("error" in result) {
-          setLoadError(t("versionHistory.historyLoadFailed"));
-        } else {
-          setVersions(result);
-        }
-      })
+
+    async function fetchVersions() {
+      const conversationId = await getConversationIdAction(projectId);
+      if (!conversationId) {
+        setLoadError(t("versionHistory.historyLoadFailed"));
+        return;
+      }
+      const result = await listEstimatesAction(conversationId);
+      if ("error" in result) {
+        setLoadError(t("versionHistory.historyLoadFailed"));
+      } else {
+        setVersions(result);
+      }
+    }
+
+    fetchVersions()
       .catch(() => {
         setLoadError(t("versionHistory.historyLoadFailed"));
       })
       .finally(() => setLoading(false));
-  }, [open, conversationId, t]);
+  }, [open, projectId, t]);
 
   function handleCheckChange(id: string, checked: boolean) {
     setSelectedIds((prev) => {
