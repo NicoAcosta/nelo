@@ -165,7 +165,11 @@ Plans:
   2. User can view a version history list for their project showing each estimate version with its timestamp and label.
   3. User can select two versions and see a side-by-side comparison showing the cost delta per category (e.g., "Estructura: +$12,400 ARS").
   4. User can type a label for any estimate version (e.g., "con pileta", "steel frame option") and the label persists and appears in the version history list.
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 12-01-PLAN.md — Data layer: DB functions, comparison logic, server actions, tool persistence wiring (TDD)
+- [ ] 12-02-PLAN.md — UI: Sheet primitive, VersionHistorySheet, CostBreakdown version badge, i18n keys
 
 ### Phase 13: Shareable Links and Floor Plan Storage
 **Goal**: Users can send a read-only estimate link to a client or colleague who can view the full cost breakdown without needing an account.
@@ -195,7 +199,7 @@ Plans:
 | 9. Supabase Auth Infrastructure | v1.1 | 3/3 | Complete |  |
 | 10. Chat Persistence | v1.1 | 2/2 | Complete    | 2026-03-22 |
 | 11. Project Management | v1.1 | 2/2 | Complete    | 2026-03-22 |
-| 12. Estimate Versioning | v1.1 | 0/TBD | Not started | - |
+| 12. Estimate Versioning | v1.1 | 0/2 | Not started | - |
 | 13. Shareable Links and Floor Plan Storage | v1.1 | 0/TBD | Not started | - |
 
 ---
