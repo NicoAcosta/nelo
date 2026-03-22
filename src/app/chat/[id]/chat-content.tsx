@@ -11,7 +11,7 @@ import { MobileNav } from "@/components/mobile-nav";
 import { ChatMessage } from "@/components/chat-message";
 import { ChatInput } from "@/components/chat-input";
 import { ChatOptions } from "@/components/chat-options";
-import { CostBreakdown } from "@/components/cost-breakdown";
+import { EstimatePreview } from "@/components/estimate-preview";
 import { FloorPlanPanel } from "@/components/floor-plan-panel";
 import { IconNelo } from "@/components/icons";
 import { buildPreamble } from "@/lib/documents/preamble";
@@ -25,9 +25,9 @@ interface FloorPlanResult {
   message: string;
 }
 
-function renderToolResult(toolName: string, result: unknown) {
+function renderToolResult(toolName: string, result: unknown, id: string) {
   if (toolName === "runEstimate" && result) {
-    return <CostBreakdown estimate={result as Estimate} />;
+    return <EstimatePreview estimate={result as Estimate} chatId={id} />;
   }
   if (toolName === "analyzeFloorPlan" && result) {
     const data = result as FloorPlanResult;
@@ -240,6 +240,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
               const rendered = renderToolResult(
                 toolName,
                 (part as { output: unknown }).output,
+                id,
               );
               if (rendered) {
                 toolResults.push(
