@@ -16,9 +16,10 @@ export async function processDocument(
     throw new Error(`Unsupported file type: ${fileName}`);
   }
 
-  const timeoutPromise = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new Error("Document processing timed out (30s)")), PROCESSING_TIMEOUT_MS),
-  );
+  let timerId: ReturnType<typeof setTimeout>;
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timerId = setTimeout(() => reject(new Error("Document processing timed out (30s)")), PROCESSING_TIMEOUT_MS);
+  });
 
   const processPromise = (async (): Promise<DocumentAnalysis> => {
     switch (fileType) {
@@ -76,5 +77,5 @@ export async function processDocument(
     }
   })();
 
-  return Promise.race([processPromise, timeoutPromise]);
+  return Promise.race([processPromise, timeoutPromise]).finally(() => clearTimeout(timerId));
 }

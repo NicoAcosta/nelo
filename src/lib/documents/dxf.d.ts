@@ -9,6 +9,7 @@ declare module "dxf" {
     end?: { x: number; y: number; z?: number };
     vertices?: Array<{ x: number; y: number; z?: number }>;
     name?: string;
+    block?: string; // INSERT entities: block name (DXF group code 2)
     measureStart?: { x: number; y: number; z?: number };
     measureEnd?: { x: number; y: number; z?: number };
     x?: number;

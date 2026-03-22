@@ -152,13 +152,16 @@ export async function extractFromPdf(
     let bestArea: number | undefined;
     let bestDist = Infinity;
 
-    for (const ann of areaAnnotations) {
+    let bestIdx = -1;
+    for (let i = 0; i < areaAnnotations.length; i++) {
+      const ann = areaAnnotations[i];
       const dx = room.x - ann.x;
       const dy = room.y - ann.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
       if (dist < bestDist) {
         bestDist = dist;
         bestArea = ann.area;
+        bestIdx = i;
       }
     }
 
@@ -169,10 +172,9 @@ export async function extractFromPdf(
       position: [room.x, room.y],
     });
 
-    // Remove matched area annotation so it isn't reused
-    if (bestDist < 100) {
-      const idx = areaAnnotations.findIndex((a) => a.area === bestArea);
-      if (idx >= 0) areaAnnotations.splice(idx, 1);
+    // Remove matched area annotation by index so duplicates aren't confused
+    if (bestDist < 100 && bestIdx >= 0) {
+      areaAnnotations.splice(bestIdx, 1);
     }
   }
 

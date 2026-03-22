@@ -100,20 +100,7 @@ function hasFurnitureLayer(layer: string): boolean {
   return lower.includes("furn") || lower.includes("mueble");
 }
 
-interface DxfEntity {
-  type: string;
-  layer?: string;
-  string?: string;
-  x?: number;
-  y?: number;
-  block?: string;
-  start?: { x: number; y: number; z: number };
-  measureStart?: { x: number; y: number; z: number };
-  measureEnd?: { x: number; y: number; z: number };
-  [key: string]: unknown;
-}
-
-// ParsedDxf type is declared in dxf.d.ts module declaration
+// Entity types are declared in dxf.d.ts module declaration
 
 /**
  * Extract construction-relevant data from a DXF string.
@@ -192,13 +179,16 @@ export async function extractFromDxf(
     let bestArea: number | undefined;
     let bestDist = Infinity;
 
-    for (const ann of areaAnnotations) {
+    let bestIdx = -1;
+    for (let i = 0; i < areaAnnotations.length; i++) {
+      const ann = areaAnnotations[i];
       const dx = room.x - ann.x;
       const dy = room.y - ann.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
       if (dist < bestDist) {
         bestDist = dist;
         bestArea = ann.area;
+        bestIdx = i;
       }
     }
 
@@ -209,10 +199,9 @@ export async function extractFromDxf(
       position: [room.x, room.y],
     });
 
-    // Remove matched area annotation so it isn't reused
-    if (bestDist < 5) {
-      const idx = areaAnnotations.findIndex((a) => a.area === bestArea);
-      if (idx >= 0) areaAnnotations.splice(idx, 1);
+    // Remove matched area annotation by index so duplicates aren't confused
+    if (bestDist < 5 && bestIdx >= 0) {
+      areaAnnotations.splice(bestIdx, 1);
     }
   }
 
