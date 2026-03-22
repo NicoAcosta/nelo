@@ -33,14 +33,24 @@ Accurate, transparent construction cost estimation through natural conversation 
 
 ### Active
 
-(None — all requirements delivered in milestone v1.0)
+#### Current Milestone: v1.1 Persistence & Sharing
+
+**Goal:** Add Supabase-powered auth, chat persistence, estimate versioning, and shareable estimate links so users can recover previous conversations, revise inputs, compare estimates, and share results.
+
+**Target features:**
+- Supabase Auth with magic link + OTP (same email flow, adaptive UI)
+- Chat persistence — auto-save conversations to Supabase Postgres
+- Estimate versioning — snapshots preserved on re-estimate, side-by-side comparison
+- Shareable estimate links — public read-only URLs with optional expiry
+- Project list — returning users see their past projects
+- Floor plan storage — Supabase Storage bucket (replaces in-memory base64)
 
 ### Out of Scope
 
 - Real-time per-request pricing APIs — daily cache is sufficient for MVP
 - CAD file parsing (DXF/DWG) — vision-only approach validated
 - Multiple regions beyond AMBA — single-region MVP
-- User accounts and persistence — in-memory per session
+- ~~User accounts and persistence~~ — **moved to Active for v1.1**
 - PDF export — nice-to-have for future milestone
 - 3D visualization — not needed for cost estimation
 
@@ -142,4 +152,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-22 after milestone v1.0 completion (all 8 phases delivered)*
+*Last updated: 2026-03-21 after milestone v1.1 started (Persistence & Sharing)*
