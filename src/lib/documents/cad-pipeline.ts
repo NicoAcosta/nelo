@@ -2,6 +2,7 @@ import { Helper } from "dxf";
 // Dynamic import — @resvg/resvg-js is a native Node addon that must be
 // marked as serverExternalPackages in next.config.ts for Turbopack.
 import type { DocumentAnalysis, ExtractedData } from "./types";
+import { sanitizeAutoCADText } from "./sanitize-autocad";
 
 /** Room-type keywords to match in TEXT/MTEXT strings */
 const ROOM_KEYWORDS = [
@@ -135,7 +136,7 @@ export async function extractFromDxf(
 
   for (const entity of entities) {
     if (entity.type === "TEXT" || entity.type === "MTEXT") {
-      const text = (entity.string || "").trim();
+      const text = sanitizeAutoCADText(entity.string || "");
       if (!text) continue;
       textEntities.push({
         text,

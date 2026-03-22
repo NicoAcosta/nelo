@@ -28,7 +28,12 @@ interface FloorPlanResult {
   message: string;
 }
 
-function renderToolResult(toolName: string, result: unknown, id: string) {
+function renderToolResult(
+  toolName: string,
+  result: unknown,
+  id: string,
+  renderedImageUrl?: string,
+) {
   if (toolName === "runEstimate" && result) {
     const estimate = result as Estimate & {
       _persistedId?: string;
@@ -49,6 +54,7 @@ function renderToolResult(toolName: string, result: unknown, id: string) {
     return (
       <FloorPlanPanel
         extraction={data.extraction}
+        imageUrl={renderedImageUrl}
         onConfirm={() => {}}
       />
     );
@@ -66,6 +72,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
   const initialQuery = searchParams.get("q");
   const hasSentInitialRef = useRef(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const renderedImagesRef = useRef<string | undefined>(undefined);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLElement>(null);
   const isNearBottomRef = useRef(true);
@@ -179,11 +186,14 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
         const { results } = await response.json();
 
         // Build preamble from all results with structured data
+        const PREAMBLE_MARKER = "<!-- doc-analysis -->";
         const preambles = results
           .map((r: DocumentAnalysis) => buildPreamble(r))
           .filter(Boolean);
         const preambleText =
-          preambles.length > 0 ? preambles.join("\n\n") + "\n\n" + text : text;
+          preambles.length > 0
+            ? `${PREAMBLE_MARKER}\n${preambles.join("\n\n")}\n${PREAMBLE_MARKER}\n\n${text}`
+            : text;
 
         // Convert rendered images from base64 data URLs to File objects
         // so useChat sends the RENDERED PNGs to Claude (not the original DWG/DXF)
@@ -201,6 +211,14 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
             });
           })
           .filter(Boolean) as File[];
+
+        // Store first rendered image for FloorPlanPanel preview
+        const firstImage = results.find(
+          (r: DocumentAnalysis) => r.renderedImage,
+        );
+        if (firstImage) {
+          renderedImagesRef.current = firstImage.renderedImage;
+        }
 
         if (renderedFiles.length > 0) {
           const dt = new DataTransfer();
@@ -287,6 +305,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
                 toolName,
                 (part as { output: unknown }).output,
                 id,
+                renderedImagesRef.current,
               );
               if (rendered) {
                 toolResults.push(

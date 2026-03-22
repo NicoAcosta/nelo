@@ -1,4 +1,5 @@
 import type { DocumentAnalysis } from "./types";
+import { cleanLayerName } from "./sanitize-autocad";
 
 interface PreambleOptions {
   degraded?: boolean;
@@ -55,9 +56,10 @@ export function buildPreamble(
     lines.push(`- Elements: ${elements.join(", ")}`);
   }
 
-  // Layers
+  // Layers — clean xref prefixes and deduplicate
   if (summary.layerNames.length > 0) {
-    lines.push(`- Layers: ${summary.layerNames.join(", ")}`);
+    const cleaned = [...new Set(summary.layerNames.map(cleanLayerName))];
+    lines.push(`- Layers: ${cleaned.join(", ")}`);
   }
 
   lines.push("");

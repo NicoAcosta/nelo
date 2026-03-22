@@ -1,6 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { IconNelo } from "./icons";
+import { splitPreambleFromDisplay } from "@/lib/documents/split-preamble";
 
 interface ChatMessageProps {
   role: "user" | "assistant";
@@ -9,6 +10,9 @@ interface ChatMessageProps {
 
 export function ChatMessage({ role, content }: ChatMessageProps) {
   if (role === "user") {
+    const { displayText, hasPreamble, files } =
+      splitPreambleFromDisplay(content);
+
     return (
       <div className="flex gap-6 max-w-3xl ml-auto flex-row-reverse animate-message-in">
         <div
@@ -20,9 +24,38 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
             <path d="M20 21a8 8 0 0 0-16 0" />
           </svg>
         </div>
-        <div className="flex flex-col items-end">
+        <div className="flex flex-col items-end gap-2">
           <div className="glass-primary text-black rounded-2xl p-6 shadow-md border border-white/20">
-            <p className="text-lg font-bold font-headline break-words overflow-wrap-anywhere">{content}</p>
+            <p className="text-lg font-bold font-headline break-words overflow-wrap-anywhere">
+              {displayText}
+            </p>
+            {hasPreamble && files.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-black/10">
+                {files.map((file) => (
+                  <span
+                    key={file.name}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-black/60 bg-black/8 px-2.5 py-1 rounded-lg"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
+                    </svg>
+                    <span className="truncate max-w-[180px]">{file.name}</span>
+                    <span className="text-black/30">·</span>
+                    <span className="text-black/40">{file.type}</span>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

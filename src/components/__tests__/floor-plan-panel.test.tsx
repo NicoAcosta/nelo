@@ -63,8 +63,25 @@ describe("FloorPlanPanel", () => {
     });
   });
 
-  it("renders translated analysis complete heading", () => {
+  it("renders translated analysis heading", () => {
     renderWithLocale(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
-    expect(screen.getByText("Floor Plan Analysis Complete")).toBeInTheDocument();
+    expect(screen.getByText("Floor Plan Analysis")).toBeInTheDocument();
+  });
+
+  it("renders room pills for extracted rooms", () => {
+    renderWithLocale(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
+    expect(screen.getByText("living")).toBeInTheDocument();
+    expect(screen.getByText("dormitorio")).toBeInTheDocument();
+    expect(screen.getByText("cocina")).toBeInTheDocument();
+  });
+
+  it("renders confidence level", () => {
+    renderWithLocale(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
+    expect(screen.getByText("High Confidence")).toBeInTheDocument();
+  });
+
+  it("renders notes when present", () => {
+    renderWithLocale(<FloorPlanPanel extraction={mockExtraction} onConfirm={vi.fn()} />);
+    expect(screen.getByText("Load-bearing walls detected at 30cm")).toBeInTheDocument();
   });
 });

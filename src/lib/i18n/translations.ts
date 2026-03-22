@@ -53,7 +53,7 @@ const en: Translations = {
 
   // floorPlanPanel
   "floorPlanPanel.analysisPhase": "Analysis Phase",
-  "floorPlanPanel.analysisComplete": "Floor Plan Analysis Complete",
+  "floorPlanPanel.analysisComplete": "Floor Plan Analysis",
   "floorPlanPanel.description": "Nelo extracted measurements from your floor plan. Review the values below and adjust if needed before calculating your estimate.",
   "floorPlanPanel.preview": "Floor Plan Preview",
   "floorPlanPanel.noNotes": "No additional notes from the analysis.",
@@ -65,6 +65,9 @@ const en: Translations = {
   "floorPlanPanel.windows": "Windows",
   "floorPlanPanel.confirm": "Confirm and Calculate",
   "floorPlanPanel.edit": "Edit Values",
+  "floorPlanPanel.confidenceHigh": "High Confidence",
+  "floorPlanPanel.confidenceMedium": "Medium Confidence",
+  "floorPlanPanel.confidenceLow": "Low Confidence",
 
   // landing
   "landing.greeting": "Hi, I'm Nelo",
@@ -326,7 +329,7 @@ const es: Translations = {
 
   // floorPlanPanel
   "floorPlanPanel.analysisPhase": "Fase de Analisis",
-  "floorPlanPanel.analysisComplete": "Analisis de Plano Completado",
+  "floorPlanPanel.analysisComplete": "Analisis de Plano",
   "floorPlanPanel.description": "Nelo extrajo las medidas de tu plano. Revisa los valores y ajustalos si es necesario antes de calcular tu presupuesto.",
   "floorPlanPanel.preview": "Vista previa del plano",
   "floorPlanPanel.noNotes": "Sin notas adicionales del analisis.",
@@ -338,6 +341,9 @@ const es: Translations = {
   "floorPlanPanel.windows": "Ventanas",
   "floorPlanPanel.confirm": "Confirmar y Calcular",
   "floorPlanPanel.edit": "Editar Valores",
+  "floorPlanPanel.confidenceHigh": "Alta Confianza",
+  "floorPlanPanel.confidenceMedium": "Media Confianza",
+  "floorPlanPanel.confidenceLow": "Baja Confianza",
 
   // landing
   "landing.greeting": "Hola, soy Nelo",
