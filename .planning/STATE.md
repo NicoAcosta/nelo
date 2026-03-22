@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Persistence & Sharing
 status: unknown
-stopped_at: Roadmap created for v1.1 (Phases 9-13). Ready to plan Phase 9.
-last_updated: "2026-03-22T05:54:50.600Z"
+stopped_at: Completed 09-02-PLAN.md — AuthProvider context, sign-in page with OTP, and PKCE callback
+last_updated: "2026-03-22T06:00:44.900Z"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State: Nelo
@@ -23,7 +23,7 @@ See: .planning/PROJECT.md (updated 2026-03-21)
 ## Current Position
 
 Phase: 09 (supabase-auth-infrastructure) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -40,6 +40,7 @@ Plan: 2 of 3
 
 *Updated after each plan completion*
 | Phase 09-supabase-auth-infrastructure P01 | 5 | 3 tasks | 10 files |
+| Phase 09-supabase-auth-infrastructure P02 | 4 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -56,6 +57,9 @@ Plan: 2 of 3
 - v1.1: `/share/**` excluded from auth middleware — pre-wired in Phase 9
 - 09-01: proxy.ts (not middleware.ts) at src root per Next.js 16 naming, exports proxy() and config
 - 09-01: Always return supabaseResponse from updateSession — never create new NextResponse.next() to preserve Set-Cookie headers
+- 09-02: AuthProvider uses getUser() not getSession() client-side — consistent with server-side anti-spoofing rule
+- 09-02: OTP uses 6 individual inputs (not one maxLength=6 input) — enables auto-advance + backspace nav + paste support
+- 09-02: AuthProvider wraps outside LocaleProvider — auth is app-global, locale preference is within auth scope
 
 ### Pending Todos
 
@@ -69,6 +73,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-22
-Stopped at: Completed 09-01-PLAN.md — Supabase client factories, proxy.ts, and database migration
+Last session: 2026-03-22T06:00:44.897Z
+Stopped at: Completed 09-02-PLAN.md — AuthProvider context, sign-in page with OTP, and PKCE callback
 Resume file: None
