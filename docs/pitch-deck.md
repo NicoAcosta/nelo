@@ -20,22 +20,22 @@ Nelo handles two critical stages of construction estimation:
 ### How it works
 
 1. **Chat** — Describe your project in natural language. Nelo asks smart follow-up questions about structure type, finishes, zone, and fills gaps with reasonable defaults.
-2. **Upload** — Drop your floor plan (image, PDF, DXF, or DWG). AI vision extracts rooms, dimensions, doors, and windows — then asks you to confirm before calculating.
+2. **Upload** — Drop your floor plan from AutoCAD (DWG, DXF), Revit (IFC), PDF, spreadsheet, or a photo. AI vision extracts rooms, dimensions, doors, and windows — then asks you to confirm before calculating.
 3. **Estimate** — Get a 26-category cost breakdown with price per m2, total price in ARS and USD (blue rate), confidence level, and transparent assumptions.
 
 ### What makes it real
 
 - **400+ line items** across 26 Argentine construction budget categories (the same structure architects actually use).
 - **Real pricing data**: UOCRA labor rates, MercadoLibre material costs, blue-rate USD conversion, inflation-adjusted via INDEC ICC index. Updated daily.
-- **Document processing**: Accepts images, PDFs, DXF, and DWG files. Extracts structured data and renders visual previews for AI vision analysis.
+- **Document processing**: Accepts AutoCAD (DWG, DXF), Revit (IFC), PDFs, spreadsheets, and images. Extracts structured data and renders visual previews for AI vision analysis.
 - **Bilingual**: English and Spanish, auto-detected from browser with manual toggle.
 - **Built by an architect** who uses this kind of estimate in his daily work.
 
 ### The team
 
-- **Juan Cruz Feres** — Architect. Spent the last year dealing with this exact problem. Knows the 26-category budget because he uses it daily.
-- **Sebastian Maldonado** — Designer. Responsible for the product design and visual identity.
-- **Nicolas Acosta** — Software Engineer. Built the AI pipeline, calculation engine, document processing, and infrastructure.
+- **Juan Cruz Feres** — Architect. Domain expert and product lead. Drove requirements from years of firsthand experience with construction estimation.
+- **Sebastian Maldonado** — Designer. Led product design, user research, and interface strategy. Shaped the experience from user interviews to final UI.
+- **Nicolas Acosta** — Software Engineer. Built the AI pipeline, calculation engine, document processing, and infrastructure. Full-stack development and system architecture.
 
 ### Tech stack
 
@@ -45,13 +45,13 @@ Nelo handles two critical stages of construction estimation:
 | AI | Claude via AI Gateway, AI SDK v6, vision analysis |
 | Frontend | React 19, Tailwind CSS 4, shadcn/ui |
 | Validation | Zod v4 |
-| Documents | DXF parser, DWG-to-DXF converter (WASM), PDF.js |
+| Documents | AutoCAD (DWG/DXF), Revit (IFC), PDF.js, spreadsheets, images |
 | Pricing | UOCRA, MercadoLibre, DolarAPI, INDEC ICC |
 | Deployment | Vercel |
 
 ### Validation
 
-- Juan Cruz has personally dealt with this problem for the past year as a practicing architect.
+- Juan Cruz has dealt with this problem throughout his career as a practicing architect.
 - Conversations with other architects confirmed strong interest — there is already a waitlist of professionals who want to try it.
 - The problem is universal across the Argentine construction industry and likely beyond.
 
@@ -76,7 +76,7 @@ Nelo handles two critical stages of construction estimation:
 
 **Title:** Getting a construction estimate shouldn't take weeks
 
-**Layout:** Dark background. Large contrasting stat in the center. Minimal text.
+**Layout:** Light background (#f2f2f0). Asymmetric two-column grid — headline left, pain points right. Full-width before/after stat at bottom.
 
 **Content on slide:**
 - Large text: **"2-3 weeks and $500+"**
@@ -133,7 +133,7 @@ Nelo handles two critical stages of construction estimation:
 |-----------|-------------|-------------|
 | 0:00-0:10 | Landing page. Click "How much does it cost to build a 100m2 house?" | "Let's see it in action. We'll start from the landing page with a simple question." |
 | 0:10-0:25 | Chat opens. Nelo asks about structure type. User clicks "Reinforced concrete." Nelo asks about finishes. User clicks "Standard." | "Nelo asks the right questions one at a time — structure, finishes, location. No forms, no jargon." |
-| 0:25-0:35 | User drags and drops a floor plan image/PDF. Upload indicator appears. | "Now we upload a real floor plan. Nelo accepts images, PDFs, and even CAD files." |
+| 0:25-0:35 | User drags and drops a floor plan image/PDF. Upload indicator appears. | "Now we upload a real floor plan. Nelo accepts AutoCAD, Revit, PDFs, spreadsheets, and photos." |
 | 0:35-0:45 | AI analyzes the floor plan. Extracted data appears — rooms, area, door/window counts. | "AI vision analyzes the plan — it identifies rooms, counts doors and windows, and estimates dimensions. Then it asks you to confirm." |
 | 0:45-1:00 | Cost breakdown renders. Zoom in on total price, price/m2, category table, confidence bar. | "And here's the result — a full 26-category cost breakdown. Total price in pesos and dollars. Price per square meter. Every assumption is transparent." |
 | 1:00-1:05 | Toggle language to Spanish. UI switches. | "And it works in both English and Spanish." |
@@ -232,7 +232,7 @@ Right side: QR code to try it live, or the app URL.
 >
 > And if you're the architect? You're spending weeks on every project — calling suppliers, researching prices, filling spreadsheets. The same repetitive work, over and over.
 >
-> Our co-founder Juan Cruz is an architect. He has spent his career dealing with this exact problem. So we built the solution.
+> Juan Cruz is an architect. He has spent his career dealing with this exact problem. So we built the solution.
 
 ---
 
@@ -308,17 +308,13 @@ Right side: QR code to try it live, or the app URL.
 
 ### [SLIDE 7 — TRACTION & CLOSE] (2:40 - 3:00)
 
-> Nelo was born from real frustration. Juan Cruz has spent his career burning time on estimates — this is the tool he needed.
+> Nelo was born from real frustration. Juan Cruz has spent his career burning time on estimates — so we built the tool he needed.
 >
-> We've already talked to other architects. They want to use it. We have a waitlist of professionals ready to try it the moment we open access.
+> We already have a waitlist of architects ready to use it. We're in free beta with partners now. Public launch at fourteen dollars a month, with studio plans for firms.
 >
-> Nelo is a working AI estimator with vision analysis, a twenty-six-category engine with over four hundred line items, bilingual UI, and real pricing data from the Argentine market.
+> The architect who used to spend weeks on every estimate? He gets his answer in five minutes now.
 >
-> We're currently in free beta with partner architects. Public launch at fourteen dollars a month, with team plans for firms.
->
-> Construction cost transparency for everyone — not just those who can afford an architect.
->
-> Try it at nelo.archi.
+> nelo.archi
 >
 > *[QR code / URL on screen]*
 
@@ -371,8 +367,8 @@ Anticipated questions and prepared answers (15-30 seconds each). These are NOT o
 
 ### Slide design guidelines
 
-- Dark theme to match the app's aesthetic (black background, white text, #ccff00 accent)
-- Font: Geist Sans (matches the app), or a clean sans-serif alternative
+- Light/dark alternation: slides 1, 6, 7 use light (#f2f2f0) with dark green accents (#6b8a00); slides 2-5 use dark (#0a0a0a) with #ccff00 accent
+- Font: Geist Sans (matches the app), Geist Mono for numbers/stats
 - Minimal text per slide — the narration carries the story
 - Screenshots should be high-res crops from the actual app, not mockups
 - QR code on final slide should be at least 200x200px for scanability

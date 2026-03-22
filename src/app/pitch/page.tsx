@@ -194,7 +194,7 @@ function Slide2() {
       <p className="text-sm text-white/55 text-center max-w-md mt-3 leading-relaxed">
         Describe your project. Upload your plan. Get a detailed estimate in minutes.
       </p>
-      <p className="mt-10 text-sm text-white/40 text-center italic">
+      <p className="mt-10 text-sm text-white/45 text-center italic font-medium">
         Think TurboTax for construction budgets.
       </p>
       <p className="mt-6 text-[10px] text-white/25 uppercase tracking-[0.25em]">
@@ -316,7 +316,7 @@ function Slide5() {
             Not a ChatGPT wrapper. A tool that replaces hours of professional work with a 5-minute conversation.
           </p>
           <p className="text-xs text-[#ccff00]/50 uppercase tracking-[0.2em] font-bold">Why now</p>
-          <p className="text-sm text-white/45 leading-relaxed max-w-sm mt-2">
+          <p className="text-sm text-white/50 leading-relaxed max-w-sm mt-2">
             AI vision can finally interpret floor plans accurately. Real-time pricing data makes static spreadsheets obsolete.
           </p>
         </div>
@@ -499,7 +499,7 @@ function Slide7() {
 
       {/* CTA — dark on light for maximum contrast */}
       <a
-        href="/"
+        href="/chat"
         className="group inline-flex items-center gap-3 bg-[#1a1a1a] text-[#f2f2f2] font-black text-lg md:text-xl uppercase tracking-[0.08em] px-12 py-5 rounded-xl hover:bg-[#333] active:scale-[0.98] transition duration-200 focus-visible:ring-2 focus-visible:ring-[#ccff00] focus-visible:ring-offset-2"
       >
         Try it live
