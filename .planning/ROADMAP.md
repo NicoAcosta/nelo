@@ -194,7 +194,7 @@ Plans:
 | 8. Real Pricing Data Pipeline | v1.0 | 5/5 | Complete | 2026-03-21 |
 | 9. Supabase Auth Infrastructure | v1.1 | 3/3 | Complete |  |
 | 10. Chat Persistence | v1.1 | 2/2 | Complete    | 2026-03-22 |
-| 11. Project Management | v1.1 | 2/2 | Complete   | 2026-03-22 |
+| 11. Project Management | v1.1 | 2/2 | Complete    | 2026-03-22 |
 | 12. Estimate Versioning | v1.1 | 0/TBD | Not started | - |
 | 13. Shareable Links and Floor Plan Storage | v1.1 | 0/TBD | Not started | - |
 
