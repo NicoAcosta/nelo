@@ -26,7 +26,7 @@ export function SummaryCards({ estimate }: SummaryCardsProps) {
     {
       label: t("estimate.pricePerM2"),
       value: estimate.pricePerM2,
-      format: (n: number) => `$${formatARS(Math.round(n))}`,
+      format: (n: number) => `ARS ${formatARS(Math.round(n))}`,
       sub: t("estimate.arsPerM2"),
       accent: true,
     },

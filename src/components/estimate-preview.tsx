@@ -38,10 +38,10 @@ export function EstimatePreview({ estimate, chatId }: EstimatePreviewProps) {
         <div className="flex items-end justify-between">
           <div>
             <div className="font-mono text-3xl font-extrabold tracking-tight tabular-nums">
-              ${formatARS(estimate.totalPrice)}
+              ARS {formatARS(estimate.totalPrice)}
             </div>
             <div className="font-mono text-sm text-[#ccff00] mt-1 tabular-nums">
-              ${formatARS(estimate.pricePerM2)} /m²
+              ARS {formatARS(estimate.pricePerM2)} /m²
             </div>
           </div>
           <div className="text-right">

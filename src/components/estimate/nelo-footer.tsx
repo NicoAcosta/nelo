@@ -44,7 +44,7 @@ export function NeloFooter({ chatId }: NeloFooterProps) {
         <div className="relative text-sm text-[#71717a] mt-3 font-medium">
           {t("estimate.tagline")}
         </div>
-        <div className="relative font-mono text-[13px] text-[#3f3f46] mt-1.5 tracking-wider">
+        <div className="relative font-mono text-[13px] text-[#52525b] mt-1.5 tracking-wider">
           nelo.archi
         </div>
 
@@ -66,7 +66,7 @@ export function NeloFooter({ chatId }: NeloFooterProps) {
       </div>
 
       {/* Powered by strip */}
-      <div className="text-center py-6 text-[11px] text-[#3f3f46] flex items-center justify-center gap-2">
+      <div className="text-center py-6 text-[11px] text-[#52525b] flex items-center justify-center gap-2">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="opacity-40" aria-hidden="true">
           <path d="M3 2h6l6 10V2h6v20h-6L9 12v10H3z" fill="currentColor" />
         </svg>
