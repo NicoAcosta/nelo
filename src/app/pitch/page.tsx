@@ -68,7 +68,7 @@ export default function PitchPage() {
 
       {/* Counter — adapts to theme */}
       <div
-        className={`absolute bottom-6 right-8 text-[11px] tracking-[0.15em] transition-colors duration-500 ${isLight ? "text-black/30" : "text-white/40"}`}
+        className={`absolute bottom-6 right-8 text-[11px] tracking-[0.15em] transition-colors duration-500 ${isLight ? "text-black/40" : "text-white/40"}`}
         style={{ fontFamily: "var(--font-geist-mono, monospace)" }}
       >
         {String(current + 1).padStart(2, "0")} / {String(TOTAL_SLIDES).padStart(2, "0")}
@@ -130,7 +130,7 @@ function Slide1() {
       <div className="w-full max-w-6xl mx-auto px-10 md:px-20 grid md:grid-cols-[1.4fr_1fr] gap-16 items-center">
         {/* Left — statement */}
         <div>
-          <p className="text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/40 font-semibold mb-8">The problem</p>
+          <p className="text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/50 font-semibold mb-8">The problem</p>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[0.92] mb-8 text-[#1a1a1a]">
             Getting a construction
             <br />
@@ -138,7 +138,7 @@ function Slide1() {
             <br />
             <span className="text-[#1a1a1a]/25">take weeks.</span>
           </h1>
-          <p className="text-base md:text-lg text-[#1a1a1a]/55 leading-relaxed max-w-xl">
+          <p className="text-base md:text-lg text-[#1a1a1a]/65 leading-relaxed max-w-xl">
             Juan Cruz is an architect. He spent the last year burning time and money on estimates for every project. This isn&apos;t a hypothetical &mdash; this is his daily frustration.
           </p>
         </div>
@@ -146,15 +146,15 @@ function Slide1() {
         {/* Right — two pain points stacked */}
         <div className="flex flex-col gap-10">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#1a1a1a]/30 font-bold mb-3">Early stage</p>
-            <p className="text-[15px] text-[#1a1a1a]/55 leading-relaxed">
+            <p className="text-xs uppercase tracking-[0.2em] text-[#1a1a1a]/50 font-bold mb-3">Early stage</p>
+            <p className="text-[15px] text-[#1a1a1a]/65 leading-relaxed">
               &ldquo;How much would this roughly cost?&rdquo; Even a ballpark requires days of calls, waiting, and often paying for a preliminary study.
             </p>
           </div>
           <div className="h-px bg-[#1a1a1a]/[0.08]" />
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#1a1a1a]/30 font-bold mb-3">Detailed stage</p>
-            <p className="text-[15px] text-[#1a1a1a]/55 leading-relaxed">
+            <p className="text-xs uppercase tracking-[0.2em] text-[#1a1a1a]/50 font-bold mb-3">Detailed stage</p>
+            <p className="text-[15px] text-[#1a1a1a]/65 leading-relaxed">
               Real numbers mean suppliers, subcontractors, price research, spreadsheets. Weeks of work &mdash; on every single project.
             </p>
           </div>
@@ -181,14 +181,14 @@ function Slide2() {
         <IconNelo className="w-14 h-14" />
         <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#ccff00] rounded-full border-[3px] border-[#0a0a0a]" />
       </div>
-      <p className="text-[11px] uppercase tracking-[0.3em] text-white/35 font-semibold mb-5">Meet</p>
+      <p className="text-[11px] uppercase tracking-[0.3em] text-white/45 font-semibold mb-5">Meet</p>
       <h1 className="text-7xl md:text-[10rem] font-black tracking-[-0.04em] leading-none mb-8">
         <span className="bg-[#ccff00] text-[#0a0a0a] px-5 md:px-8 py-1 md:py-2 inline-block">NELO</span>
       </h1>
       <p className="text-lg md:text-xl text-white/55 text-center max-w-lg leading-relaxed">
         Your AI construction cost estimator.
       </p>
-      <p className="text-sm text-white/35 text-center max-w-md mt-3 leading-relaxed">
+      <p className="text-sm text-white/55 text-center max-w-md mt-3 leading-relaxed">
         Describe your project. Upload your plan. Get a detailed estimate in minutes.
       </p>
       <p className="mt-12 text-[10px] text-white/25 uppercase tracking-[0.25em]">
@@ -263,7 +263,7 @@ function Slide4() {
       <h2 className="text-3xl md:text-5xl font-black tracking-tight text-center text-white/90 mb-3 z-10">
         See it in action
       </h2>
-      <p className="text-sm text-white/45 text-center mb-10 z-10">
+      <p className="text-sm text-white/55 text-center mb-10 z-10">
         From first question to full cost breakdown in under 5 minutes
       </p>
 
@@ -306,7 +306,7 @@ function Slide5() {
             <br />
             time.
           </h2>
-          <p className="text-sm text-white/45 leading-relaxed max-w-sm">
+          <p className="text-sm text-white/55 leading-relaxed max-w-sm">
             Not a ChatGPT wrapper. A tool that replaces hours of professional work with a 5-minute conversation.
           </p>
         </div>
@@ -403,7 +403,7 @@ function Slide6() {
   return (
     <div className="w-screen h-screen flex-shrink-0 bg-[#f2f2f0] text-[#1a1a1a] flex items-center">
       <div className="w-full max-w-5xl mx-auto px-10 md:px-20">
-        <p className="text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/35 font-semibold mb-8">The team</p>
+        <p className="text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/50 font-semibold mb-8">The team</p>
         <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-[0.92] mb-16 text-[#1a1a1a]">
           Built by people who<br />know the problem.
         </h2>
@@ -413,8 +413,8 @@ function Slide6() {
             <div key={member.name}>
               <TeamPhoto member={member} />
               <h3 className="text-lg font-black uppercase tracking-tight text-[#1a1a1a] mt-5">{member.name}</h3>
-              <p className="text-xs text-[#1a1a1a]/40 uppercase tracking-[0.2em] font-bold mt-1 mb-3">{member.role}</p>
-              <p className="text-sm text-[#1a1a1a]/50 leading-relaxed">{member.desc}</p>
+              <p className="text-xs text-[#1a1a1a]/55 uppercase tracking-[0.2em] font-bold mt-1 mb-3">{member.role}</p>
+              <p className="text-sm text-[#1a1a1a]/60 leading-relaxed">{member.desc}</p>
             </div>
           ))}
         </div>
@@ -430,7 +430,7 @@ function Slide6() {
 function Slide7() {
   return (
     <div className="w-screen h-screen flex-shrink-0 bg-[#f2f2f0] text-[#1a1a1a] flex flex-col items-center justify-center px-8 md:px-16">
-      <p className="text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/35 font-semibold mb-6">Already validated</p>
+      <p className="text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/50 font-semibold mb-6">Already validated</p>
       <h2 className="text-4xl md:text-6xl font-black tracking-tight text-center text-[#1a1a1a] mb-14 leading-[0.92]">
         From weeks to minutes.
       </h2>
@@ -441,8 +441,8 @@ function Slide7() {
           <div className="text-6xl md:text-7xl font-black text-[#1a1a1a] leading-none mb-2" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>
             24h
           </div>
-          <p className="text-xs text-[#1a1a1a]/40 uppercase tracking-[0.15em] font-bold">shipped</p>
-          <p className="text-sm text-[#1a1a1a]/40 mt-2 leading-relaxed max-w-[200px]">
+          <p className="text-xs text-[#1a1a1a]/60 uppercase tracking-[0.15em] font-bold">shipped</p>
+          <p className="text-sm text-[#1a1a1a]/60 mt-2 leading-relaxed max-w-[200px]">
             Full estimation engine, vision, bilingual UI, real pricing
           </p>
         </div>
@@ -452,11 +452,11 @@ function Slide7() {
         <div className="flex flex-col gap-6">
           <div>
             <div className="text-2xl font-black text-[#1a1a1a]/70 mb-1" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>1 year</div>
-            <p className="text-xs text-[#1a1a1a]/40">of real pain &mdash; our architect lived this problem every day</p>
+            <p className="text-xs text-[#1a1a1a]/60">of real pain &mdash; our architect lived this problem every day</p>
           </div>
           <div>
             <div className="text-2xl font-black text-[#1a1a1a]/70 mb-1" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>Waitlist</div>
-            <p className="text-xs text-[#1a1a1a]/40">of architects ready to use it before we even launched</p>
+            <p className="text-xs text-[#1a1a1a]/60">of architects ready to use it before we even launched</p>
           </div>
         </div>
       </div>
