@@ -153,6 +153,23 @@ const en: Translations = {
   "expressQuestion.finishLevel": "Finish level?",
   "expressQuestion.locationZone": "In which area of Buenos Aires?",
 
+  // uploadDialog
+  "uploadDialog.title": "Upload Documents",
+  "uploadDialog.subtitle": "Drag and drop or click to select",
+  "uploadDialog.dropHere": "Drop files here",
+  "uploadDialog.orBrowse": "or click to browse",
+  "uploadDialog.cadLabel": "AutoCAD",
+  "uploadDialog.cadFormats": "DWG, DXF",
+  "uploadDialog.pdfLabel": "Documents",
+  "uploadDialog.pdfFormats": "PDF",
+  "uploadDialog.photoLabel": "Photos",
+  "uploadDialog.photoFormats": "PNG, JPG, WEBP",
+  "uploadDialog.upTo20": "Up to 20 MB",
+  "uploadDialog.upTo10": "Up to 10 MB",
+  "uploadDialog.cancel": "Cancel",
+  "uploadDialog.upload": "Upload Files",
+  "uploadDialog.maxFiles": "Maximum 3 files per message",
+
   // auth
   "auth.signIn": "Sign in to Nelo",
   "auth.emailLabel": "Email address",
@@ -322,6 +339,23 @@ const es: Translations = {
   "expressQuestion.roofType": "Tipo de cubierta / techo?",
   "expressQuestion.finishLevel": "Nivel de terminaciones?",
   "expressQuestion.locationZone": "En que zona de Buenos Aires?",
+
+  // uploadDialog
+  "uploadDialog.title": "Subir Documentos",
+  "uploadDialog.subtitle": "Arrastra y solta o hace click para seleccionar",
+  "uploadDialog.dropHere": "Solta los archivos aca",
+  "uploadDialog.orBrowse": "o hace click para buscar",
+  "uploadDialog.cadLabel": "AutoCAD",
+  "uploadDialog.cadFormats": "DWG, DXF",
+  "uploadDialog.pdfLabel": "Documentos",
+  "uploadDialog.pdfFormats": "PDF",
+  "uploadDialog.photoLabel": "Fotos",
+  "uploadDialog.photoFormats": "PNG, JPG, WEBP",
+  "uploadDialog.upTo20": "Hasta 20 MB",
+  "uploadDialog.upTo10": "Hasta 10 MB",
+  "uploadDialog.cancel": "Cancelar",
+  "uploadDialog.upload": "Subir Archivos",
+  "uploadDialog.maxFiles": "Maximo 3 archivos por mensaje",
 
   // auth
   "auth.signIn": "Iniciar sesion en Nelo",

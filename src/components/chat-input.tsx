@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { IconSend, IconAttach } from "./icons";
+import { IconSend, IconAttach, IconAutoCAD, IconPDF, IconPhoto } from "./icons";
+import { UploadDialog } from "./upload-dialog";
 import { useLocale } from "@/lib/i18n/use-locale";
-import { ACCEPT_STRING, MAX_FILES_PER_MESSAGE, validateFile } from "@/lib/documents/validation";
+import { detectFileType } from "@/lib/documents/validation";
 
 const MAX_MESSAGE_LENGTH = 5000;
 
@@ -13,11 +14,11 @@ interface ChatInputProps {
   placeholder?: string;
 }
 
-function getFileIcon(fileName: string): string {
-  const ext = fileName.slice(fileName.lastIndexOf(".")).toLowerCase();
-  if (ext === ".dwg" || ext === ".dxf") return "📐";
-  if (ext === ".pdf") return "📄";
-  return "🖼";
+function FileTypeIcon({ fileName }: { fileName: string }) {
+  const type = detectFileType(fileName);
+  if (type === "dwg" || type === "dxf") return <IconAutoCAD className="w-3.5 h-3.5" />;
+  if (type === "pdf") return <IconPDF className="w-3.5 h-3.5" />;
+  return <IconPhoto className="w-3.5 h-3.5" />;
 }
 
 export function ChatInput({
@@ -29,9 +30,8 @@ export function ChatInput({
   const [value, setValue] = useState("");
   const resolvedPlaceholder = placeholder ?? t("chatInput.placeholder");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [fileError, setFileError] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   function removeFile(index: number) {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
@@ -60,54 +60,19 @@ export function ChatInput({
     }
   }
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const newFiles = Array.from(e.target.files ?? []);
-    setFileError(null);
-
-    for (const file of newFiles) {
-      const validation = validateFile(file.name, file.size);
-      if (!validation.valid) {
-        setFileError(validation.error ?? "Invalid file");
-        e.target.value = "";
-        return;
-      }
-    }
-
-    setSelectedFiles((prev) => {
-      const combined = [...prev, ...newFiles];
-      if (combined.length > MAX_FILES_PER_MESSAGE) {
-        setFileError(`Maximum ${MAX_FILES_PER_MESSAGE} files per message`);
-        return prev;
-      }
-      return combined;
-    });
-
-    e.target.value = "";
+  function handleDialogConfirm(files: File[]) {
+    setSelectedFiles(files);
+    setDialogOpen(false);
   }
 
   return (
     <div className="w-full max-w-4xl mx-auto">
       <div className="glass-card border-2 border-white/50 rounded-2xl flex flex-col p-3">
-        {fileError && (
-          <div role="alert" className="flex items-center gap-2 px-4 py-2 mb-1">
-            <span className="text-xs font-bold text-error bg-error/10 px-3 py-1 rounded-lg">
-              {fileError}
-            </span>
-            <button
-              type="button"
-              onClick={() => setFileError(null)}
-              className="text-error/70 hover:text-error text-xs font-bold transition-colors"
-              aria-label="Dismiss error"
-            >
-              &times;
-            </button>
-          </div>
-        )}
         {selectedFiles.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 px-4 py-2 mb-1">
             {selectedFiles.map((file, i) => (
               <span key={`${file.name}-${i}`} className="inline-flex items-center gap-1.5 text-xs font-bold text-on-surface/60 bg-white/40 px-3 py-1 rounded-lg">
-                <span>{getFileIcon(file.name)}</span>
+                <FileTypeIcon fileName={file.name} />
                 <span className="truncate max-w-[150px]">{file.name}</span>
                 <span className="text-on-surface/30">{(file.size / 1024 / 1024).toFixed(1)}MB</span>
                 <button
@@ -136,19 +101,10 @@ export function ChatInput({
         />
         <div className="flex items-center justify-between px-2 pb-1 pt-2">
           <div className="flex items-center gap-1">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept={ACCEPT_STRING}
-              multiple
-              onChange={handleFileChange}
-              className="hidden"
-              aria-label="Upload floor plan"
-            />
             <button
               type="button"
               aria-label="Attach file"
-              onClick={() => fileInputRef.current?.click()}
+              onClick={() => setDialogOpen(true)}
               className="p-2 text-on-surface/50 hover:text-on-surface hover:bg-white/40 rounded-xl transition-all"
             >
               <IconAttach />
@@ -168,6 +124,11 @@ export function ChatInput({
       <p className="text-center text-[9px] text-on-surface/30 mt-4 tracking-widest font-bold uppercase">
         {t("chatInput.disclaimer")}
       </p>
+      <UploadDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        onConfirm={handleDialogConfirm}
+      />
     </div>
   );
 }
