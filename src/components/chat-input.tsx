@@ -36,7 +36,7 @@ export function ChatInput({
     if (selectedFiles.length > 0) {
       const dt = new DataTransfer();
       for (const f of selectedFiles) dt.items.add(f);
-      onSend(trimmed || t("chatInput.analyzeFloorPlan"), dt.files);
+      onSend(trimmed, dt.files);
       setSelectedFiles([]);
     } else {
       onSend(trimmed);
