@@ -168,7 +168,7 @@ function Slide2() {
         Describe your project. Upload your plan. Get a detailed estimate in minutes.
       </p>
       <p className="mt-12 text-[10px] text-white/25 uppercase tracking-[0.25em]">
-        Named after our architect co-founder
+        Built by architects, for architects
       </p>
     </div>
   );
@@ -347,7 +347,7 @@ function Slide6() {
             <h3 className="text-xl font-black uppercase tracking-tight text-white/90">Juan Cruz Feres</h3>
             <p className="text-xs text-[#ccff00] uppercase tracking-[0.2em] font-bold mt-1 mb-3">Architect</p>
             <p className="text-[15px] text-white/50 leading-relaxed">
-              Uses this budget structure every day. Spent the last year dealing with this exact problem. Named the app after himself.
+              Uses this budget structure every day. Spent the last year dealing with this exact problem. Built Nelo to solve his own pain.
             </p>
           </div>
 

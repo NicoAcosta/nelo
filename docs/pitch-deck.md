@@ -33,7 +33,7 @@ Nelo handles two critical stages of construction estimation:
 
 ### The team
 
-- **Juan Cruz Feres** — Architect. Spent the last year dealing with this exact problem. Knows the 26-category budget because he uses it. Named the app after himself (Nelo is his nickname).
+- **Juan Cruz Feres** — Architect. Spent the last year dealing with this exact problem. Knows the 26-category budget because he uses it daily.
 - **Sebastian Maldonado** — Designer. Responsible for the product design and visual identity.
 - **Nicolas Acosta** — Software Engineer. Built the AI pipeline, calculation engine, document processing, and infrastructure.
 
@@ -178,7 +178,7 @@ Nelo handles two critical stages of construction estimation:
 | Juan Cruz Feres | Sebastian Maldonado | Nicolas Acosta |
 |----------------|--------------------|--------------------|
 | Architect | Designer | Software Engineer |
-| Uses this budget structure daily. Named the app after himself. | Made it look like a product, not a hackathon project. | Built the AI pipeline, engine, and document processing. |
+| Uses this budget structure daily. Built Nelo to solve his own problem. | Made it look like a product, not a hackathon project. | Built the AI pipeline, engine, and document processing. |
 
 **Visual direction:** Professional photos or clean avatars. Consistent framing. The architect being first (leftmost) is intentional — he's the domain credibility.
 
@@ -239,7 +239,7 @@ Right side: QR code to try it live, or the app URL.
 
 > This is Nelo — an AI construction cost estimator.
 >
-> Describe your project, upload your floor plan, and get a detailed cost breakdown in minutes instead of weeks. It's named after Juan Cruz, because this is the tool he wished he had.
+> Describe your project, upload your floor plan, and get a detailed cost breakdown in minutes instead of weeks. Built by architects, for architects.
 
 ---
 
