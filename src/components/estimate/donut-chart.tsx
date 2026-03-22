@@ -69,7 +69,7 @@ export function DonutChart({ categories, totalPrice }: DonutChartProps) {
   return (
     <div className="bg-[#111113] p-8 flex flex-col items-center justify-center gap-6">
       <div className="w-[260px] h-[260px] relative">
-        <svg viewBox="0 0 200 200" className="w-full h-full -rotate-90">
+        <svg viewBox="0 0 200 200" className="w-full h-full -rotate-90" role="img" aria-label="Cost distribution chart showing category breakdown">
           {segmentData.map((seg) => (
             <circle
               key={seg.id}
@@ -95,7 +95,7 @@ export function DonutChart({ categories, totalPrice }: DonutChartProps) {
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="font-mono text-[22px] font-bold text-[#fafafa] tabular-nums">
-            {formatCompact(totalPrice)}
+            {formatCompact(directCost)}
           </span>
           <span className="text-[11px] text-[#71717a] mt-0.5">
             {t("estimate.nCategories").replace("{n}", String(active.length))}

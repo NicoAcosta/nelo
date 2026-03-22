@@ -1,6 +1,7 @@
 "use client";
 
-import type { Estimate, ProjectInputs, LocationZone } from "@/lib/estimate/types";
+import type { Estimate, ProjectInputs } from "@/lib/estimate/types";
+import { ZONE_LABELS } from "@/components/estimate/format";
 import { EstimateTopbar } from "@/components/estimate/estimate-topbar";
 import { HeroSection } from "@/components/estimate/hero-section";
 import { SummaryCards } from "@/components/estimate/summary-cards";
@@ -9,13 +10,6 @@ import { CategoryBreakdown } from "@/components/estimate/category-breakdown";
 import { CostBuildUp } from "@/components/estimate/cost-buildup";
 import { AssumptionsPanel } from "@/components/estimate/assumptions-panel";
 import { NeloFooter } from "@/components/estimate/nelo-footer";
-
-const ZONE_LABELS: Record<LocationZone, string> = {
-  caba: "CABA",
-  gba_norte: "GBA Norte",
-  gba_sur: "GBA Sur",
-  gba_oeste: "GBA Oeste",
-};
 
 interface EstimateDashboardProps {
   estimate: Estimate;
@@ -49,26 +43,34 @@ export function EstimateDashboard({
         locationLabel={locationLabel}
       />
 
-      <HeroSection estimate={estimate} />
+      <main>
+        <div className="animate-fade-up delay-1">
+          <HeroSection estimate={estimate} />
+        </div>
 
-      <SummaryCards estimate={estimate} />
+        <div className="animate-fade-up delay-2">
+          <SummaryCards estimate={estimate} />
+        </div>
 
-      {/* Main two-panel grid */}
-      <div className="grid grid-cols-[1fr_1.3fr] gap-px bg-white/[0.06] mx-8 my-5 rounded-xl overflow-hidden border border-white/[0.06] min-h-[480px]">
-        <DonutChart
-          categories={estimate.categories}
-          totalPrice={estimate.totalPrice}
-        />
-        <CategoryBreakdown categories={estimate.categories} />
-      </div>
+        {/* Main two-panel grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-px bg-white/[0.06] mx-4 md:mx-8 my-5 rounded-xl overflow-hidden border border-white/[0.06] min-h-[480px] animate-fade-up delay-3">
+          <DonutChart
+            categories={estimate.categories}
+            totalPrice={estimate.totalPrice}
+          />
+          <CategoryBreakdown categories={estimate.categories} />
+        </div>
 
-      {/* Bottom two-panel grid */}
-      <div className="grid grid-cols-2 gap-px bg-white/[0.06] mx-8 mb-5 rounded-xl overflow-hidden border border-white/[0.06]">
-        <CostBuildUp estimate={estimate} />
-        <AssumptionsPanel estimate={estimate} inputs={inputs} />
-      </div>
+        {/* Bottom two-panel grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/[0.06] mx-4 md:mx-8 mb-5 rounded-xl overflow-hidden border border-white/[0.06] animate-fade-up delay-4">
+          <CostBuildUp estimate={estimate} />
+          <AssumptionsPanel estimate={estimate} inputs={inputs} />
+        </div>
+      </main>
 
-      <NeloFooter chatId={chatId} />
+      <footer className="animate-fade-up delay-5">
+        <NeloFooter chatId={chatId} />
+      </footer>
     </div>
   );
 }

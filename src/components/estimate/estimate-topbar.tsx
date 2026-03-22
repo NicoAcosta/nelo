@@ -18,9 +18,13 @@ export function EstimateTopbar({
   const [copied, setCopied] = useState(false);
 
   const handleShare = useCallback(async () => {
-    await navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard write failed; silently ignore
+    }
   }, []);
 
   const displayName = locationLabel
