@@ -184,6 +184,16 @@ const en: Translations = {
   "auth.networkError": "Connection error. Please try again.",
   "auth.signOut": "Sign out",
   "auth.signInButton": "Sign in",
+
+  // projects
+  "projects.title": "Projects",
+  "projects.empty": "No projects yet.",
+  "projects.emptyBody": "Start a conversation to estimate your first project.",
+  "projects.startFirst": "Start your first estimate",
+  "projects.open": "Open",
+  "projects.renameHint": "Click to rename",
+  "projects.titleTooLong": "Title too long (100 chars max)",
+  "projects.titleEmpty": "Title cannot be empty",
 };
 
 const es: Translations = {
@@ -371,6 +381,16 @@ const es: Translations = {
   "auth.networkError": "Error de conexion. Intenta de nuevo.",
   "auth.signOut": "Cerrar sesion",
   "auth.signInButton": "Iniciar sesion",
+
+  // projects
+  "projects.title": "Proyectos",
+  "projects.empty": "Sin proyectos aun.",
+  "projects.emptyBody": "Empieza una conversacion para estimar tu primer proyecto.",
+  "projects.startFirst": "Empeza tu primera estimacion",
+  "projects.open": "Abrir",
+  "projects.renameHint": "Hacer click para renombrar",
+  "projects.titleTooLong": "Titulo demasiado largo (max 100 caracteres)",
+  "projects.titleEmpty": "El titulo no puede estar vacio",
 };
 
 export const translations: Record<Locale, Translations> = { en, es };
