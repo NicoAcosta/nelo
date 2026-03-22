@@ -4,6 +4,7 @@ import { chatModel } from "@/lib/ai/models";
 import { createChatTools } from "@/lib/ai/tools";
 import { buildSystemPrompt } from "@/lib/pricing/system-prompt-builder";
 import type { Locale } from "@/lib/i18n/types";
+import { createClient } from "@/lib/supabase/server";
 
 export const maxDuration = 60;
 
@@ -11,6 +12,13 @@ const MAX_MESSAGES = 100;
 const MAX_BODY_BYTES = 10 * 1024 * 1024; // 10MB
 
 export async function POST(req: Request) {
+  // Auth guard — must have a valid user session
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   // Guard against oversized payloads
   const contentLength = req.headers.get("content-length");
   if (contentLength && Number(contentLength) > MAX_BODY_BYTES) {
