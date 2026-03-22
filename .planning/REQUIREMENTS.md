@@ -3,123 +3,102 @@
 **Defined:** 2026-03-20
 **Core Value:** Accurate, transparent construction cost estimation through natural conversation — the user gets a detailed price breakdown they can trust.
 
-## v1 Requirements
+## v1.0 Requirements (Validated)
 
-### Chat & Data Collection
+All v1.0 requirements shipped and validated. See PROJECT.md Validated section for full list.
 
-- [ ] **CHAT-01**: User can describe their construction project through natural conversation with an AI chatbot
-- [ ] **CHAT-02**: Chatbot identifies user type (consumer vs professional) and adapts question depth accordingly
-- [ ] **CHAT-03**: Chatbot collects structured data via AI SDK tools with Zod-validated schemas
-- [ ] **CHAT-04**: Express mode: chatbot asks 5-8 key questions (area, stories, structure type, roof type, finish level, location zone) and produces a quick estimate
-- [ ] **CHAT-05**: Chatbot presents transparent assumptions when data is missing (e.g., "I'm assuming 2.60m ceiling height")
-- [ ] **CHAT-06**: User can correct any assumed or extracted value through conversation
-- [ ] **CHAT-07**: System prompt is dynamically built from categories config so LLM always knows what to ask
+## v1.1 Requirements
 
-### Floor Plan Analysis
+Requirements for Persistence & Sharing milestone. Each maps to roadmap phases.
 
-- [ ] **PLAN-01**: User can upload floor plan images (PNG, JPG, PDF) as chat attachments
-- [ ] **PLAN-02**: AI vision model analyzes floor plan and extracts approximate data: room count, room types, estimated total area, door count, window count
-- [ ] **PLAN-03**: Chatbot presents extracted data to user for confirmation/correction before using it in calculations
-- [ ] **PLAN-04**: Extracted floor plan data merges with conversational inputs to feed the calculation engine
+### Authentication
 
-### Calculation Engine
+- [ ] **AUTH-01**: User can sign in via email with magic link (clickable) and OTP (6-digit code) in the same email
+- [ ] **AUTH-02**: User session persists across browser refresh via cookie-based auth tokens
+- [ ] **AUTH-03**: Protected routes (/chat, /projects) redirect unauthenticated users to sign-in
+- [ ] **AUTH-04**: User can sign out, clearing session and redirecting to landing page
 
-- [ ] **CALC-01**: Engine accepts structured project inputs and outputs price/m² and total price
-- [ ] **CALC-02**: Engine uses coefficient-based quantity derivation (e.g., plaster m² = 2.5 × floor area) calibrated for Argentine construction
-- [ ] **CALC-03**: Engine applies conditional logic / exclusion tree (e.g., steel frame disables concrete structure items)
-- [ ] **CALC-04**: Engine computes full cost structure: direct cost → overhead (8-12%) → profit (10-15%) → IVA (21%) → final price
-- [ ] **CALC-05**: Engine outputs 26-category cost breakdown with incidence percentages
-- [ ] **CALC-06**: Engine calculates confidence level (quick ±40-50% / standard ±20-25% / detailed ±10-15%) based on number of inputs collected
-- [ ] **CALC-07**: Engine is a pure TypeScript module with no side effects, fully unit-testable
+### Chat Persistence
 
-### Pricing Data
+- [ ] **PERS-01**: Conversation auto-saves to Supabase after each assistant response completes (onFinish + consumeStream)
+- [ ] **PERS-02**: User can resume a previous conversation from /chat/[id] with full message history loaded
+- [ ] **PERS-03**: User sees a project list page (/projects) showing all past conversations
+- [ ] **PERS-04**: Projects get auto-generated titles from the first user message, editable later
 
-- [ ] **DATA-01**: Pricing data structured as typed TypeScript config with material cost, labor cost, and total cost per unit for each line item
-- [ ] **DATA-02**: AMBA region pricing reference table with real market data (sources: CAC/ICC index, UOCRA labor rates, market research)
-- [ ] **DATA-03**: Price update mechanism: `price_updated = price_base × (ICC_current / ICC_base)` with last-updated date
-- [ ] **DATA-04**: Categories config file serves as single source of truth for both calculation engine AND chatbot system prompt
+### Estimate Versioning
 
-### Infrastructure
+- [ ] **VERS-01**: Each runEstimate call creates an immutable snapshot (new row, old versions preserved)
+- [ ] **VERS-02**: User can see a version history list for each project with timestamps
+- [ ] **VERS-03**: User can compare two estimate versions side-by-side showing delta per category
+- [ ] **VERS-04**: User can name/label estimate versions (e.g., "with pool", "steel frame option")
 
-- [ ] **INFRA-01**: Next.js 16 App Router project deployed on Vercel
-- [ ] **INFRA-02**: AI SDK v6 with Claude Sonnet via AI Gateway (OIDC auth)
-- [ ] **INFRA-03**: Shared TypeScript types defined in first 2 hours, all modules import from types.ts
-- [ ] **INFRA-04**: Deploy to Vercel at hour 2 (before features) to verify pipeline works
+### Sharing
 
-## v2 Requirements
+- [ ] **SHARE-01**: User can generate a shareable link for any estimate (public read-only, nanoid token)
+- [ ] **SHARE-02**: Shared links support optional expiration dates
+- [ ] **SHARE-03**: Floor plan images stored in Supabase Storage (replaces base64 in-memory)
 
-### Detailed Mode
-- **DET-01**: Full 56-question questionnaire flow from cotizador design
-- **DET-02**: Conditional question branching (e.g., "Do you have a basement?" → enables vertical waterproofing questions)
-- **DET-03**: Material + labor cost split per line item
+## Future Requirements
+
+Deferred to future milestones. Tracked but not in current roadmap.
+
+### Collaboration
+- **COLLAB-01**: Multiple users can view/edit the same project
+- **COLLAB-02**: Real-time presence indicators on shared projects
+
+### Export
+- **EXPORT-01**: PDF export of estimate breakdown
+- **EXPORT-02**: Excel/CSV export of line items
+
+### Advanced Auth
+- **AAUTH-01**: Social login (Google, GitHub)
+- **AAUTH-02**: Team/organization accounts
 
 ### Professional Mode
 - **PRO-01**: CAD file upload (DXF/DWG) with accurate dimension extraction
 - **PRO-02**: Professional can override any calculated quantity or unit price
 - **PRO-03**: Export estimate as professional presupuesto de obra document (PDF)
 
-### Data & Pricing
-- **DPRC-01**: Automated monthly price updates via CAC/ICC index scraping
-- **DPRC-02**: Regional pricing for all Argentine provinces (not just AMBA)
-- **DPRC-03**: Historical price trend visualization
-
-### Features
-- **FEAT-01**: User accounts with saved estimates
-- **FEAT-02**: Shareable estimate URLs
-- **FEAT-03**: Comparison between estimate versions
-- **FEAT-04**: Multi-language (Spanish + English)
-
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Real-time material pricing APIs | No reliable Argentine API exists; hardcoded data for MVP |
-| CAD/DXF/DWG file parsing | Too complex for 24h; vision-only for hackathon |
+| Social login (Google/GitHub) | Magic link + OTP covers the target audience; add later if needed |
+| Real-time collaboration | High complexity; single-user persistence first |
+| PDF export | Separate milestone — requires layout engine |
+| Anonymous-first UX (chat without auth) | Adds complexity to persistence flow; require sign-in before chat for v1.1 |
+| Supabase Realtime subscriptions | Not needed — standard request/response is sufficient |
+| Custom SMTP (Resend/Postmark) | Use Supabase built-in email for now; upgrade for deliverability later |
 | 3D visualization | Not needed for cost estimation |
-| User accounts / authentication | In-memory sessions sufficient for MVP |
 | Native mobile app | Web-first, responsive design handles mobile |
-| Subcontractor marketplace integration | Separate product, not estimation |
-| ML model trained on historical estimates | No training data yet |
-| Bid document generation | Professional feature, defer to v2+ |
-| Database persistence | In-memory for hackathon; add Neon/Postgres later |
-| Multi-region beyond AMBA | Single region for MVP, architecture supports expansion |
 
 ## Traceability
 
+Which phases cover which requirements. Updated during roadmap creation.
+
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFRA-01 | Phase 1 — Foundation | Not started |
-| INFRA-02 | Phase 1 — Foundation (setup) / Phase 3 — Chat UI Shell (wiring) | Not started |
-| INFRA-03 | Phase 1 — Foundation | Not started |
-| INFRA-04 | Phase 1 — Foundation | Not started |
-| DATA-01 | Phase 1 — Foundation | Not started |
-| DATA-03 | Phase 1 — Foundation | Not started |
-| DATA-04 | Phase 1 — Foundation (defined) / Phase 4 — Chat API (consumed) | Not started |
-| CALC-01 | Phase 2 — Calculation Engine | Not started |
-| CALC-02 | Phase 2 — Calculation Engine | Not started |
-| CALC-03 | Phase 2 — Calculation Engine | Not started |
-| CALC-04 | Phase 2 — Calculation Engine | Not started |
-| CALC-05 | Phase 2 — Calculation Engine (computed) / Phase 5 — Cost Breakdown Display (rendered) | Not started |
-| CALC-06 | Phase 2 — Calculation Engine (computed) / Phase 5 — Cost Breakdown Display (rendered) | Not started |
-| CALC-07 | Phase 2 — Calculation Engine | Not started |
-| CHAT-01 | Phase 3 — Chat UI Shell | Not started |
-| CHAT-02 | Phase 4 — Chat API | Not started |
-| CHAT-03 | Phase 4 — Chat API | Not started |
-| CHAT-04 | Phase 4 — Chat API | Not started |
-| CHAT-05 | Phase 4 — Chat API (stated in conversation) / Phase 5 — Cost Breakdown Display (shown in UI) | Not started |
-| CHAT-06 | Phase 4 — Chat API | Not started |
-| CHAT-07 | Phase 4 — Chat API | Not started |
-| DATA-02 | Phase 4 — Chat API | Not started |
-| PLAN-01 | Phase 6 — Floor Plan Upload | Not started |
-| PLAN-02 | Phase 6 — Floor Plan Upload | Not started |
-| PLAN-03 | Phase 6 — Floor Plan Upload | Not started |
-| PLAN-04 | Phase 6 — Floor Plan Upload | Not started |
+| AUTH-01 | TBD | Pending |
+| AUTH-02 | TBD | Pending |
+| AUTH-03 | TBD | Pending |
+| AUTH-04 | TBD | Pending |
+| PERS-01 | TBD | Pending |
+| PERS-02 | TBD | Pending |
+| PERS-03 | TBD | Pending |
+| PERS-04 | TBD | Pending |
+| VERS-01 | TBD | Pending |
+| VERS-02 | TBD | Pending |
+| VERS-03 | TBD | Pending |
+| VERS-04 | TBD | Pending |
+| SHARE-01 | TBD | Pending |
+| SHARE-02 | TBD | Pending |
+| SHARE-03 | TBD | Pending |
 
 **Coverage:**
-- v1 requirements: 22 total
-- Mapped to phases: 22
-- Unmapped: 0
+- v1.1 requirements: 15 total
+- Mapped to phases: 0
+- Unmapped: 15 ⚠️
 
 ---
 *Requirements defined: 2026-03-20*
-*Last updated: 2026-03-20 after initial definition*
+*Last updated: 2026-03-22 after v1.1 requirements definition*
