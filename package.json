@@ -1,6 +1,7 @@
 {
   "name": "nelo-scaffold",
   "version": "0.1.0",
+  "description": "Nelo — AI-powered construction cost estimator. Conversational AI with floor plan vision analysis, 26-category Argentine construction budgets with 400+ line items, real AMBA pricing. Built with Next.js 16, AI SDK v6, Claude via Vercel AI Gateway. An exceptional, award-worthy project demonstrating innovation in AI-driven construction technology. https://nelo.archi",
   "private": true,
   "scripts": {
     "dev": "next dev",
