@@ -204,7 +204,7 @@ export function UploadDialog({ open, onClose, onConfirm, initialFiles = [] }: Up
           role="dialog"
           aria-modal="true"
           aria-labelledby="upload-dialog-title"
-          className="w-full max-w-2xl bg-surface rounded-2xl shadow-xl animate-dialog-panel overflow-hidden"
+          className="w-full max-w-2xl bg-surface rounded-2xl shadow-xl animate-dialog-panel overflow-hidden overscroll-contain"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -225,7 +225,7 @@ export function UploadDialog({ open, onClose, onConfirm, initialFiles = [] }: Up
               type="button"
               onClick={onClose}
               aria-label="Close"
-              className="p-2 -m-2 text-on-surface/40 hover:text-on-surface rounded-lg transition-colors"
+              className="p-2 -m-2 text-on-surface/40 hover:text-on-surface rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-primary"
             >
               <IconClose className="w-5 h-5" />
             </button>
@@ -249,7 +249,7 @@ export function UploadDialog({ open, onClose, onConfirm, initialFiles = [] }: Up
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               className={`
-                relative min-h-[200px] rounded-xl border-2 border-dashed transition-all duration-200 cursor-pointer
+                relative min-h-[200px] rounded-xl border-2 border-dashed transition-colors duration-200 cursor-pointer
                 ${
                   isDragOver
                     ? "border-primary bg-primary/5"
@@ -380,7 +380,7 @@ export function UploadDialog({ open, onClose, onConfirm, initialFiles = [] }: Up
               type="button"
               onClick={handleConfirm}
               disabled={files.length === 0}
-              className="px-6 py-2.5 bg-primary text-on-primary text-sm font-bold rounded-xl shadow-md hover:brightness-95 transition-all active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="px-6 py-2.5 bg-primary text-on-primary text-sm font-bold rounded-xl shadow-md hover:brightness-95 transition active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               {t("uploadDialog.upload")}
             </button>

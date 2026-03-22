@@ -500,7 +500,7 @@ function Slide7() {
       {/* CTA — dark on light for maximum contrast */}
       <a
         href="/"
-        className="group inline-flex items-center gap-3 bg-[#1a1a1a] text-[#f2f2f2] font-black text-lg md:text-xl uppercase tracking-[0.08em] px-12 py-5 rounded-xl hover:bg-[#333] active:scale-[0.98] transition-all duration-200"
+        className="group inline-flex items-center gap-3 bg-[#1a1a1a] text-[#f2f2f2] font-black text-lg md:text-xl uppercase tracking-[0.08em] px-12 py-5 rounded-xl hover:bg-[#333] active:scale-[0.98] transition duration-200 focus-visible:ring-2 focus-visible:ring-[#ccff00] focus-visible:ring-offset-2"
       >
         Try it live
         <svg className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>

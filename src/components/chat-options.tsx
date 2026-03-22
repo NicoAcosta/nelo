@@ -14,7 +14,7 @@ interface ChatOptionsProps {
 }
 
 const baseStyles =
-  "text-sm font-medium transition-all duration-150 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-background";
+  "text-sm font-medium transition duration-150 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-background";
 
 const pillStyles = "px-4 py-2 rounded-full";
 const verticalStyles = "px-4 py-2.5 rounded-xl w-full text-left";

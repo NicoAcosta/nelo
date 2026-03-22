@@ -89,7 +89,7 @@ export function ChatInput({
           rows={1}
           maxLength={MAX_MESSAGE_LENGTH}
           aria-label="Message input"
-          className="w-full bg-transparent border-none focus:ring-0 focus:outline-none text-on-surface placeholder:text-on-surface/30 min-h-[60px] max-h-[200px] resize-none px-4 py-2 font-medium text-sm"
+          className="w-full bg-transparent border-none focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg text-on-surface placeholder:text-on-surface/30 min-h-[60px] max-h-[200px] resize-none px-4 py-2 font-medium text-sm"
         />
         <div className="flex items-center justify-between px-2 pb-1 pt-2">
           <div className="flex items-center gap-1">
@@ -97,7 +97,7 @@ export function ChatInput({
               type="button"
               aria-label="Attach file"
               onClick={() => setDialogOpen(true)}
-              className="p-2 text-on-surface/50 hover:text-on-surface hover:bg-white/40 rounded-xl transition-all"
+              className="p-2 text-on-surface/50 hover:text-on-surface hover:bg-white/40 rounded-xl transition focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               <IconAttach />
             </button>
@@ -107,7 +107,7 @@ export function ChatInput({
             aria-label="Send message"
             onClick={handleSend}
             disabled={disabled || (!value.trim() && selectedFiles.length === 0)}
-            className="p-3 bg-primary text-on-primary rounded-xl shadow-md hover:brightness-95 transition-all active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+            className="p-3 bg-primary text-on-primary rounded-xl shadow-md hover:brightness-95 transition active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           >
             <IconSend />
           </button>

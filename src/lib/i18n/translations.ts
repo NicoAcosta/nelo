@@ -94,6 +94,12 @@ const en: Translations = {
     "An unexpected error occurred. Please try again.",
   "error.tryAgain": "Try Again",
 
+  // chatError
+  "chatError.title": "Connection Lost",
+  "chatError.description":
+    "The chat was interrupted. Click below to restart your conversation.",
+  "chatError.restart": "Restart Chat",
+
   // notFound
   "notFound.title": "404",
   "notFound.description":
@@ -291,6 +297,12 @@ const es: Translations = {
   "error.description":
     "Ocurrio un error inesperado. Por favor intenta de nuevo.",
   "error.tryAgain": "Intentar de Nuevo",
+
+  // chatError
+  "chatError.title": "Conexion Perdida",
+  "chatError.description":
+    "El chat fue interrumpido. Hace click para reiniciar la conversacion.",
+  "chatError.restart": "Reiniciar Chat",
 
   // notFound
   "notFound.title": "404",

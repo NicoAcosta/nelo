@@ -59,7 +59,7 @@ export default function LandingPage() {
             <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full border-4 border-background" />
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-black font-headline tracking-tight text-on-surface mb-4 uppercase italic text-center">
+          <h1 className="text-5xl md:text-6xl font-black font-headline tracking-tight text-on-surface mb-4 uppercase italic text-center text-balance">
             {t("landing.greeting").replace("Nelo", "")}<span className="bg-primary px-2">Nelo</span>.
           </h1>
           <p className="text-lg md:text-xl font-bold text-on-surface/50 font-headline uppercase tracking-tight mb-16 text-center">
@@ -69,9 +69,9 @@ export default function LandingPage() {
           {/* Prompt cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <div className="space-y-4">
-              <h3 className="text-[10px] uppercase tracking-[0.2em] text-on-surface/40 font-black px-1">
+              <h2 className="text-[10px] uppercase tracking-[0.2em] text-on-surface/40 font-black px-1">
                 {t("landing.sectionQuick")}
-              </h3>
+              </h2>
               {quickPrompts.map((p) => (
                 <PromptCard
                   key={p.text}
@@ -82,9 +82,9 @@ export default function LandingPage() {
               ))}
             </div>
             <div className="space-y-4">
-              <h3 className="text-[10px] uppercase tracking-[0.2em] text-on-surface/40 font-black px-1">
+              <h2 className="text-[10px] uppercase tracking-[0.2em] text-on-surface/40 font-black px-1">
                 {t("landing.sectionPro")}
-              </h3>
+              </h2>
               {proPrompts.map((p) => (
                 <PromptCard
                   key={p.text}

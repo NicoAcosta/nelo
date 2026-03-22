@@ -38,7 +38,7 @@ export function FloorPlanPanel({
 
   return (
     <div className="max-w-6xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-headline font-black text-on-surface tracking-tighter mb-4">
+      <h2 className="text-4xl md:text-5xl font-headline font-black text-on-surface tracking-tighter mb-4 text-balance">
         {t("floorPlanPanel.analysisComplete")}
       </h2>
       <p className="text-on-surface-variant max-w-2xl text-lg font-medium leading-relaxed mb-10">

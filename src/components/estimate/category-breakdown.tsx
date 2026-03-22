@@ -93,7 +93,7 @@ export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
                 </span>
                 <div className="h-[5px] bg-[#18181b] rounded-full overflow-hidden">
                   <div
-                    className="h-full rounded-full transition-all duration-700"
+                    className="h-full rounded-full transition-[width] duration-700"
                     style={{
                       width: `${barWidth}%`,
                       backgroundColor: colorMap.get(cat.id) ?? "#52525b",

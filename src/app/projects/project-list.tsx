@@ -113,7 +113,7 @@ function ProjectRow({ project, onRename, locale, t, index }: ProjectRowProps) {
       </div>
       <Link
         href={"/chat/" + project.id}
-        className="ml-4 px-4 py-2 text-[10px] font-bold uppercase tracking-wider border border-on-surface/20 rounded-full text-on-surface/70 hover:bg-primary hover:text-on-primary hover:border-primary transition-all active:scale-95 shrink-0"
+        className="ml-4 px-4 py-2 text-[10px] font-bold uppercase tracking-wider border border-on-surface/20 rounded-full text-on-surface/70 hover:bg-primary hover:text-on-primary hover:border-primary transition active:scale-95 shrink-0 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         aria-label={"Open " + project.title}
       >
         <span className="hidden md:inline">{t("projects.open")}</span>
@@ -150,7 +150,7 @@ export function ProjectList({ projects }: { projects: ProjectSummary[] }) {
           </p>
           <Link
             href="/chat"
-            className="inline-block px-5 py-3 bg-primary text-on-primary font-bold text-xs uppercase tracking-wider rounded-full hover:brightness-95 transition-all active:scale-95"
+            className="inline-block px-5 py-3 bg-primary text-on-primary font-bold text-xs uppercase tracking-wider rounded-full hover:brightness-95 transition active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           >
             {t("projects.startFirst")}
           </Link>

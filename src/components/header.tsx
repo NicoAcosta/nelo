@@ -43,7 +43,7 @@ export function Header({ projectName }: { projectName?: string }) {
         </span>
         <button
           onClick={() => setLocale(locale === "en" ? "es" : "en")}
-          className="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full border border-outline/20 text-[10px] font-bold uppercase tracking-widest text-on-surface/60 hover:text-on-surface hover:border-outline/40 transition-all"
+          className="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full border border-outline/20 text-[10px] font-bold uppercase tracking-widest text-on-surface/60 hover:text-on-surface hover:border-outline/40 transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           aria-label={locale === "en" ? "Switch to Spanish" : "Cambiar a ingles"}
         >
           <span className={locale === "en" ? "text-on-surface" : "text-on-surface/40"}>EN</span>
@@ -57,7 +57,7 @@ export function Header({ projectName }: { projectName?: string }) {
           <>
             <Link
               href="/chat"
-              className="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary font-bold text-xs uppercase tracking-wider rounded-full shadow-sm hover:brightness-95 transition-all active:scale-95"
+              className="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary font-bold text-xs uppercase tracking-wider rounded-full shadow-sm hover:brightness-95 transition active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               <IconPlus />
               {t("header.newEstimate")}
@@ -65,7 +65,7 @@ export function Header({ projectName }: { projectName?: string }) {
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setMenuOpen((open) => !open)}
-                className="w-8 h-8 rounded-full bg-primary text-on-primary font-bold text-xs flex items-center justify-center hover:brightness-95 transition-all"
+                className="w-8 h-8 rounded-full bg-primary text-on-primary font-bold text-xs flex items-center justify-center hover:brightness-95 transition focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 aria-label="User menu"
               >
                 {(user.email?.[0] ?? "?").toUpperCase()}
@@ -80,7 +80,7 @@ export function Header({ projectName }: { projectName?: string }) {
                       setMenuOpen(false);
                       signOut();
                     }}
-                    className="w-full text-left px-2 py-1.5 text-xs font-bold text-on-surface/70 hover:text-on-surface hover:bg-outline/5 rounded transition-colors"
+                    className="w-full text-left px-2 py-1.5 text-xs font-bold text-on-surface/70 hover:text-on-surface hover:bg-outline/5 rounded transition-colors focus-visible:ring-2 focus-visible:ring-primary"
                   >
                     {t("auth.signOut")}
                   </button>

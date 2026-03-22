@@ -28,7 +28,7 @@ export default function GlobalError({
         <button
           type="button"
           onClick={reset}
-          className="px-8 py-3 bg-primary text-on-primary font-bold text-sm uppercase tracking-wider rounded-full hover:brightness-95 transition-all active:scale-95"
+          className="px-8 py-3 bg-primary text-on-primary font-bold text-sm uppercase tracking-wider rounded-full hover:brightness-95 transition active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
           {t("error.tryAgain")}
         </button>

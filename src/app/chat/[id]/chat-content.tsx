@@ -310,7 +310,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
                       type="button"
                       disabled={isStreaming}
                       onClick={() => handleSend(s)}
-                      className="px-4 py-2 glass-card rounded-xl text-xs font-semibold text-on-surface/60 hover:text-on-surface hover:bg-surface-container-high transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                      className="px-4 py-2 glass-card rounded-xl text-xs font-semibold text-on-surface/60 hover:text-on-surface hover:bg-surface-container-high transition-colors disabled:opacity-30 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                     >
                       {s}
                     </button>

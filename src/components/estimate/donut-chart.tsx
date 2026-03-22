@@ -79,7 +79,7 @@ export function DonutChart({ categories, totalPrice }: DonutChartProps) {
               strokeWidth={hoveredId === seg.id ? HOVER_STROKE : STROKE_WIDTH}
               strokeDasharray={`${seg.dashLen} ${seg.gapLen}`}
               strokeDashoffset={seg.offset}
-              className="transition-all duration-200 cursor-pointer"
+              className="transition-[stroke-dasharray,stroke-dashoffset,filter] duration-200 cursor-pointer"
               style={{
                 filter:
                   hoveredId === seg.id

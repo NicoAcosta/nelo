@@ -36,7 +36,7 @@ export default async function EstimatePage({
           </p>
           <a
             href={`/chat/${id}`}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#ccff00] text-black font-semibold text-sm hover:brightness-95 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#ccff00] text-black font-semibold text-sm hover:brightness-95 transition focus-visible:ring-2 focus-visible:ring-[#ccff00] focus-visible:ring-offset-2"
           >
             ← Back to Chat
           </a>

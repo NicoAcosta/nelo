@@ -55,7 +55,7 @@ export function Sidebar({ activeItem = "dashboard" }: { activeItem?: NavItem }) 
                 key={id}
                 href={href}
                 aria-current={isActive ? "page" : undefined}
-                className={`flex items-center gap-3 px-4 py-3 mx-2 rounded-lg transition-all ${
+                className={`flex items-center gap-3 px-4 py-3 mx-2 rounded-lg transition-colors ${
                   isActive
                     ? "bg-primary text-on-primary font-bold"
                     : "text-on-surface/60 hover:text-on-surface hover:bg-surface-container"

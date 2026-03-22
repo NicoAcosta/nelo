@@ -38,7 +38,7 @@ export function EstimateTopbar({
       <div className="flex gap-2">
         <button
           onClick={handleShare}
-          className="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-white/[0.06] text-[#a1a1aa] hover:bg-[#18181b] hover:text-white transition-all flex items-center gap-1.5"
+          className="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-white/[0.06] text-[#a1a1aa] hover:bg-[#18181b] hover:text-white transition-colors flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#ccff00]"
         >
           {copied ? "Copied!" : "↗ Share"}
         </button>
@@ -51,7 +51,7 @@ export function EstimateTopbar({
         </button>
         <a
           href={`/chat/${chatId}`}
-          className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#ccff00] text-black border border-[#ccff00] hover:bg-[#E2FF00] transition-all"
+          className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#ccff00] text-black border border-[#ccff00] hover:bg-[#E2FF00] transition-colors focus-visible:ring-2 focus-visible:ring-[#ccff00] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090b]"
         >
           ← Back to Chat
         </a>

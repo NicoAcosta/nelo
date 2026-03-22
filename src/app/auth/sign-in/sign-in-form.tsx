@@ -185,7 +185,7 @@ export function SignInForm() {
             disabled={loading}
             className="w-full rounded-lg bg-primary text-black font-bold py-3 text-sm hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "..." : t("auth.continue")}
+            {loading ? "\u2026" : t("auth.continue")}
           </button>
         </form>
       </div>
