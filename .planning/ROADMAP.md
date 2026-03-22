@@ -147,10 +147,14 @@ Plans:
 **Requirements**: PERS-03, PERS-04
 **Success Criteria** (what must be TRUE):
   1. Authenticated user visiting `/projects` sees a list of all their past conversations sorted by most recent activity, each showing its title and last-updated timestamp.
-  2. A new conversation gets an auto-generated title derived from the first user message (e.g., "Casa 120m² en Palermo, steel frame") within seconds of sending that message.
+  2. A new conversation gets an auto-generated title derived from the first user message (e.g., "Casa 120m2 en Palermo, steel frame") within seconds of sending that message.
   3. User can click a project's title inline to rename it; the new name persists immediately and appears in the list on next load.
   4. User can click any project in the list to navigate to `/chat/[id]` and resume that conversation with full history loaded.
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 11-01-PLAN.md — Data layer: listProjects() query, updateProjectTitle() server action, i18n keys, TDD tests
+- [ ] 11-02-PLAN.md — UI: Projects page with ProjectList component, inline rename, empty state, sidebar/nav link updates
 
 ### Phase 12: Estimate Versioning
 **Goal**: Every re-estimation creates a preserved snapshot so users can compare how costs change when they update their inputs or material choices.
@@ -190,7 +194,7 @@ Plans:
 | 8. Real Pricing Data Pipeline | v1.0 | 5/5 | Complete | 2026-03-21 |
 | 9. Supabase Auth Infrastructure | v1.1 | 3/3 | Complete |  |
 | 10. Chat Persistence | v1.1 | 2/2 | Complete    | 2026-03-22 |
-| 11. Project Management | v1.1 | 0/TBD | Not started | - |
+| 11. Project Management | v1.1 | 0/2 | Not started | - |
 | 12. Estimate Versioning | v1.1 | 0/TBD | Not started | - |
 | 13. Shareable Links and Floor Plan Storage | v1.1 | 0/TBD | Not started | - |
 
