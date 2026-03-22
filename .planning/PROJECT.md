@@ -50,7 +50,7 @@ Accurate, transparent construction cost estimation through natural conversation 
 - Real-time per-request pricing APIs — daily cache is sufficient for MVP
 - CAD file parsing (DXF/DWG) — vision-only approach validated
 - Multiple regions beyond AMBA — single-region MVP
-- ~~User accounts and persistence~~ — **moved to Active for v1.1**
+- ~~User accounts and persistence~~ — **moved to Active for v1.1** (auth infrastructure shipped in Phase 9)
 - PDF export — nice-to-have for future milestone
 - 3D visualization — not needed for cost estimation
 
@@ -151,5 +151,7 @@ This document evolves at phase transitions and milestone boundaries.
 3. Audit Out of Scope — reasons still valid?
 4. Update Context with current state
 
+| Supabase for auth + persistence | Magic link + OTP, @supabase/ssr, getUser() not getSession() | Validated — Phase 9 |
+
 ---
-*Last updated: 2026-03-21 after milestone v1.1 started (Persistence & Sharing)*
+*Last updated: 2026-03-22 after Phase 9 complete (Supabase Auth Infrastructure)*
