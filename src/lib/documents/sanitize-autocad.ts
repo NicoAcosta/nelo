@@ -11,7 +11,12 @@ export function sanitizeAutoCADText(raw: string): string {
 
   // 1. MTEXT curly-brace font codes: {\Ffont|flags;content} or {\ffont;content}
   //    Extract the inner content, discard the font directive.
-  text = text.replace(/\{\\[fF][^;]*;([^}]*)\}/g, "$1");
+  //    Loop handles nested font codes (inner braces resolved first).
+  let prev;
+  do {
+    prev = text;
+    text = text.replace(/\{\\[fF][^;]*;([^}]*)\}/g, "$1");
+  } while (text !== prev);
 
   // 2. %%u — underline toggle (case-insensitive), just strip it
   text = text.replace(/%%[uU]/g, "");
@@ -25,8 +30,8 @@ export function sanitizeAutoCADText(raw: string): string {
   // 5. %%c — diameter
   text = text.replace(/%%[cC]/g, "⌀");
 
-  // 6. \P — MTEXT paragraph break → space
-  text = text.replace(/\\P/g, " ");
+  // 6. \P — MTEXT paragraph break → space (case-insensitive for non-Autodesk writers)
+  text = text.replace(/\\[pP]/g, " ");
 
   // 7. Collapse multiple whitespace and trim
   text = text.replace(/\s+/g, " ").trim();

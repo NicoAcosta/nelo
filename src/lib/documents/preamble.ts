@@ -58,8 +58,10 @@ export function buildPreamble(
 
   // Layers — clean xref prefixes and deduplicate
   if (summary.layerNames.length > 0) {
-    const cleaned = [...new Set(summary.layerNames.map(cleanLayerName))];
-    lines.push(`- Layers: ${cleaned.join(", ")}`);
+    const cleaned = [...new Set(summary.layerNames.map(cleanLayerName))].filter(Boolean);
+    if (cleaned.length > 0) {
+      lines.push(`- Layers: ${cleaned.join(", ")}`);
+    }
   }
 
   lines.push("");

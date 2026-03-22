@@ -101,6 +101,28 @@ describe("splitPreambleFromDisplay", () => {
     expect(result.displayText).toBe("Analyze this");
   });
 
+  it("handles single unclosed marker gracefully", () => {
+    const text = "<!-- doc-analysis -->\nSome text without closing marker";
+    const result = splitPreambleFromDisplay(text);
+    expect(result.hasPreamble).toBe(false);
+    expect(result.displayText).toBe(text);
+  });
+
+  it("handles markers with unrecognized content format", () => {
+    const text = [
+      "<!-- doc-analysis -->",
+      "Some random text with no File: line",
+      "<!-- doc-analysis -->",
+      "",
+      "User message",
+    ].join("\n");
+
+    const result = splitPreambleFromDisplay(text);
+    expect(result.displayText).toBe("User message");
+    expect(result.hasPreamble).toBe(true);
+    expect(result.files).toEqual([]);
+  });
+
   it("handles file name with comma-separated metadata", () => {
     const text = [
       "<!-- doc-analysis -->",

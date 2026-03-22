@@ -56,6 +56,13 @@ describe("sanitizeAutoCADText", () => {
     );
   });
 
+  // Nested font codes
+  it("handles nested MTEXT font codes", () => {
+    expect(
+      sanitizeAutoCADText("{\\fArial;outer {\\fBold;inner} text}"),
+    ).toBe("outer inner text");
+  });
+
   // Combined codes
   it("handles combined %%u and font codes", () => {
     expect(sanitizeAutoCADText("%%u{\\fArial;Bold Room}")).toBe("Bold Room");
@@ -68,6 +75,10 @@ describe("sanitizeAutoCADText", () => {
   // \P paragraph break
   it("replaces \\P with space", () => {
     expect(sanitizeAutoCADText("Line 1\\PLine 2")).toBe("Line 1 Line 2");
+  });
+
+  it("replaces lowercase \\p with space", () => {
+    expect(sanitizeAutoCADText("Line 1\\pLine 2")).toBe("Line 1 Line 2");
   });
 
   // Whitespace normalization
@@ -97,6 +108,10 @@ describe("cleanLayerName", () => {
 
   it("strips nested xref prefixes (greedy match)", () => {
     expect(cleanLayerName("xref-foo$0$xref-bar$0$A-DOOR")).toBe("A-DOOR");
+  });
+
+  it("returns empty string when input is only $0$", () => {
+    expect(cleanLayerName("$0$")).toBe("");
   });
 
   it("handles complex xref names", () => {
