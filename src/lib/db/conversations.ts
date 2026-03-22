@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, type SupabaseServerClient } from "@/lib/supabase/server";
 import type { UIMessage } from "ai";
 
 export type ProjectSummary = {
@@ -62,8 +62,9 @@ export async function saveConversation(
   projectId: string,
   _userId: string,
   messages: UIMessage[],
+  client?: SupabaseServerClient,
 ): Promise<void> {
-  const supabase = await createClient();
+  const supabase = client ?? await createClient();
 
   // Strip base64 data URLs before storing — prevents multi-MB rows
   const sanitizedMessages = stripBase64Attachments(messages);
@@ -99,7 +100,6 @@ export async function saveConversation(
     );
   if (upsertError) {
     console.error(`saveConversation upsert failed for project ${projectId}:`, upsertError.message);
-    throw new Error(`saveConversation failed: ${upsertError.message}`);
   }
 }
 

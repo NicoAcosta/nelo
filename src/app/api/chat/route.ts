@@ -77,7 +77,7 @@ export async function POST(req: Request) {
       onFinish: async ({ messages: allMessages }) => {
         try {
           if (projectId && user) {
-            await saveConversation(projectId, user.id, allMessages);
+            await saveConversation(projectId, user.id, allMessages, supabase);
           }
         } catch (err) {
           console.error("Failed to persist conversation:", err);
