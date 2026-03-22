@@ -24,10 +24,10 @@ decisions:
 metrics:
   duration_seconds: 142
   completed_date: "2026-03-22"
-  tasks_completed: 2
+  tasks_completed: 3
   tasks_total: 3
   files_modified: 4
-status: checkpoint-pending
+status: complete
 ---
 
 # Phase 11 Plan 02: Projects Page UI Summary
@@ -54,11 +54,9 @@ status: checkpoint-pending
 - **Files:** `src/components/sidebar.tsx`, `src/components/mobile-nav.tsx`
 - Changed `estimates` nav item href from `/chat` to `/projects` in both components
 
-## Task Pending Human Verification
-
 ### Task 3: Verify projects page end-to-end
-- **Status:** awaiting human verification
-- **How to verify:** See checkpoint details
+- **Status:** approved by user
+- User confirmed /projects page renders, inline rename works, navigation to /chat/[id] works, and sidebar/mobile-nav link to /projects
 
 ## Deviations from Plan
 
