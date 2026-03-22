@@ -28,7 +28,7 @@ Requirements for Persistence & Sharing milestone. Each maps to roadmap phases.
 ### Estimate Versioning
 
 - [x] **VERS-01**: Each runEstimate call creates an immutable snapshot (new row, old versions preserved)
-- [ ] **VERS-02**: User can see a version history list for each project with timestamps
+- [x] **VERS-02**: User can see a version history list for each project with timestamps
 - [x] **VERS-03**: User can compare two estimate versions side-by-side showing delta per category
 - [x] **VERS-04**: User can name/label estimate versions (e.g., "with pool", "steel frame option")
 
@@ -95,7 +95,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PERS-03 | Phase 11 | Complete |
 | PERS-04 | Phase 11 | Complete |
 | VERS-01 | Phase 12 | Complete |
-| VERS-02 | Phase 12 | Pending |
+| VERS-02 | Phase 12 | Complete |
 | VERS-03 | Phase 12 | Complete |
 | VERS-04 | Phase 12 | Complete |
 | SHARE-01 | Phase 13 | Pending |

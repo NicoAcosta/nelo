@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Persistence & Sharing
 status: unknown
-stopped_at: Completed 12-estimate-versioning/12-01-PLAN.md
-last_updated: "2026-03-22T09:29:25.879Z"
+stopped_at: Completed 12-estimate-versioning/12-02-PLAN.md
+last_updated: "2026-03-22T09:39:52.674Z"
 last_activity: 2026-03-22
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State: Nelo
@@ -23,8 +23,8 @@ See: .planning/PROJECT.md (updated 2026-03-21)
 
 ## Current Position
 
-Phase: 12 (estimate-versioning) — EXECUTING
-Plan: 2 of 2
+Phase: 12 (estimate-versioning) — COMPLETE
+Plan: 2 of 2 (all plans done)
 
 ## Performance Metrics
 
@@ -48,6 +48,7 @@ Plan: 2 of 2
 | Phase 11-project-management P01 | 2 | 2 tasks | 5 files |
 | Phase 11-project-management P02 | 20 | 3 tasks | 4 files |
 | Phase 12-estimate-versioning P01 | 5 | 2 tasks | 9 files |
+| Phase 12-estimate-versioning P02 | 45min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,8 @@ Plan: 2 of 2
 - 12-01: Migration 0004 (not 0003) for estimates index — 0003 already created idx_estimates_conversation_id; used IF NOT EXISTS
 - 12-01: Estimate persistence in tool execute (not onFinish) — fires even on tab close mid-stream (D-01)
 - 12-01: saveEstimate callback bound at route handler — supabase client never created inside tool execute
+- 12-02: VersionHistorySheet accepts projectId (not conversationId) — resolves UUID lazily via getConversationIdAction on sheet open
+- 12-02: Comparison view fetches both EstimateRows in parallel (Promise.all) then calls compareEstimates client-side
 
 ### Pending Todos
 
@@ -95,6 +98,6 @@ None yet.
 
 Last activity: 2026-03-22
 
-Last session: 2026-03-22T09:29:25.874Z
-Stopped at: Completed 12-estimate-versioning/12-01-PLAN.md
+Last session: 2026-03-22T09:39:52.671Z
+Stopped at: Completed 12-estimate-versioning/12-02-PLAN.md
 Resume file: None
