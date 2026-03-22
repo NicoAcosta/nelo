@@ -1,6 +1,27 @@
 import { createClient } from "@/lib/supabase/server";
 import type { UIMessage } from "ai";
 
+export type ProjectSummary = {
+  id: string;
+  title: string;
+  created_at: string;
+  updated_at: string;
+};
+
+/**
+ * List all projects for the authenticated user, sorted by most recently updated.
+ * RLS enforces user scoping — no userId param needed.
+ */
+export async function listProjects(): Promise<ProjectSummary[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("projects")
+    .select("id, title, created_at, updated_at")
+    .order("updated_at", { ascending: false });
+  if (error) throw new Error(`listProjects failed: ${error.message}`);
+  return data ?? [];
+}
+
 /**
  * Load all messages for a conversation.
  * Returns [] for new projects (no conversation row yet).

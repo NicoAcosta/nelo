@@ -210,6 +210,52 @@ describe("stripBase64Attachments", () => {
   });
 });
 
+describe("listProjects", () => {
+  const mockOrder = vi.fn();
+  const mockListSelect = vi.fn(() => ({ order: mockOrder }));
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockFrom.mockImplementation((table: string) => {
+      if (table === "projects") {
+        return { select: mockListSelect };
+      }
+      return { select: mockSelect };
+    });
+  });
+
+  it("calls supabase with correct query and returns data array", async () => {
+    const projects = [
+      { id: "p1", title: "House", created_at: "2024-01-01", updated_at: "2024-01-02" },
+    ];
+    mockOrder.mockResolvedValue({ data: projects, error: null });
+
+    const { listProjects } = await import("../conversations");
+    const result = await listProjects();
+
+    expect(mockFrom).toHaveBeenCalledWith("projects");
+    expect(mockListSelect).toHaveBeenCalledWith("id, title, created_at, updated_at");
+    expect(mockOrder).toHaveBeenCalledWith("updated_at", { ascending: false });
+    expect(result).toEqual(projects);
+  });
+
+  it("returns [] when supabase returns null data", async () => {
+    mockOrder.mockResolvedValue({ data: null, error: null });
+
+    const { listProjects } = await import("../conversations");
+    const result = await listProjects();
+
+    expect(result).toEqual([]);
+  });
+
+  it("throws Error when supabase returns an error", async () => {
+    mockOrder.mockResolvedValue({ data: null, error: { message: "DB error" } });
+
+    const { listProjects } = await import("../conversations");
+    await expect(listProjects()).rejects.toThrow("listProjects failed: DB error");
+  });
+});
+
 describe("getTextFromMessage", () => {
   it("extracts text from a message with text parts", () => {
     const msg = makeUserMessage("Hello world");
