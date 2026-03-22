@@ -11,7 +11,7 @@ function formatRelativeTime(dateStr: string, locale: string): string {
   const now = Date.now();
   const then = new Date(dateStr).getTime();
   const diffMs = now - then;
-  const diffDays = Math.round(diffMs / 86400000);
+  const diffDays = Math.floor(diffMs / 86400000);
 
   if (diffDays === 0) return locale === "es" ? "Hoy" : "Today";
   if (diffDays === 1) return locale === "es" ? "Ayer" : "Yesterday";
@@ -51,11 +51,12 @@ function ProjectRow({ project, onRename, locale, t, index }: ProjectRowProps) {
       setValue(project.title);
       return;
     }
+    const originalTitle = project.title;
     onRename(project.id, trimmed);
     startTransition(async () => {
       const result = await updateProjectTitle(project.id, trimmed);
       if (result.error) {
-        setValue(project.title);
+        setValue(originalTitle);
         setError(result.error);
       }
     });
@@ -138,7 +139,7 @@ export function ProjectList({ projects }: { projects: ProjectSummary[] }) {
         {t("projects.title")}
       </h1>
 
-      {projects.length === 0 ? (
+      {optimisticProjects.length === 0 ? (
         <div className="text-center py-20">
           <IconEstimates className="w-10 h-10 text-on-surface/20 mx-auto mb-4" />
           <p className="text-sm font-medium text-on-surface/40 mb-1">
