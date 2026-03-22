@@ -20,7 +20,41 @@ import {
 import { AcDbLibreDwgConverter } from "@mlightcad/libredwg-converter";
 import { LibreDwg, Dwg_File_Type } from "@mlightcad/libredwg-web";
 
-let libredwg: InstanceType<typeof LibreDwg> | null = null;
+/** Expose protected process methods for server-side use (no Web Worker). */
+class ServerDwgConverter extends AcDbLibreDwgConverter {
+  override processLineTypes(...args: Parameters<AcDbLibreDwgConverter["processLineTypes"]>) {
+    return super.processLineTypes(...args);
+  }
+  override processTextStyles(...args: Parameters<AcDbLibreDwgConverter["processTextStyles"]>) {
+    return super.processTextStyles(...args);
+  }
+  override processDimStyles(...args: Parameters<AcDbLibreDwgConverter["processDimStyles"]>) {
+    return super.processDimStyles(...args);
+  }
+  override processLayers(...args: Parameters<AcDbLibreDwgConverter["processLayers"]>) {
+    return super.processLayers(...args);
+  }
+  override processViewports(...args: Parameters<AcDbLibreDwgConverter["processViewports"]>) {
+    return super.processViewports(...args);
+  }
+  override processHeader(...args: Parameters<AcDbLibreDwgConverter["processHeader"]>) {
+    return super.processHeader(...args);
+  }
+  override processBlockTables(...args: Parameters<AcDbLibreDwgConverter["processBlockTables"]>) {
+    return super.processBlockTables(...args);
+  }
+  override processObjects(...args: Parameters<AcDbLibreDwgConverter["processObjects"]>) {
+    return super.processObjects(...args);
+  }
+  override processBlocks(...args: Parameters<AcDbLibreDwgConverter["processBlocks"]>) {
+    return super.processBlocks(...args);
+  }
+  override processEntities(...args: Parameters<AcDbLibreDwgConverter["processEntities"]>) {
+    return super.processEntities(...args);
+  }
+}
+
+let libredwg: LibreDwg | null = null;
 
 /** Initialize the WASM module once. */
 async function getLibreDwg() {
@@ -62,7 +96,7 @@ export async function convertDwgToDxf(
 
     // 3. Populate AcDbDatabase using the converter's process methods
     //    (bypasses parse() which requires Web Workers)
-    const converter = new AcDbLibreDwgConverter({ useWorker: false });
+    const converter = new ServerDwgConverter({ useWorker: false });
     const db = new AcDbDatabase();
     acdbHostApplicationServices().workingDatabase = db;
 
@@ -81,7 +115,7 @@ export async function convertDwgToDxf(
       db.createDefaultData({ layout: true });
     }
     await converter.processBlocks(model, db);
-    await converter.processEntities(model, db, 100, { value: 0 }, null);
+    await converter.processEntities(model, db, 100, { value: 0 }, undefined);
 
     // 4. Export as DXF
     const dxfString = db.dxfOut();

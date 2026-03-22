@@ -195,7 +195,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
             name: files[i]?.name ?? `file-${i}`,
             storagePath: r.storagePath,
           }))
-          .filter((ref): ref is { name: string; storagePath: string } => !!ref.storagePath);
+          .filter((ref: { name: string; storagePath: string | undefined }): ref is { name: string; storagePath: string } => !!ref.storagePath);
         const floorPlanMetadata =
           floorPlanRefs.length > 0 ? { floorPlanRefs } : undefined;
 
