@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import { Providers } from "@/components/providers";
 import "./globals.css";
 
@@ -26,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className={`h-full ${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="min-h-full flex">
         <Providers>{children}</Providers>
       </body>

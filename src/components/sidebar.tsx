@@ -7,6 +7,7 @@ import {
   IconBlueprints,
   IconSettings,
   IconHelp,
+  NeloLogo,
 } from "./icons";
 import { useLocale } from "@/lib/i18n/use-locale";
 
@@ -27,9 +28,7 @@ export function Sidebar({ activeItem = "dashboard" }: { activeItem?: NavItem }) 
       <div className="flex flex-col h-full py-6">
         {/* Branding */}
         <div className="px-6 mb-8">
-          <div className="text-xl font-bold text-on-surface font-headline tracking-tight uppercase">
-            Nelo AI
-          </div>
+          <NeloLogo size="md" className="text-on-surface" />
           <p className="text-[10px] text-secondary/60 font-bold uppercase tracking-widest">
             {t("sidebar.brandSubtitle")}
           </p>

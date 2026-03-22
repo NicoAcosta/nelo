@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { IconPlus } from "./icons";
+import { IconPlus, NeloLogo } from "./icons";
 import { useLocale } from "@/lib/i18n/use-locale";
 
 export function Header({ projectName }: { projectName?: string }) {
@@ -10,9 +10,7 @@ export function Header({ projectName }: { projectName?: string }) {
   return (
     <header className="bg-white/70 backdrop-blur-md border-b border-outline/10 sticky top-0 z-50 flex justify-between items-center w-full px-6 py-4">
       <div className="flex items-center gap-4">
-        <span className="text-xl font-black text-on-surface tracking-tighter font-headline uppercase">
-          Nelo
-        </span>
+        <NeloLogo size="md" className="text-on-surface" />
         {projectName && (
           <>
             <div className="h-5 w-px bg-outline/30 mx-1 hidden md:block" />

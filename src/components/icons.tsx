@@ -136,12 +136,31 @@ export function IconArchitect({ className, ...rest }: IconProps) {
   );
 }
 
+/** N mark — two vertical strokes + diagonal, evoking architectural walls meeting at a corner. */
 export function IconNelo({ className, ...rest }: IconProps) {
   return (
-    <svg className={className} aria-hidden="true" {...rest} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2L2 7l10 5 10-5-10-5Z" />
-      <path d="M2 17l10 5 10-5" />
-      <path d="M2 12l10 5 10-5" />
+    <svg className={className} aria-hidden="true" {...rest} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 20V4" />
+      <path d="M5 4l14 16" />
+      <path d="M19 4v16" />
     </svg>
+  );
+}
+
+/** Combined logo: N mark + "nelo" wordmark. */
+export function NeloLogo({ className, size = "md" }: { className?: string; size?: "sm" | "md" | "lg" }) {
+  const sizes = {
+    sm: { icon: "w-5 h-5", text: "text-base", gap: "gap-1.5" },
+    md: { icon: "w-6 h-6", text: "text-xl", gap: "gap-2" },
+    lg: { icon: "w-8 h-8", text: "text-2xl", gap: "gap-2.5" },
+  };
+  const s = sizes[size];
+  return (
+    <span className={`inline-flex items-center ${s.gap} ${className ?? ""}`}>
+      <IconNelo className={s.icon} />
+      <span className={`${s.text} font-extrabold tracking-tighter font-headline lowercase`}>
+        nelo
+      </span>
+    </span>
   );
 }

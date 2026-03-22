@@ -35,10 +35,11 @@
   /* Error */
   --color-error: #ba1a1a;
 
-  /* Fonts */
-  --font-headline: "Helvetica", "Arial", sans-serif;
-  --font-body: "Helvetica", "Arial", sans-serif;
-  --font-label: "Helvetica", "Arial", sans-serif;
+  /* Fonts — Geist Sans for UI, Geist Mono for numbers/code */
+  --font-headline: var(--font-geist-sans), "Helvetica", "Arial", sans-serif;
+  --font-body: var(--font-geist-sans), "Helvetica", "Arial", sans-serif;
+  --font-label: var(--font-geist-sans), "Helvetica", "Arial", sans-serif;
+  --font-mono: var(--font-geist-mono), "Courier New", monospace;
 }
 
 html {

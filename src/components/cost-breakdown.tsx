@@ -39,7 +39,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
               </span>
               <div className="h-[1px] w-8 bg-[#ccff00]/30" />
             </div>
-            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black font-headline tracking-tighter">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black font-headline tracking-tighter font-mono">
               ${formatARS(estimate.totalPrice)}
               <span className="text-lg font-medium text-[#999] align-baseline ml-2">
                 ARS
@@ -47,7 +47,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
             </h2>
             <p className="mt-2 text-[#999] font-medium">
               {t("costBreakdown.pricePerM2")}:{" "}
-              <span className="text-[#ccff00] font-bold">
+              <span className="text-[#ccff00] font-bold font-mono">
                 ${formatARS(estimate.pricePerM2)}/m²
               </span>
             </p>
@@ -59,7 +59,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
               <span className="text-[10px] font-black text-[#999] uppercase tracking-wider">
                 {t("costBreakdown.confidenceLevel")}
               </span>
-              <span className="text-[10px] font-black text-[#ccff00]">
+              <span className="text-[10px] font-black text-[#ccff00] font-mono">
                 {confidenceLabels[estimate.confidence]} (±{estimate.confidenceRange.low}%)
               </span>
             </div>
@@ -128,12 +128,12 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
                 <td className="px-6 py-4 max-w-[240px]">
                   <span className="text-sm font-bold block truncate" title={cat.name}>{cat.name}</span>
                 </td>
-                <td className="px-6 py-4 text-right font-headline text-sm font-bold">
+                <td className="px-6 py-4 text-right font-mono text-sm font-bold">
                   ${formatARS(cat.subtotal)}
                 </td>
                 <td className="px-6 py-4 text-right">
                   <div className="inline-flex items-center gap-2">
-                    <span className="text-xs font-black">{cat.incidencePercent.toFixed(1)}%</span>
+                    <span className="text-xs font-black font-mono">{cat.incidencePercent.toFixed(1)}%</span>
                     <div aria-hidden="true" className="w-12 h-1 bg-white/10 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-[#ccff00]"
