@@ -5,6 +5,7 @@ import { createChatTools } from "@/lib/ai/tools";
 import { buildSystemPrompt } from "@/lib/pricing/system-prompt-builder";
 import type { Locale } from "@/lib/i18n/types";
 import { createClient } from "@/lib/supabase/server";
+import { saveConversation } from "@/lib/db/conversations";
 
 export const maxDuration = 60;
 
@@ -29,11 +30,13 @@ export async function POST(req: Request) {
   }
 
   let messages: UIMessage[];
+  let conversationId: string | undefined;
   const headerLocale = req.headers.get("x-locale");
   const locale: Locale = headerLocale === "es" ? "es" : "en";
   try {
     const body = await req.json();
     messages = body.messages;
+    conversationId = body.conversationId; // passed by chat-content.tsx transport
   } catch {
     return Response.json({ error: "Invalid JSON body" }, { status: 400 });
   }
@@ -64,7 +67,17 @@ export async function POST(req: Request) {
       stopWhen: stepCountIs(5),
     });
 
-    return result.toUIMessageStreamResponse();
+    // CRITICAL: consumeStream() BEFORE return — ensures onFinish fires even on tab close
+    result.consumeStream(); // do NOT await
+
+    return result.toUIMessageStreamResponse({
+      originalMessages: messages,
+      onFinish: async ({ messages: allMessages }) => {
+        if (conversationId && user) {
+          await saveConversation(conversationId, user.id, allMessages);
+        }
+      },
+    });
   } catch (error) {
     console.error("Chat API error:", error);
     const message = error instanceof Error ? error.message : "Internal server error";
