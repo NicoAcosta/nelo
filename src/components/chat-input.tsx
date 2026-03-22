@@ -3,15 +3,21 @@
 import { useState, useRef } from "react";
 import { IconSend, IconAttach } from "./icons";
 import { useLocale } from "@/lib/i18n/use-locale";
+import { ACCEPT_STRING, MAX_FILES_PER_MESSAGE, validateFile } from "@/lib/documents/validation";
 
-const MAX_FILE_SIZE_MB = 10;
-const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 const MAX_MESSAGE_LENGTH = 5000;
 
 interface ChatInputProps {
   onSend: (message: string, files?: FileList) => void;
   disabled?: boolean;
   placeholder?: string;
+}
+
+function getFileIcon(fileName: string): string {
+  const ext = fileName.slice(fileName.lastIndexOf(".")).toLowerCase();
+  if (ext === ".dwg" || ext === ".dxf") return "📐";
+  if (ext === ".pdf") return "📄";
+  return "🖼";
 }
 
 export function ChatInput({
@@ -22,20 +28,24 @@ export function ChatInput({
   const { t } = useLocale();
   const [value, setValue] = useState("");
   const resolvedPlaceholder = placeholder ?? t("chatInput.placeholder");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileError, setFileError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  function removeFile(index: number) {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  }
+
   function handleSend() {
     const trimmed = value.trim();
-    if (!trimmed && !selectedFile) return;
+    if (!trimmed && selectedFiles.length === 0) return;
 
-    if (selectedFile) {
+    if (selectedFiles.length > 0) {
       const dt = new DataTransfer();
-      dt.items.add(selectedFile);
+      for (const f of selectedFiles) dt.items.add(f);
       onSend(trimmed || t("chatInput.analyzeFloorPlan"), dt.files);
-      setSelectedFile(null);
+      setSelectedFiles([]);
     } else {
       onSend(trimmed);
     }
@@ -51,16 +61,27 @@ export function ChatInput({
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > MAX_FILE_SIZE_BYTES) {
-        setFileError(`File too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Max ${MAX_FILE_SIZE_MB}MB.`);
-        setSelectedFile(null);
-      } else {
-        setFileError(null);
-        setSelectedFile(file);
+    const newFiles = Array.from(e.target.files ?? []);
+    setFileError(null);
+
+    for (const file of newFiles) {
+      const validation = validateFile(file.name, file.size);
+      if (!validation.valid) {
+        setFileError(validation.error ?? "Invalid file");
+        e.target.value = "";
+        return;
       }
     }
+
+    setSelectedFiles((prev) => {
+      const combined = [...prev, ...newFiles];
+      if (combined.length > MAX_FILES_PER_MESSAGE) {
+        setFileError(`Maximum ${MAX_FILES_PER_MESSAGE} files per message`);
+        return prev;
+      }
+      return combined;
+    });
+
     e.target.value = "";
   }
 
@@ -82,19 +103,23 @@ export function ChatInput({
             </button>
           </div>
         )}
-        {selectedFile && (
-          <div className="flex items-center gap-2 px-4 py-2 mb-1">
-            <span className="text-xs font-bold text-on-surface/60 bg-white/40 px-3 py-1 rounded-lg truncate max-w-[200px]">
-              {selectedFile.name}
-            </span>
-            <button
-              type="button"
-              onClick={() => setSelectedFile(null)}
-              className="text-on-surface/40 hover:text-on-surface text-xs font-bold"
-              aria-label="Remove file"
-            >
-              &times;
-            </button>
+        {selectedFiles.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 px-4 py-2 mb-1">
+            {selectedFiles.map((file, i) => (
+              <span key={`${file.name}-${i}`} className="inline-flex items-center gap-1.5 text-xs font-bold text-on-surface/60 bg-white/40 px-3 py-1 rounded-lg">
+                <span>{getFileIcon(file.name)}</span>
+                <span className="truncate max-w-[150px]">{file.name}</span>
+                <span className="text-on-surface/30">{(file.size / 1024 / 1024).toFixed(1)}MB</span>
+                <button
+                  type="button"
+                  onClick={() => removeFile(i)}
+                  className="text-on-surface/40 hover:text-on-surface ml-1"
+                  aria-label={`Remove ${file.name}`}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
           </div>
         )}
         <textarea
@@ -114,10 +139,11 @@ export function ChatInput({
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept={ACCEPT_STRING}
+              multiple
               onChange={handleFileChange}
               className="hidden"
-              aria-label="Upload floor plan image"
+              aria-label="Upload floor plan"
             />
             <button
               type="button"
@@ -132,7 +158,7 @@ export function ChatInput({
             type="button"
             aria-label="Send message"
             onClick={handleSend}
-            disabled={disabled || (!value.trim() && !selectedFile)}
+            disabled={disabled || (!value.trim() && selectedFiles.length === 0)}
             className="p-3 bg-primary text-on-primary rounded-xl shadow-md hover:brightness-95 transition-all active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
           >
             <IconSend />
