@@ -148,21 +148,21 @@ export function PopoverContent({
       else left = rect.left + rect.width / 2;
     }
 
+    const translateX =
+      side === "bottom" || side === "top"
+        ? align === "center"
+          ? "translateX(-50%)"
+          : align === "end"
+            ? "translateX(-100%)"
+            : "none"
+        : "none";
+
     setStyle({
       position: "absolute",
       top,
       left,
       zIndex: 50,
-      transform:
-        side === "bottom" || side === "top"
-          ? align === "center"
-            ? "translateX(-50%)"
-            : align === "end"
-              ? "translateX(-100%)"
-              : "none"
-          : side === "top"
-            ? "translateY(-100%)"
-            : "none",
+      transform: translateX,
     });
   }, [open, side, align, triggerRef]);
 

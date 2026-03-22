@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { processDocument } from "@/lib/documents/processor";
 import { validateFile, MAX_FILES_PER_MESSAGE } from "@/lib/documents/validation";
 import { createClient } from "@/lib/supabase/server";
+import { buildStoragePath } from "@/lib/db/conversations";
 
 export const maxDuration = 60;
 
@@ -16,6 +17,7 @@ export async function POST(req: Request) {
 
     const formData = await req.formData();
     const files = formData.getAll("files") as File[];
+    const projectId = formData.get("projectId") as string | null;
 
     if (files.length === 0) {
       return NextResponse.json({ error: "No files provided" }, { status: 400 });
@@ -47,7 +49,33 @@ export async function POST(req: Request) {
       }),
     );
 
-    return NextResponse.json({ results });
+    // Upload rendered images to Supabase Storage (non-fatal: failure falls back to base64)
+    const resultsWithStorage = await Promise.all(
+      results.map(async (result, i) => {
+        if (!result.renderedImage || !projectId || !user.id) return result;
+        try {
+          const file = files[i];
+          const storagePath = buildStoragePath(user.id, projectId, file.name);
+          const buffer = await file.arrayBuffer();
+          const { error: uploadError } = await supabase.storage
+            .from("floor-plans")
+            .upload(storagePath, buffer, {
+              contentType: file.type || "application/octet-stream",
+              upsert: false,
+            });
+          if (uploadError) {
+            console.error("Storage upload failed:", uploadError.message);
+            return result;
+          }
+          return { ...result, storagePath };
+        } catch (err) {
+          console.error("Storage upload error:", err);
+          return result;
+        }
+      }),
+    );
+
+    return NextResponse.json({ results: resultsWithStorage });
   } catch (error) {
     console.error("Document processing error:", error);
     const message = error instanceof Error ? error.message : "Processing failed";

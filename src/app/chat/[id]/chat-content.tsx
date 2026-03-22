@@ -188,15 +188,16 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
 
         const { results } = await response.json();
 
-        // Build floor-plan-ref annotations for Storage paths (D-18)
-        // Used by loadConversation to inject signed URLs on next load
-        const floorPlanAnnotations = results
+        // Build floor-plan-refs for Storage paths (D-18)
+        // Stored in message metadata so loadConversation can inject signed URLs on reload
+        const floorPlanRefs = results
           .filter((r: DocumentAnalysis & { storagePath?: string }) => r.storagePath)
           .map((r: DocumentAnalysis & { storagePath?: string }, i: number) => ({
-            type: "floor-plan-ref" as const,
             name: files[i]?.name ?? `file-${i}`,
             storagePath: r.storagePath!,
           }));
+        const floorPlanMetadata =
+          floorPlanRefs.length > 0 ? { floorPlanRefs } : undefined;
 
         // Build preamble from all results with structured data
         const preambles = results
@@ -232,16 +233,12 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
           renderedImagesRef.current = firstImage.renderedImage;
         }
 
-        // Attach floor-plan-ref annotations if any Storage paths were returned
-        const annotations =
-          floorPlanAnnotations.length > 0 ? floorPlanAnnotations : undefined;
-
         if (renderedFiles.length > 0) {
           const dt = new DataTransfer();
           for (const f of renderedFiles) dt.items.add(f);
-          sendMessage({ text: preambleText, files: dt.files, annotations });
+          sendMessage({ text: preambleText, files: dt.files, metadata: floorPlanMetadata });
         } else {
-          sendMessage({ text: preambleText, annotations });
+          sendMessage({ text: preambleText, metadata: floorPlanMetadata });
         }
       } catch {
         // Fallback: send only Claude-compatible files (images/PDFs)
@@ -375,14 +372,14 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
             role="log"
             aria-live="polite"
             aria-label="Chat messages"
-            className="absolute inset-0 overflow-y-auto p-6 md:p-12 pb-20 md:pb-12 space-y-12 max-w-5xl mx-auto w-full"
+            className="absolute inset-0 overflow-y-auto p-6 md:p-12 pb-20 md:pb-12 space-y-6 md:space-y-12 max-w-5xl mx-auto w-full"
           >
             {messages.length === 0 && !isStreaming && (
               <div className="flex flex-col items-center justify-center h-full text-center">
                 <div className="w-14 h-14 glass-card rounded-xl flex items-center justify-center mb-6">
                   <IconNelo className="w-7 h-7 text-on-surface" />
                 </div>
-                <p className="text-on-surface/40 text-sm font-medium mb-8">
+                <p className="text-on-surface/60 text-sm font-medium mb-8">
                   {t("chat.emptySubtitle")}
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
@@ -451,7 +448,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
                   <IconNelo className="w-5 h-5 text-on-surface animate-pulse" />
                 </div>
                 <div className="glass-card rounded-2xl p-6 border border-white/40">
-                  <p className="text-sm text-on-surface/60 font-medium animate-pulse">
+                  <p className="text-sm text-on-surface/60 font-medium">
                     {t("chat.processingDocument")}
                   </p>
                 </div>
