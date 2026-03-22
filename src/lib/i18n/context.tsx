@@ -13,13 +13,11 @@ export interface LocaleContextValue {
 
 export const LocaleContext = createContext<LocaleContextValue | null>(null);
 
-function detectInitialLocale(): Locale {
+export function detectInitialLocale(): Locale {
   if (typeof window === "undefined") return DEFAULT_LOCALE;
 
   const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
   if (stored === "en" || stored === "es") return stored;
-
-  if (navigator.language.startsWith("es")) return "es";
 
   return DEFAULT_LOCALE;
 }

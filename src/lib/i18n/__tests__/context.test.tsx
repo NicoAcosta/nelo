@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { LocaleProvider } from "../context";
+import { LocaleProvider, detectInitialLocale } from "../context";
 import { useLocale } from "../use-locale";
 
 function wrapper({ children }: { children: ReactNode }) {
@@ -55,14 +55,13 @@ describe("LocaleProvider + useLocale", () => {
     expect(result.current.locale).toBe("es");
   });
 
-  it("detects 'es' from navigator.language starting with 'es'", () => {
+  it("defaults to English even when navigator.language is Spanish", () => {
     Object.defineProperty(navigator, "language", {
       value: "es-AR",
       configurable: true,
     });
     const { result } = renderHook(() => useLocale(), { wrapper });
-    expect(result.current.locale).toBe("es");
-    // Restore
+    expect(result.current.locale).toBe("en");
     Object.defineProperty(navigator, "language", {
       value: "en-US",
       configurable: true,
@@ -72,5 +71,42 @@ describe("LocaleProvider + useLocale", () => {
   it("t() with missing key returns the key itself as fallback", () => {
     const { result } = renderHook(() => useLocale(), { wrapper });
     expect(result.current.t("nonexistent.key")).toBe("nonexistent.key");
+  });
+});
+
+describe("detectInitialLocale", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it("returns 'en' when no localStorage preference exists", () => {
+    expect(detectInitialLocale()).toBe("en");
+  });
+
+  it("returns 'es' when localStorage has 'es'", () => {
+    localStorage.setItem("nelo-locale", "es");
+    expect(detectInitialLocale()).toBe("es");
+  });
+
+  it("returns 'en' when localStorage has 'en'", () => {
+    localStorage.setItem("nelo-locale", "en");
+    expect(detectInitialLocale()).toBe("en");
+  });
+
+  it("returns 'en' when localStorage has invalid value", () => {
+    localStorage.setItem("nelo-locale", "fr");
+    expect(detectInitialLocale()).toBe("en");
+  });
+
+  it("ignores navigator.language and defaults to English", () => {
+    Object.defineProperty(navigator, "language", {
+      value: "es-AR",
+      configurable: true,
+    });
+    expect(detectInitialLocale()).toBe("en");
+    Object.defineProperty(navigator, "language", {
+      value: "en-US",
+      configurable: true,
+    });
   });
 });
