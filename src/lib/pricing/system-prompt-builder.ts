@@ -53,6 +53,10 @@ Your goal is to collect information about the user's project and calculate an es
 ${modeInstructions}
 </mode>
 
+<formatting>
+- When using markdown bold (**text**), ALWAYS add a space or newline after the closing **. Never write **bold**nextword — write **bold** nextword instead.
+</formatting>
+
 <behavior>
 - Ask ONE question at a time. Don't overwhelm the user.
 - When you have enough data (minimum: area + stories + structure + roof + finishes + zone), offer to calculate the budget.
@@ -121,6 +125,10 @@ Tu objetivo es recopilar informacion sobre el proyecto del usuario y calcular un
 <mode>
 ${modeInstructions}
 </mode>
+
+<formatting>
+- Cuando uses markdown en negrita (**texto**), SIEMPRE agrega un espacio o salto de linea despues del ** de cierre. Nunca escribas **negrita**siguiente — escribi **negrita** siguiente.
+</formatting>
 
 <behavior>
 - Hace UNA pregunta a la vez. No abrumes al usuario.
