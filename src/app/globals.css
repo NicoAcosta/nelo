@@ -211,6 +211,23 @@ body {
   50% { opacity: 1; transform: translateX(-50%) scale(1.06); }
 }
 
+/* Estimate dashboard — fade up reveal */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.15s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.45s; }
+.delay-5 { animation-delay: 0.6s; }
+.delay-6 { animation-delay: 0.75s; }
+
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -5,6 +6,21 @@ import {
   extractEstimateFromMessages,
 } from "@/lib/db/conversations";
 import { EstimateDashboard } from "./estimate-dashboard";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const supabase = await createClient();
+  const { data: project } = await supabase
+    .from("projects")
+    .select("title")
+    .eq("id", id)
+    .single();
+  return { title: `${project?.title || "Estimate"} — Nelo` };
+}
 
 export default async function EstimatePage({
   params,
