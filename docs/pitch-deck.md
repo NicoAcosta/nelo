@@ -321,6 +321,32 @@ Right side: QR code to try it live, or the app URL.
 
 ---
 
+## Appendix: Q&A Preparation
+
+Anticipated questions and prepared answers (15-30 seconds each). These are NOT on slides — they're verbal responses for when judges ask.
+
+### "How do you make money?"
+
+> Right now Nelo is free for architects and consumers. Our roadmap includes a **supplier marketplace** — material suppliers and subcontractors list their real-time pricing on the platform. Architects see competitive offers while estimating, suppliers get distribution to high-intent buyers actively pricing projects. We take a revenue share on transactions that originate from Nelo estimates. Suppliers pay for distribution, architects get better pricing, estimates get more accurate. Everyone wins.
+
+### "What if a big player copies this?"
+
+> The moat is domain depth. 400+ line items across 26 Argentine construction categories, real UOCRA labor rates, INDEC inflation adjustment, blue-rate conversion — this isn't a weekend project to replicate. And as we add the supplier marketplace, the data network effect compounds: more suppliers means more accurate pricing, which attracts more architects, which attracts more suppliers.
+
+### "How accurate is it?"
+
+> Accuracy depends on how much information the user provides. With minimal input (5-6 questions), we give a ballpark with a ±40% confidence range — useful for early-stage "should I even pursue this" decisions. With detailed input including a floor plan, confidence tightens to ±10-15%. We're transparent about every assumption the AI makes, so users can correct anything that looks off.
+
+### "How do you handle pricing volatility in Argentina?"
+
+> We pull real-time data daily — UOCRA labor rates, MercadoLibre material costs, the blue-rate dollar exchange, and the INDEC ICC construction cost index for inflation adjustment. Prices aren't hardcoded — they're composition formulas that adapt automatically. Architects can also manually override any unit cost they know is wrong.
+
+### "What's next?"
+
+> Two immediate priorities: user accounts so architects can save and compare estimates across projects, and the supplier marketplace for real-time competitive pricing. Longer term, we want to expand beyond AMBA to other Argentine regions, and eventually other Latin American markets with similar estimation challenges.
+
+---
+
 ## Appendix: Production Notes
 
 ### Video recording checklist

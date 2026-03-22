@@ -59,6 +59,14 @@ Deferred to future milestones. Tracked but not in current roadmap.
 - **PRO-02**: Professional can override any calculated quantity or unit price
 - **PRO-03**: Export estimate as professional presupuesto de obra document (PDF)
 
+### B2B Supplier Marketplace (Revenue Model)
+- **MKT-01**: Suppliers can create accounts and list material/service offerings with real-time pricing
+- **MKT-02**: Supplier listings appear in estimates as competitive pricing options for each category/line item
+- **MKT-03**: Revenue share model — Nelo takes a percentage on transactions originating from estimates
+- **MKT-04**: Supplier dashboard with analytics (views, clicks, conversion from estimates)
+
+**Rationale:** Suppliers get distribution to high-intent buyers (architects actively pricing projects). Architects get real-time competitive pricing that improves estimate accuracy. Nelo gets a sustainable revenue stream without charging end users. Creates a data network effect: more suppliers → better pricing data → more architects → more suppliers.
+
 ## Out of Scope
 
 | Feature | Reason |
