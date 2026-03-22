@@ -152,6 +152,21 @@ const en: Translations = {
   "expressQuestion.roofType": "Roof / ceiling type?",
   "expressQuestion.finishLevel": "Finish level?",
   "expressQuestion.locationZone": "In which area of Buenos Aires?",
+
+  // auth
+  "auth.signIn": "Sign in to Nelo",
+  "auth.emailLabel": "Email address",
+  "auth.emailPlaceholder": "you@example.com",
+  "auth.continue": "Continue",
+  "auth.checkEmail": "Check your email -- click the link or enter the code below",
+  "auth.otpLabel": "Verification code",
+  "auth.resend": "Resend code",
+  "auth.invalidEmail": "Please enter a valid email address",
+  "auth.expiredOtp": "Code expired. Please request a new one.",
+  "auth.rateLimited": "Too many attempts. Please wait a moment.",
+  "auth.networkError": "Connection error. Please try again.",
+  "auth.signOut": "Sign out",
+  "auth.signInButton": "Sign in",
 };
 
 const es: Translations = {
@@ -307,6 +322,21 @@ const es: Translations = {
   "expressQuestion.roofType": "Tipo de cubierta / techo?",
   "expressQuestion.finishLevel": "Nivel de terminaciones?",
   "expressQuestion.locationZone": "En que zona de Buenos Aires?",
+
+  // auth
+  "auth.signIn": "Iniciar sesion en Nelo",
+  "auth.emailLabel": "Correo electronico",
+  "auth.emailPlaceholder": "tu@ejemplo.com",
+  "auth.continue": "Continuar",
+  "auth.checkEmail": "Revisa tu correo -- hace click en el enlace o ingresa el codigo",
+  "auth.otpLabel": "Codigo de verificacion",
+  "auth.resend": "Reenviar codigo",
+  "auth.invalidEmail": "Ingresa un correo electronico valido",
+  "auth.expiredOtp": "Codigo expirado. Solicita uno nuevo.",
+  "auth.rateLimited": "Demasiados intentos. Espera un momento.",
+  "auth.networkError": "Error de conexion. Intenta de nuevo.",
+  "auth.signOut": "Cerrar sesion",
+  "auth.signInButton": "Iniciar sesion",
 };
 
 export const translations: Record<Locale, Translations> = { en, es };
