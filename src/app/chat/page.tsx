@@ -108,6 +108,7 @@ function ChatContent() {
             if (toolName === "presentOptions") {
               const data = (part as { output: { questionId: string; options: Array<{ value: string; label: string }> } }).output;
               const selected = getSelectedValue(message, messages);
+              const isLastAssistantMsg = message === [...messages].reverse().find((m) => m.role === "assistant");
               toolResults.push(
                 <div key={`${message.id}-options-${toolResults.length}`} className="mt-4">
                   <ChatOptions
@@ -116,6 +117,7 @@ function ChatContent() {
                     onSelect={(label) => handleSend(label)}
                     disabled={isStreaming || selected !== null}
                     selectedValue={selected}
+                    isLatest={isLastAssistantMsg && selected === null}
                   />
                 </div>
               );

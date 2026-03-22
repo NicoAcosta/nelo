@@ -136,13 +136,23 @@ export function IconArchitect({ className, ...rest }: IconProps) {
   );
 }
 
-/** N mark — two vertical strokes + diagonal, evoking architectural walls meeting at a corner. */
+export function IconCheck({ className, ...rest }: IconProps) {
+  return (
+    <svg className={className} aria-hidden="true" {...rest} width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 7L5.5 10.5L12 3.5" />
+    </svg>
+  );
+}
+
+/**
+ * N mark — outlined geometric N with beveled corners, matching the generated brand logo.
+ * Two vertical bars + diagonal, hollow/outlined style using fill-rule evenodd.
+ * Outer contour defines the N shape, inner contour creates the hollow stroke effect.
+ */
 export function IconNelo({ className, ...rest }: IconProps) {
   return (
-    <svg className={className} aria-hidden="true" {...rest} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 20V4" />
-      <path d="M5 4l14 16" />
-      <path d="M19 4v16" />
+    <svg className={className} aria-hidden="true" {...rest} width="24" height="24" viewBox="0 0 24 24" fill="currentColor" fillRule="evenodd">
+      <path d="M2 3.5L3.5 2H9v9l6-9h5.5L22 3.5v17L20.5 22H15V13l-6 9H3.5L2 20.5ZM4 5l1-1h2v12l10-12h2l1 1v14l-1 1h-2V8L7 20H5l-1-1Z" />
     </svg>
   );
 }
@@ -158,8 +168,8 @@ export function NeloLogo({ className, size = "md" }: { className?: string; size?
   return (
     <span className={`inline-flex items-center ${s.gap} ${className ?? ""}`}>
       <IconNelo className={s.icon} />
-      <span className={`${s.text} font-extrabold tracking-tighter font-headline lowercase`}>
-        nelo
+      <span className={`${s.text} font-black tracking-tight font-headline`}>
+        NELO
       </span>
     </span>
   );

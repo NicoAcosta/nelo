@@ -4,6 +4,9 @@ import type { UIMessage } from "ai";
  * Determines if the user has already answered a question presented via ChatOptions.
  * Checks if the message immediately following the assistant's message is a user message,
  * and returns its text content (which matches the selected option label via auto-send).
+ *
+ * Note: Uses Array.indexOf with reference equality — works because useChat's
+ * messages array preserves object identity across renders.
  */
 export function getSelectedValue(
   currentMessage: UIMessage,

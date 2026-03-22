@@ -25,6 +25,7 @@ const defaultProps = {
   onSelect: vi.fn(),
   disabled: false,
   selectedValue: null,
+  isLatest: true,
 };
 
 describe("ChatOptions", () => {
@@ -66,6 +67,12 @@ describe("ChatOptions", () => {
       expect(screen.getByText("2")).toBeInTheDocument();
       expect(screen.getByText("3")).toBeInTheDocument();
     });
+
+    it("renders questionId as data attribute", () => {
+      render(<ChatOptions {...defaultProps} />);
+      const group = screen.getByRole("group");
+      expect(group).toHaveAttribute("data-question-id", "finishLevel");
+    });
   });
 
   describe("click behavior", () => {
@@ -85,16 +92,18 @@ describe("ChatOptions", () => {
   });
 
   describe("selected state", () => {
-    it("highlights the selected option", () => {
+    it("highlights the selected option with aria-pressed", () => {
       render(<ChatOptions {...defaultProps} selectedValue="Medio" disabled />);
       const selectedBtn = screen.getByRole("button", { name: /Medio/ });
       expect(selectedBtn).toHaveAttribute("data-selected", "true");
+      expect(selectedBtn).toHaveAttribute("aria-pressed", "true");
     });
 
     it("dims non-selected options when one is selected", () => {
       render(<ChatOptions {...defaultProps} selectedValue="Medio" disabled />);
       const otherBtn = screen.getByRole("button", { name: /Económico/ });
       expect(otherBtn).toHaveAttribute("data-selected", "false");
+      expect(otherBtn).toHaveAttribute("aria-pressed", "false");
     });
 
     it("disables all buttons when disabled prop is true", () => {
@@ -127,6 +136,48 @@ describe("ChatOptions", () => {
       fireEvent.keyDown(document, { key: "9" });
       expect(onSelect).not.toHaveBeenCalled();
     });
+
+    it("does not handle keyboard when isLatest is false", () => {
+      const onSelect = vi.fn();
+      render(<ChatOptions {...defaultProps} onSelect={onSelect} isLatest={false} />);
+      fireEvent.keyDown(document, { key: "1" });
+      expect(onSelect).not.toHaveBeenCalled();
+    });
+
+    it("moves focus with ArrowDown", () => {
+      render(<ChatOptions {...defaultProps} />);
+      const buttons = screen.getAllByRole("button");
+      fireEvent.keyDown(document, { key: "ArrowDown" });
+      expect(document.activeElement).toBe(buttons[0]);
+      fireEvent.keyDown(document, { key: "ArrowDown" });
+      expect(document.activeElement).toBe(buttons[1]);
+    });
+
+    it("moves focus with ArrowUp", () => {
+      render(<ChatOptions {...defaultProps} />);
+      const buttons = screen.getAllByRole("button");
+      // Move down twice first
+      fireEvent.keyDown(document, { key: "ArrowDown" });
+      fireEvent.keyDown(document, { key: "ArrowDown" });
+      expect(document.activeElement).toBe(buttons[1]);
+      // Move back up
+      fireEvent.keyDown(document, { key: "ArrowUp" });
+      expect(document.activeElement).toBe(buttons[0]);
+    });
+
+    it("clamps focus at boundaries", () => {
+      render(<ChatOptions {...defaultProps} />);
+      const buttons = screen.getAllByRole("button");
+      // ArrowUp at start stays at 0
+      fireEvent.keyDown(document, { key: "ArrowUp" });
+      expect(document.activeElement).toBe(buttons[0]);
+      // Move to end and try past it
+      fireEvent.keyDown(document, { key: "ArrowDown" });
+      fireEvent.keyDown(document, { key: "ArrowDown" });
+      fireEvent.keyDown(document, { key: "ArrowDown" });
+      fireEvent.keyDown(document, { key: "ArrowDown" });
+      expect(document.activeElement).toBe(buttons[2]); // last button
+    });
   });
 });
 
@@ -136,7 +187,6 @@ describe("getSelectedValue", () => {
       id: `msg-${Math.random()}`,
       role,
       parts: [{ type: "text" as const, text }],
-
     };
   }
 
@@ -169,7 +219,6 @@ describe("getSelectedValue", () => {
       id: "empty",
       role: "user",
       parts: [{ type: "text" as const, text: "  " }],
-
     };
     expect(getSelectedValue(msg1, [msg1, msg2])).toBeNull();
   });

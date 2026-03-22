@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
+import { IconCheck } from "@/components/icons";
 
 interface ChatOptionsProps {
   questionId: string;
@@ -8,13 +9,29 @@ interface ChatOptionsProps {
   onSelect: (label: string) => void;
   disabled: boolean;
   selectedValue: string | null;
+  /** Only the latest active option set should handle keyboard events */
+  isLatest: boolean;
 }
 
+const baseStyles =
+  "text-sm font-medium transition-all duration-150 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-background";
+
+const pillStyles = "px-4 py-2 rounded-full";
+const verticalStyles = "px-4 py-2.5 rounded-xl w-full text-left";
+
+const stateStyles = {
+  selected: "glass-primary text-black font-bold",
+  notSelected: "glass-card opacity-50 cursor-not-allowed text-on-surface/60",
+  active: "glass-card text-on-surface/80 hover:text-on-surface hover:bg-surface-container-high cursor-pointer",
+} as const;
+
 export function ChatOptions({
+  questionId,
   options,
   onSelect,
   disabled,
   selectedValue,
+  isLatest,
 }: ChatOptionsProps) {
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const focusIndex = useRef(-1);
@@ -41,8 +58,9 @@ export function ChatOptions({
     [options.length],
   );
 
+  // Only register keyboard listener on the latest, non-disabled option set
   useEffect(() => {
-    if (disabled) return;
+    if (disabled || !isLatest) return;
 
     function handleKeyDown(e: KeyboardEvent) {
       const active = document.activeElement;
@@ -73,7 +91,7 @@ export function ChatOptions({
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [disabled, options, handleSelect, moveFocus]);
+  }, [disabled, isLatest, options, handleSelect, moveFocus]);
 
   const hasSelection = selectedValue !== null;
 
@@ -82,13 +100,21 @@ export function ChatOptions({
       role="group"
       aria-label="Options"
       data-layout={usePills ? "pills" : "vertical"}
-      className={`${
-        usePills ? "flex flex-wrap gap-2" : "flex flex-col gap-1.5 max-w-sm"
-      } animate-result-in`}
+      data-question-id={questionId}
+      className={[
+        usePills ? "flex flex-wrap gap-2" : "flex flex-col gap-1.5 max-w-sm",
+        "animate-result-in",
+      ].join(" ")}
     >
       {options.map((opt, i) => {
         const isSelected = hasSelection && selectedValue === opt.label;
         const isNotSelected = hasSelection && selectedValue !== opt.label;
+
+        const stateClass = isSelected
+          ? stateStyles.selected
+          : isNotSelected
+            ? stateStyles.notSelected
+            : stateStyles.active;
 
         return (
           <button
@@ -98,40 +124,16 @@ export function ChatOptions({
             }}
             type="button"
             disabled={disabled}
+            aria-pressed={hasSelection ? isSelected : undefined}
             data-selected={hasSelection ? String(isSelected) : undefined}
             onClick={() => handleSelect(opt.label)}
-            className={`
-              ${usePills ? "px-4 py-2 rounded-full" : "px-4 py-2.5 rounded-xl w-full text-left"}
-              text-sm font-medium transition-all duration-150
-              flex items-center gap-2
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-background
-              ${
-                isSelected
-                  ? "glass-primary text-black font-bold"
-                  : isNotSelected
-                    ? "glass-card opacity-50 cursor-not-allowed text-on-surface/60"
-                    : "glass-card text-on-surface/80 hover:text-on-surface hover:bg-surface-container-high cursor-pointer"
-              }
-            `}
+            className={[
+              usePills ? pillStyles : verticalStyles,
+              baseStyles,
+              stateClass,
+            ].join(" ")}
           >
-            {isSelected && (
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                className="flex-shrink-0"
-                aria-hidden="true"
-              >
-                <path
-                  d="M2 7L5.5 10.5L12 3.5"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
+            {isSelected && <IconCheck className="flex-shrink-0" />}
             <kbd
               className="kbd-hint text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/20 text-on-surface/40 flex-shrink-0"
               aria-hidden="true"
