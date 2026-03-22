@@ -7,6 +7,7 @@ import { buildSystemPrompt } from "@/lib/pricing/system-prompt-builder";
 import type { Locale } from "@/lib/i18n/types";
 import { createClient } from "@/lib/supabase/server";
 import { saveConversation } from "@/lib/db/conversations";
+import { saveEstimate, getConversationId } from "@/lib/db/estimates";
 
 export const maxDuration = 60;
 
@@ -56,6 +57,17 @@ export async function POST(req: Request) {
     );
   }
 
+  // Resolve conversation ID for estimate persistence (per D-01)
+  let conversationId: string | undefined;
+  if (projectId) {
+    try {
+      conversationId =
+        (await getConversationId(projectId, supabase)) ?? undefined;
+    } catch {
+      // Non-critical — estimates won't be persisted for this request
+    }
+  }
+
   const userMode = detectUserMode(messages);
   const modelMessages = await convertToModelMessages(messages);
   fixDataUrlFileParts(modelMessages);
@@ -65,7 +77,12 @@ export async function POST(req: Request) {
       model: chatModel,
       system: buildSystemPrompt(userMode, locale),
       messages: modelMessages,
-      tools: createChatTools(locale),
+      tools: createChatTools(locale, {
+        conversationId,
+        saveEstimate: conversationId
+          ? (params) => saveEstimate(params, supabase)
+          : undefined,
+      }),
       stopWhen: stepCountIs(5),
     });
 

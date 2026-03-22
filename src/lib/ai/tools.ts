@@ -11,12 +11,21 @@ import { z } from "zod";
 import { computeEstimate } from "@/lib/estimate/engine";
 import type { ProjectInputs, Estimate } from "@/lib/estimate/types";
 import type { Locale } from "@/lib/i18n/types";
+import type { SaveEstimateParams } from "@/lib/db/estimates";
+
+export interface ChatToolOptions {
+  conversationId?: string;
+  saveEstimate?: (
+    params: SaveEstimateParams,
+  ) => Promise<{ id: string; version: number }>;
+}
 
 /**
  * Creates locale-aware chat tools.
  * The locale determines the language of user-facing messages in tool results.
+ * Accepts optional persistence options for estimate versioning (D-01, D-04).
  */
-export function createChatTools(locale: Locale = "en") {
+export function createChatTools(locale: Locale = "en", options?: ChatToolOptions) {
   const isEn = locale === "en";
 
   const collectProjectData = tool({
@@ -136,7 +145,26 @@ export function createChatTools(locale: Locale = "en") {
         foundationType: inputs.foundationType,
         slabType: inputs.slabType,
       };
-      return computeEstimate(projectInputs, locale);
+      const estimate = computeEstimate(projectInputs, locale);
+      // Persist estimate snapshot (D-01, D-04): runs inside execute so it fires
+      // even if the user closes the tab mid-stream (before onFinish).
+      if (options?.saveEstimate && options?.conversationId) {
+        try {
+          const { id, version } = await options.saveEstimate({
+            conversationId: options.conversationId,
+            projectInputs,
+            result: estimate,
+          });
+          return {
+            ...estimate,
+            _persistedId: id,
+            _version: version,
+          } as Estimate & { _persistedId: string; _version: number };
+        } catch (err) {
+          console.error("Failed to persist estimate:", err);
+        }
+      }
+      return estimate;
     },
   });
 
