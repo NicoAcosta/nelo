@@ -12,33 +12,36 @@ Accurate, transparent construction cost estimation through natural conversation 
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] AI chatbot collects project details through natural conversation — *Phase 4*
+- [x] Three user modes: Express (5-8 key questions), Detailed, Professional (floor plan) — *Phases 4, 6*
+- [x] Floor plan upload and AI vision analysis — *Phase 6*
+- [x] User confirmation/correction flow after floor plan analysis — *Phase 6*
+- [x] Structured data collection via AI SDK tools with Zod validation — *Phase 4*
+- [x] Calculation engine based on 26-category Argentine construction budget (~130+ line items) — *Phases 2, 8*
+- [x] Coefficient-based quantity derivation with smart defaults — *Phases 2, 8*
+- [x] Conditional logic / exclusion tree (steel frame disables concrete, etc.) — *Phase 2*
+- [x] Price per square meter output (ARS + USD via blue rate) — *Phases 2, 8*
+- [x] Total construction price with full cost structure (direct + overhead 10% + profit 12% + IVA 21%) — *Phase 2*
+- [x] Detailed category-by-category cost breakdown with incidence percentages — *Phase 5*
+- [x] Confidence level indicator (quick/standard/detailed) — *Phase 2*
+- [x] Composition-formula pricing with ICC per-item adjustment (replaces FERES reference) — *Phase 8*
+- [x] Dynamic system prompt built from configurable categories — *Phase 1*
+- [x] Bilingual UI (English default, Spanish toggle, browser auto-detect) — *Phase 7*
+- [x] Real pricing from UOCRA labor + MercadoLibre materials + DolarAPI blue rate — *Phase 8*
+- [x] Manual override system for architect price corrections — *Phase 8*
+- [x] Daily cron refresh for dynamic data sources — *Phase 8*
 
 ### Active
 
-- [ ] AI chatbot collects project details through natural conversation
-- [ ] Three user modes: Express (5-8 key questions), Detailed (56-question full questionnaire), Professional (floor plan upload + auto-compute)
-- [ ] Floor plan upload and AI vision analysis (approximate extraction of rooms, area, doors, windows)
-- [ ] User confirmation/correction flow after floor plan analysis
-- [ ] Structured data collection via AI SDK tools with Zod validation
-- [ ] Calculation engine based on 26-category Argentine construction budget with subcategories (~130+ line items from FERES/PyOO reference)
-- [ ] Coefficient-based quantity derivation (e.g., m² of plaster = 2.5 × m² of floor area, calibrated from FERES data)
-- [ ] Conditional logic / exclusion tree (e.g., steel frame disables concrete items, no basement disables vertical waterproofing)
-- [ ] Price per square meter output
-- [ ] Total construction price output with full cost structure (direct cost + overhead 8-12% + profit 10-15% + taxes + IVA 21%)
-- [ ] Detailed category-by-category cost breakdown display with incidence percentages
-- [ ] Confidence level indicator (quick/standard/detailed based on inputs collected)
-- [ ] Reference pricing from FERES UT2 project data (Jul 2024, $90.2M ARS baseline) with ICC/CAC index update formula
-- [ ] 56-question decision tree covering: general project data, site prep, structure, masonry, roofing, insulation, finishes, carpentry, MEP, gas, HVAC, painting, exteriors, management
-- [ ] Dynamic system prompt built from configurable categories
+(None — all requirements delivered in milestone v1.0)
 
 ### Out of Scope
 
-- Real-time pricing APIs — hardcoded reference data for MVP
-- CAD file parsing (DXF/DWG) — vision-only for hackathon
+- Real-time per-request pricing APIs — daily cache is sufficient for MVP
+- CAD file parsing (DXF/DWG) — vision-only approach validated
 - Multiple regions beyond AMBA — single-region MVP
 - User accounts and persistence — in-memory per session
-- PDF export — nice-to-have if time permits
+- PDF export — nice-to-have for future milestone
 - 3D visualization — not needed for cost estimation
 
 ## Context
@@ -111,13 +114,15 @@ Floor plans can auto-extract ~60-70% of these quantities.
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Next.js monolith (no separate backend) | Fastest to build for hackathon, TypeScript sufficient for calculation engine | — Pending |
-| AI SDK tools for data collection | Zod schemas enforce structure, LLM decides conversation flow | — Pending |
-| Claude Sonnet via AI Gateway | Best tool-calling, good Spanish, vision-capable, provider-agnostic | — Pending |
-| UniFormat-inspired categories | Maps to how users think about buildings (systems, not products) | — Pending |
-| Vision-only floor plan analysis | CAD parsing too complex for 24h; vision + user confirmation is good UX | — Pending |
-| Hardcoded AMBA pricing | Fastest for MVP; designed for swap-in of real data later | — Pending |
-| Assembly-based costing model | Projects decompose into categories → line items → unit costs | — Pending |
+| Next.js monolith (no separate backend) | Fastest to build for hackathon, TypeScript sufficient for calculation engine | Validated |
+| AI SDK tools for data collection | Zod schemas enforce structure, LLM decides conversation flow | Validated |
+| OpenRouter instead of AI Gateway | Team chose for model flexibility | Validated |
+| UniFormat-inspired 26 categories | Maps to how users think about buildings (systems, not products) | Validated |
+| Vision-only floor plan analysis | CAD parsing too complex; vision + user confirmation is good UX | Validated |
+| Composition-formula pricing | Replaced hardcoded AMBA pricing with (labor × UOCRA) + (materials × ML) | Validated — Phase 8 |
+| Assembly-based costing model | Projects decompose into categories → line items → unit costs | Validated |
+| USD/m² via blue rate | Standard Argentine construction quoting practice | Validated — Phase 8 |
+| Bilingual EN/ES with English default | Browser auto-detect + manual toggle + localStorage persistence | Validated — Phase 7 |
 
 ## Evolution
 
@@ -137,4 +142,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-20 after initialization*
+*Last updated: 2026-03-22 after milestone v1.0 completion (all 8 phases delivered)*

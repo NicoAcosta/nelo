@@ -120,7 +120,7 @@ Plans:
 - [x] 07-01-PLAN.md — i18n infrastructure (types, translations dictionary, LocaleProvider, useLocale hook)
 - [x] 07-02-PLAN.md — Backend bilingual (system prompt, category names, engine assumptions, API locale)
 - [x] 07-03-PLAN.md — Frontend bilingual (all UI components use t(), header toggle, LocaleProvider wrap)
-- [ ] 07-04-PLAN.md — Documentation update + end-to-end verification checkpoint
+- [x] 07-04-PLAN.md — Documentation update + end-to-end verification checkpoint
 
 ### Phase 8: Real Pricing Data Pipeline — Replace all placeholder pricing with live/cached data from INDEC ICC, UOCRA, MercadoLibre, GCBA, Cifras Online, and composition formulas
 
