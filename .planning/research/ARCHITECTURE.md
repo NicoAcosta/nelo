@@ -1,525 +1,786 @@
-# Nelo — System Architecture
+# Architecture Research
 
-*Research document for the hackathon build. Last updated: 2026-03-20.*
-
----
-
-## 1. Component Overview
-
-Five distinct layers with clean separation of concerns:
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        BROWSER                                  │
-│                                                                 │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │                    Chat UI Layer                          │  │
-│  │  app/page.tsx  (useChat + AI Elements rendering)          │  │
-│  │                                                           │  │
-│  │  • Message list (text + tool-result parts)                │  │
-│  │  • File upload input (floor plan images)                  │  │
-│  │  • Confirmation widgets (floor plan data review)          │  │
-│  │  • Cost breakdown display component                       │  │
-│  └────────────────────┬─────────────────────────────────────┘  │
-└───────────────────────┼─────────────────────────────────────────┘
-                        │  HTTP streaming  (toUIMessageStreamResponse)
-                        │  POST /api/chat  { messages: UIMessage[] }
-┌───────────────────────┼─────────────────────────────────────────┐
-│                       │  SERVER (Next.js App Router)             │
-│                       ▼                                         │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │              AI Orchestration Layer                       │  │
-│  │  app/api/chat/route.ts                                    │  │
-│  │                                                           │  │
-│  │  streamText({                                             │  │
-│  │    model: claude-sonnet (via AI Gateway),                 │  │
-│  │    system: buildSystemPrompt(categories),  ◄──────────┐  │  │
-│  │    messages,                                           │  │  │
-│  │    stopWhen: stepCountIs(20),                          │  │  │
-│  │    tools: { collectProjectData,                        │  │  │
-│  │             analyzeFloorPlan,                          │  │  │
-│  │             confirmFloorPlanData,                      │  │  │
-│  │             computeEstimate }                          │  │  │
-│  │  })                                                    │  │  │
-│  └──────┬──────────┬──────────────┬────────────────────┘  │  │
-│         │          │              │                         │  │
-│         ▼          ▼              ▼                         │  │
-│  ┌──────────┐ ┌──────────┐ ┌──────────────────────────┐   │  │
-│  │  Vision  │ │  Data    │ │   Calculation Engine      │   │  │
-│  │ Analysis │ │ Collect  │ │   lib/estimate/           │   │  │
-│  │  Tool    │ │  Tools   │ │                           │   │  │
-│  │          │ │          │ │  deriveQuantities()        │   │  │
-│  │ Claude   │ │  Zod     │ │  applyUnitCosts()          │   │  │
-│  │ vision   │ │ schemas  │ │  sumByCategory()           │   │  │
-│  │ call     │ │ validate │ │  computeConfidence()       │   │  │
-│  └──────────┘ └──────────┘ └──────────────────────────┘   │  │
-│                                          ▲                  │  │
-│                                          │                  │  │
-│  ┌───────────────────────────────────────┴────────────────┐ │  │
-│  │              Pricing Data Layer                         │ │  │
-│  │  lib/pricing/                                           │ │  │
-│  │                                                         │ │  │
-│  │  AMBA_UNIT_COSTS   (hardcoded, swap-in later)           │ │  │
-│  │  CATEGORIES_CONFIG (21 categories + line items)         ├─┘  │
-│  │  buildSystemPrompt(categories) → string                │    │
-│  └─────────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────────┘
-```
+**Domain:** Supabase persistence integration — Next.js 16 App Router + AI SDK v6 chatbot
+**Researched:** 2026-03-21
+**Confidence:** HIGH (official Supabase SSR docs, AI SDK v6 persistence docs verified)
 
 ---
 
-## 2. Component Boundaries
+## Standard Architecture
 
-### 2.1 Chat UI Layer (`app/page.tsx`, `components/`)
-
-**Responsibility**: Render conversation, handle user input, display results.
-
-**Uses**: `useChat` from `@ai-sdk/react`, `DefaultChatTransport`, `UIMessage` parts.
-
-**What it knows**:
-- Message history (text parts, tool result parts)
-- Current streaming status
-- Tool invocation state (`input-available` vs `output-available`)
-
-**What it does NOT know**:
-- How calculations are performed
-- What categories exist
-- Model selection
-
-**Key behaviors**:
-- Renders `tool-confirmFloorPlanData` parts as an editable form widget
-- Renders `tool-computeEstimate` output-available parts as a cost breakdown table
-- Attaches floor plan images as `FileUIPart` before sending messages
-- Sends `{ parts: [{ type: 'text', text }, ...fileParts] }` via `sendMessage()`
-
-### 2.2 AI Orchestration Layer (`app/api/chat/route.ts`)
-
-**Responsibility**: Run the conversation loop; define all tools; build system prompt.
-
-**Uses**: `streamText`, `tool`, `stepCountIs`, `convertToModelMessages` from `ai`.
-
-**What it knows**:
-- Tool definitions and their Zod input schemas
-- System prompt template + categories config
-- When to stop (stepCountIs cap)
-
-**What it does NOT know**:
-- UI rendering details
-- How to derive m2 quantities from base measurements (delegated to engine)
-
-**Pattern**: Single POST handler. All state lives in the `messages` array passed back and forth — the full conversation history is the state store. Tool results accumulate as message parts.
-
-### 2.3 Calculation Engine (`lib/estimate/`)
-
-**Responsibility**: Pure functions that turn collected measurements into a priced budget.
-
-**Files**:
-- `derive-quantities.ts` — maps 14 base measurements → ~80 line-item quantities
-- `apply-unit-costs.ts` — multiplies quantities × unit prices from pricing layer
-- `sum-by-category.ts` — aggregates into 21-category totals
-- `compute-confidence.ts` — scores completeness of inputs (quick/standard/detailed)
-- `types.ts` — `ProjectInputs`, `LineItem`, `CategoryTotal`, `Estimate` types
-
-**Contract**: All functions are pure. No I/O. No AI SDK imports. Testable in isolation.
-
-**Input** (`ProjectInputs`):
-```typescript
-{
-  totalFloorArea: number,       // m2
-  buildingFootprint: number,    // m2
-  perimeter: number,            // ml
-  stories: number,
-  ceilingHeight: number,        // m
-  doorCount: number,
-  doorTypes: DoorType[],
-  windowCount: number,
-  windowTypes: WindowType[],
-  bathroomCount: number,
-  kitchenCount: number,
-  hasAzotea: boolean,
-  hasGas: boolean,
-  energySavingOptions: string[],
-  userMode: 'consumer' | 'professional',
-}
-```
-
-**Output** (`Estimate`):
-```typescript
-{
-  categories: CategoryTotal[],  // 21 categories with subtotals
-  totalCost: number,            // ARS
-  costPerM2: number,            // ARS/m2
-  confidence: 'quick' | 'standard' | 'detailed',
-  lineItems: LineItem[],        // full ~80-item breakdown
-}
-```
-
-### 2.4 Pricing Data Layer (`lib/pricing/`)
-
-**Responsibility**: Reference data for AMBA unit costs and category definitions.
-
-**Files**:
-- `amba-unit-costs.ts` — hardcoded `Record<LineItemId, { unit, costARS }>` table
-- `categories-config.ts` — 21 categories with display names, line item IDs, icons
-- `system-prompt-builder.ts` — `buildSystemPrompt(categories, userMode)` → string
-
-**Key design decision**: `categories-config.ts` is the single source of truth. The system prompt is dynamically built from it at request time, so the LLM's knowledge of what to ask always matches the calculation engine's expectations.
-
-### 2.5 Floor Plan Analysis Pipeline
-
-**Not a separate service** — implemented as the `analyzeFloorPlan` tool inside the route handler.
-
-**Sequence**:
-1. User message arrives with `FileUIPart` (image) + text
-2. `streamText` sees the image part; Claude can invoke `analyzeFloorPlan`
-3. Tool `execute()` calls `generateObject` (or `generateText`) with the image directly passed to the model — Claude vision extracts approximate measurements
-4. Result is a `FloorPlanExtraction` object (partial `ProjectInputs`)
-5. LLM then calls `confirmFloorPlanData` tool, rendering a confirmation widget to the user
-6. User corrects values in the widget and re-submits
-7. Confirmed data merges into the accumulated `ProjectInputs`
-
----
-
-## 3. Data Flow
-
-### 3.1 Conversational Data Collection
+### System Overview — After Persistence Integration
 
 ```
-User types answer
-       │
-       ▼
-useChat.sendMessage({ parts: [{ type: 'text', text }] })
-       │
-       ▼  POST /api/chat  { messages: UIMessage[] }
-       │
-       ▼
-streamText sees full history → decides which tool to call next
-       │
-       ▼
-tool: collectProjectData({ fieldName, value })
-  └── execute() returns { collected: { [fieldName]: value } }
-       │
-       ▼  tool result appended to messages stream
-       │
-       ▼
-LLM continues → asks next question OR calls computeEstimate
-       │
-       ▼
-toUIMessageStreamResponse() → streamed back to client
-       │
-       ▼
-useChat appends new assistant message parts to messages[]
-(tool-result parts carry collected data for display)
-```
-
-**State note**: The `messages` array IS the state. Each tool call result is a message part in the history. The route re-receives all messages on each turn and the LLM has full context of everything collected so far. No separate server-side session store needed for MVP.
-
-### 3.2 Floor Plan Analysis Flow
-
-```
-User uploads image + "here is my floor plan"
-       │
-       ▼
-sendMessage({ parts: [{ type: 'text', text }, { type: 'file', mediaType: 'image/png', url: dataUrl }] })
-       │
-       ▼  POST /api/chat  (messages include file part)
-       │
-       ▼
-streamText: Claude sees image in message history
-       │
-       ▼
-Claude calls tool: analyzeFloorPlan({ imageIndex: 0 })
-  └── execute():
-        generateObject({
-          model: claude-sonnet,
-          schema: FloorPlanExtractionSchema,   // Zod
-          messages: [{ role: 'user', content: [{ type: 'image', image: <url> }, { type: 'text', text: 'extract...' }] }]
-        })
-        → returns FloorPlanExtraction (partial ProjectInputs with confidence flags)
-       │
-       ▼
-Claude calls tool: confirmFloorPlanData({ extraction })
-  └── execute() returns extraction as-is (UI renders editable widget)
-       │
-       ▼
-UI renders confirmation form (pre-filled with extracted values)
-User reviews, corrects, submits
-       │
-       ▼
-sendMessage({ parts: [{ type: 'text', text: 'confirmed, here are corrections: ...' }] })
-       │
-       ▼
-Claude merges confirmed values, continues data collection for missing fields
-```
-
-### 3.3 Calculation Trigger Flow
-
-```
-LLM decides enough data is collected (or user requests estimate)
-       │
-       ▼
-Claude calls tool: computeEstimate({ inputs: ProjectInputs })
-  └── execute():
-        quantities = deriveQuantities(inputs)
-        lineItems  = applyUnitCosts(quantities, AMBA_UNIT_COSTS)
-        categories = sumByCategory(lineItems)
-        confidence = computeConfidence(inputs)
-        return { categories, totalCost, costPerM2, confidence, lineItems }
-       │
-       ▼
-Tool result streamed as message part: type: 'tool-computeEstimate', state: 'output-available'
-       │
-       ▼
-UI renders cost breakdown table from tool output part
-LLM generates summary text alongside the breakdown
-```
-
-### 3.4 System Prompt ← Categories Config
-
-```
-At request time (each POST /api/chat):
-
-import { CATEGORIES_CONFIG } from '@/lib/pricing/categories-config'
-import { buildSystemPrompt } from '@/lib/pricing/system-prompt-builder'
-
-const system = buildSystemPrompt(CATEGORIES_CONFIG, userMode)
-
-Resulting prompt includes:
-- Role: Argentine construction cost estimator
-- User mode instructions (consumer: 8 questions, professional: 15+)
-- List of the 21 categories and what data each requires
-- Instructions on when to call each tool
-- Language instructions (respond in Spanish by default)
-- Confidence guidance (flag when quick estimate vs. detailed)
+┌────────────────────────────────────────────────────────────────────┐
+│                           BROWSER                                  │
+│                                                                    │
+│  ┌─────────────────────────────────────────────────────────────┐  │
+│  │                    Chat UI Layer                             │  │
+│  │  app/chat/[id]/page.tsx  (Client Component)                 │  │
+│  │                                                             │  │
+│  │  useChat({ id: chatId, messages: initialMessages })         │  │
+│  │    └── DefaultChatTransport → POST /api/chat               │  │
+│  │                                                             │  │
+│  │  NEW:                                                       │  │
+│  │  • Auth gate — redirect to /login if !user                  │  │
+│  │  • initialMessages loaded from Server Component parent      │  │
+│  │  • Sidebar: project list from /api/projects                 │  │
+│  │  • Share button → POST /api/shares → copy link             │  │
+│  └───────────────────┬─────────────────────────────────────────┘  │
+└───────────────────────┼────────────────────────────────────────────┘
+                        │ POST /api/chat  { id, messages }
+                        │ (chatId now included in body)
+┌───────────────────────┼────────────────────────────────────────────┐
+│  MIDDLEWARE (src/middleware.ts)                                    │
+│  updateSession() — refresh Supabase auth token in cookies          │
+│  Protect: /chat/** routes → redirect to /login if !user           │
+│  Allow:   /share/[token] routes (public, no auth required)        │
+├───────────────────────┼────────────────────────────────────────────┤
+│  SERVER (Next.js App Router)                                       │
+│                       ▼                                            │
+│  ┌─────────────────────────────────────────────────────────────┐  │
+│  │              AI Orchestration Layer (MODIFIED)               │  │
+│  │  app/api/chat/route.ts                                       │  │
+│  │                                                              │  │
+│  │  1. Auth check: supabase.auth.getUser() → 401 if anon       │  │
+│  │  2. Load prior messages: loadChat(chatId) → UIMessage[]     │  │
+│  │  3. streamText({ model, system, messages, tools })          │  │
+│  │  4. toUIMessageStreamResponse({                              │  │
+│  │       originalMessages: messages,                            │  │
+│  │       onFinish: async ({ messages }) => {                    │  │
+│  │         await saveChat(chatId, userId, messages)            │  │
+│  │       }                                                      │  │
+│  │     })                                                       │  │
+│  └──────┬──────────┬─────────────────────────────────────────┘   │
+│         │ (unchanged)                                              │
+│         ▼          ▼                                               │
+│  ┌──────────┐  ┌──────────────────────────────────────────────┐  │
+│  │  Vision  │  │   Calculation Engine (UNCHANGED)              │  │
+│  │  Tool    │  │   lib/estimate/engine.ts                      │  │
+│  │ analyze  │  │   Pure functions, no Supabase imports         │  │
+│  │  Floor   │  └──────────────────────────────────────────────┘  │
+│  │  Plan    │                                                     │
+│  └──────────┘                                                     │
+│                                                                    │
+│  ┌─────────────────────────────────────────────────────────────┐  │
+│  │              NEW: Persistence Layer                          │  │
+│  │  src/lib/db/                                                 │  │
+│  │                                                              │  │
+│  │  chats     — id, user_id, title, created_at, updated_at     │  │
+│  │  messages  — id, chat_id, messages JSONB, saved_at          │  │
+│  │  estimates — id, chat_id, user_id, snapshot JSONB,          │  │
+│  │              version, created_at                            │  │
+│  │  shares    — id, estimate_id, token, expires_at, user_id   │  │
+│  └─────────────────────────────────────────────────────────────┘  │
+│                                                                    │
+│  ┌─────────────────────────────────────────────────────────────┐  │
+│  │              NEW: Storage Layer                              │  │
+│  │  Supabase Storage bucket: floor-plans                       │  │
+│  │  Path: {userId}/{chatId}/{filename}                         │  │
+│  │  RLS: owner read/write, anon denied                         │  │
+│  └─────────────────────────────────────────────────────────────┘  │
+│                                                                    │
+│  ┌─────────────────────────────────────────────────────────────┐  │
+│  │              Pricing Data Layer (UNCHANGED)                  │  │
+│  │  lib/pricing/ — static data, no auth concerns               │  │
+│  └─────────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────────┘
+                        │
+                        ▼
+┌────────────────────────────────────────────────────────────────────┐
+│              SUPABASE (external)                                   │
+│  Auth  — magic link + OTP, cookie-based sessions via @supabase/ssr│
+│  Postgres — chats, messages, estimates, shares tables + RLS        │
+│  Storage — floor-plans bucket, private, owner-scoped RLS          │
+└────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 4. AI SDK v6 Patterns Used
+## Component Responsibilities
 
-### 4.1 `streamText` + tools for progressive collection
-
-The route handler uses a single `streamText` call with all tools available. The LLM decides the conversation flow — which field to ask about next, when to trigger floor plan analysis, when enough data exists to compute. `stopWhen: stepCountIs(20)` prevents infinite loops.
-
-```typescript
-// app/api/chat/route.ts
-const result = streamText({
-  model: anthropic('claude-sonnet-4-5'),
-  system: buildSystemPrompt(CATEGORIES_CONFIG, userMode),
-  messages: convertToModelMessages(messages),
-  stopWhen: stepCountIs(20),
-  tools: {
-    collectProjectData,
-    analyzeFloorPlan,
-    confirmFloorPlanData,
-    computeEstimate,
-  },
-});
-return result.toUIMessageStreamResponse();
-```
-
-### 4.2 Tool definitions with Zod schemas
-
-Each tool uses `z.object()` for `inputSchema`, giving the LLM a strict contract and giving us runtime validation for free.
-
-```typescript
-const collectProjectData = tool({
-  description: 'Record a collected project measurement or choice',
-  inputSchema: z.object({
-    field: z.enum(['totalFloorArea', 'stories', 'bathroomCount', ...]),
-    value: z.union([z.number(), z.string(), z.boolean()]),
-  }),
-  execute: async ({ field, value }) => ({ field, value, collected: true }),
-});
-```
-
-### 4.3 Vision analysis as a tool
-
-`analyzeFloorPlan` tool calls the model a second time (nested `generateObject`) with the image attached. The outer `streamText` passes the image URL from the message history into the inner call.
-
-```typescript
-const analyzeFloorPlan = tool({
-  description: 'Analyze a floor plan image to extract approximate measurements',
-  inputSchema: z.object({ imageUrl: z.string() }),
-  execute: async ({ imageUrl }) => {
-    const { object } = await generateObject({
-      model: anthropic('claude-sonnet-4-5'),
-      schema: FloorPlanExtractionSchema,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'image', image: imageUrl },
-          { type: 'text', text: 'Extract room count, approximate floor area, door count, window count, and number of stories from this floor plan. Provide confidence level for each field.' },
-        ],
-      }],
-    });
-    return object;
-  },
-});
-```
-
-### 4.4 How tools feed into calculation
-
-Tool results accumulate in the message history as `tool-result` parts. When the LLM calls `computeEstimate`, its `inputSchema` requires a complete `ProjectInputs` object. The LLM must synthesize this from the tool results visible in its context window — every `collectProjectData` result and every `confirmFloorPlanData` result is visible to the model when it assembles the final call.
-
-This means: **no server-side accumulation state needed**. The full message history is the source of truth.
+| Component | Responsibility | Modified? |
+|-----------|---------------|-----------|
+| `src/middleware.ts` | Refresh auth tokens, protect /chat/** routes | NEW |
+| `src/lib/supabase/server.ts` | createServerClient for Route Handlers/Server Components | NEW |
+| `src/lib/supabase/client.ts` | createBrowserClient for Client Components | NEW |
+| `src/lib/db/chats.ts` | loadChat(), saveChat(), listChats() — DB access layer | NEW |
+| `src/lib/db/estimates.ts` | saveEstimateVersion(), listVersions(), loadEstimate() | NEW |
+| `src/lib/db/shares.ts` | createShare(), validateShare(), revokeShare() | NEW |
+| `app/chat/[id]/page.tsx` | Server Component that loads chat, passes initialMessages | NEW |
+| `app/chat/page.tsx` | Redirect: creates new chat ID, redirects to /chat/[id] | MODIFIED |
+| `app/api/chat/route.ts` | Add auth check + onFinish persistence | MODIFIED |
+| `app/api/shares/route.ts` | Create/manage shareable links | NEW |
+| `app/auth/login/page.tsx` | Magic link request form | NEW |
+| `app/auth/confirm/route.ts` | token_hash exchange — magic link callback | NEW |
+| `app/share/[token]/page.tsx` | Public read-only estimate view | NEW |
+| `src/lib/estimate/engine.ts` | Pure calculation engine | UNCHANGED |
+| `src/lib/pricing/` | Unit costs, categories config | UNCHANGED |
+| `src/lib/ai/tools.ts` | AI tool definitions | UNCHANGED |
 
 ---
 
-## 5. State Management
-
-### 5.1 Where collected data lives
-
-**During a session**: In the `messages` array managed by `useChat` on the client. Each round-trip sends the full history. Tool results (e.g., `{ field: 'totalFloorArea', value: 120 }`) are embedded as message parts.
-
-**No database, no session store** for MVP. In-memory only — losing the tab loses the session. This is explicitly out of scope.
-
-### 5.2 How tool results accumulate
+## Recommended Project Structure (New Files Only)
 
 ```
-Turn 1: user says "120 square meters"
-  → Claude calls collectProjectData({ field: 'totalFloorArea', value: 120 })
-  → messages now has assistant message with tool-result part
-
-Turn 2: user says "two floors"
-  → Claude sees prior tool results in history
-  → Claude calls collectProjectData({ field: 'stories', value: 2 })
-  → messages now has two tool-result parts across history
-
-Turn N: Claude judges sufficient data
-  → Claude assembles ProjectInputs from all tool results in context
-  → Claude calls computeEstimate({ inputs: { totalFloorArea: 120, stories: 2, ... } })
-  → Estimate streams back as tool output part
-```
-
-The LLM context window is effectively the working memory. The `messages` array is serialized to JSON and sent on every POST — this is stateless on the server.
-
-### 5.3 Client-side display state
-
-The `useChat` hook owns `messages`. Additional UI state (e.g., "is floor plan confirmation pending?") is derived by checking whether a `tool-confirmFloorPlanData` part with `state: 'output-available'` exists in the latest assistant message. No separate Zustand/Redux store needed.
-
----
-
-## 6. Build Order
-
-### Phase 1 — Foundation (must be first, no dependencies)
-
-These can be built in parallel by different team members:
-
-| Component | Owner | Output |
-|-----------|-------|--------|
-| `lib/pricing/categories-config.ts` | Data | 21-category config object |
-| `lib/pricing/amba-unit-costs.ts` | Data | Unit cost table |
-| `lib/estimate/types.ts` | Backend | TypeScript types for all data |
-
-### Phase 2 — Core Engine (depends on Phase 1 types + pricing)
-
-Parallel work:
-
-| Component | Owner | Depends on |
-|-----------|-------|------------|
-| `lib/estimate/derive-quantities.ts` | Backend | `types.ts` |
-| `lib/estimate/apply-unit-costs.ts` | Backend | `types.ts`, `amba-unit-costs.ts` |
-| `lib/estimate/sum-by-category.ts` | Backend | `types.ts` |
-| `lib/estimate/compute-confidence.ts` | Backend | `types.ts` |
-| `lib/pricing/system-prompt-builder.ts` | Backend | `categories-config.ts` |
-
-Write tests for all engine functions before implementing (pure functions = easy to test).
-
-### Phase 3 — API Route (depends on Phase 1 + 2)
-
-| Component | Owner | Depends on |
-|-----------|-------|------------|
-| Tool schemas (`tool-schemas.ts`) | Backend | `types.ts` |
-| `app/api/chat/route.ts` | Backend | engine, tools, system-prompt-builder |
-
-Integration point: The route wires all pieces together for the first time here.
-
-### Phase 4 — UI (can start in parallel with Phase 2/3)
-
-| Component | Owner | Depends on |
-|-----------|-------|------------|
-| Basic `useChat` chat shell | Frontend | None (mock API response) |
-| Message rendering (text + tool parts) | Frontend | Tool schemas (for types) |
-| Floor plan upload widget | Frontend | None |
-| Confirmation form widget | Frontend | `FloorPlanExtraction` type |
-| Cost breakdown display | Frontend | `Estimate` type |
-
-Frontend can develop against a stub `/api/chat` that returns hardcoded tool results until Phase 3 is ready.
-
-### Phase 5 — Integration + Polish (everything done)
-
-- Wire real `/api/chat` to frontend
-- End-to-end test: upload floor plan → confirm → get estimate
-- Confidence indicator display
-- Spanish/English language handling
-- Error states (file too large, extraction failed)
-
-### Dependency Graph
-
-```
-categories-config ──┐
-amba-unit-costs ────┼──► types ──► derive-quantities ─┐
-                    │          ──► apply-unit-costs   ─┼──► route.ts ──► UI
-                    │          ──► sum-by-category    ─┤
-                    └──► system-prompt-builder ────────┘
-```
-
-### Critical Path
-
-```
-types.ts → derive-quantities.ts → route.ts → end-to-end test
-```
-
-Bottleneck: The calculation engine (derive-quantities + apply-unit-costs) is the hardest logic and blocks the final integration. Prioritize this.
-
----
-
-## 7. File Structure
-
-```
-arqui/
-├── app/
-│   ├── page.tsx                        # Chat UI (useChat)
-│   ├── api/
-│   │   └── chat/
-│   │       └── route.ts                # streamText orchestration
-│   └── components/
-│       ├── ChatMessage.tsx             # Message + tool part renderer
-│       ├── FloorPlanConfirmation.tsx   # Editable extraction review widget
-│       └── CostBreakdown.tsx           # 21-category estimate display
+src/
+├── middleware.ts                    # Supabase session refresh + route protection
+│
 ├── lib/
-│   ├── pricing/
-│   │   ├── categories-config.ts        # Source of truth: 21 categories
-│   │   ├── amba-unit-costs.ts          # Hardcoded AMBA prices
-│   │   └── system-prompt-builder.ts    # Builds system prompt from config
-│   └── estimate/
-│       ├── types.ts                    # ProjectInputs, Estimate, etc.
-│       ├── derive-quantities.ts        # 14 inputs → 80 line-item quantities
-│       ├── apply-unit-costs.ts         # quantities × prices
-│       ├── sum-by-category.ts          # aggregate to 21 categories
-│       └── compute-confidence.ts       # quick/standard/detailed scoring
-└── lib/
-    └── tools/
-        ├── collect-project-data.ts     # Tool: record one field
-        ├── analyze-floor-plan.ts       # Tool: vision extraction
-        ├── confirm-floor-plan-data.ts  # Tool: trigger confirmation UI
-        └── compute-estimate.ts         # Tool: run calculation engine
+│   ├── supabase/
+│   │   ├── client.ts               # createBrowserClient (Client Components)
+│   │   └── server.ts               # createServerClient (Route Handlers, Server Components)
+│   │
+│   └── db/
+│       ├── chats.ts                # CRUD for chats + messages
+│       ├── estimates.ts            # Estimate snapshot versioning
+│       └── shares.ts               # Share token generation + validation
+│
+├── app/
+│   ├── auth/
+│   │   ├── login/
+│   │   │   └── page.tsx            # Magic link request form (Client Component)
+│   │   └── confirm/
+│   │       └── route.ts            # Token exchange callback (GET handler)
+│   │
+│   ├── chat/
+│   │   ├── page.tsx                # Modified: creates chatId, redirects to /chat/[id]
+│   │   └── [id]/
+│   │       └── page.tsx            # Server Component: load chat, render ChatContent
+│   │
+│   ├── projects/
+│   │   └── page.tsx                # Project list for authenticated users
+│   │
+│   └── share/
+│       └── [token]/
+│           └── page.tsx            # Public read-only estimate view
+│
+└── components/
+    ├── auth-gate.tsx               # Wraps pages requiring auth, shows login prompt
+    └── share-button.tsx            # Copy-to-clipboard share link UI
 ```
 
 ---
 
-## 8. Key Risks and Mitigations
+## Architectural Patterns
 
-| Risk | Mitigation |
-|------|------------|
-| LLM assembles wrong `ProjectInputs` for `computeEstimate` | Zod schema validates on arrival; return error message for LLM to retry |
-| Floor plan vision returns garbage | All fields optional with `null`; user sees confidence flags; UI prompts corrections |
-| Message history grows too large (many tool calls) | Cap with `stopWhen: stepCountIs(20)`; prune old `collectProjectData` results if needed |
-| Categories config not ready in time | Stub with 3–4 categories for demo; engine and prompt work the same |
-| Unit costs not finalized | Use placeholder ARS values; display disclaimer; easy to swap |
-| Two user modes complicate prompt | Build consumer mode first; add professional mode as a flag in `buildSystemPrompt` |
+### Pattern 1: Supabase SSR Cookie Auth
+
+**What:** Two-client architecture — one browser client (singleton, Client Components), one server client (per-request, Server Components and Route Handlers). Both backed by `@supabase/ssr` with HTTP-only cookies for sessions. Middleware refreshes tokens transparently.
+
+**When to use:** Every interaction with Supabase. Never import Supabase directly — always go through the factory functions in `src/lib/supabase/`.
+
+**Implementation:**
+
+```typescript
+// src/lib/supabase/server.ts — for Route Handlers, Server Components, Server Actions
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
+
+export async function createClient() {
+  const cookieStore = await cookies()
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() { return cookieStore.getAll() },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch { /* Server Component context — middleware handles refresh */ }
+        },
+      },
+    }
+  )
+}
+
+// src/lib/supabase/client.ts — for Client Components
+import { createBrowserClient } from '@supabase/ssr'
+
+export function createClient() {
+  return createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+}
+```
+
+```typescript
+// src/middleware.ts — runs on every request matching the pattern
+import { type NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
+import { NextResponse } from 'next/server'
+
+export async function middleware(request: NextRequest) {
+  let response = NextResponse.next({ request })
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() { return request.cookies.getAll() },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options)
+          })
+        },
+      },
+    }
+  )
+
+  // CRITICAL: use getUser() not getSession() — validates with auth server
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // Protect /chat/** routes
+  if (!user && request.nextUrl.pathname.startsWith('/chat')) {
+    return NextResponse.redirect(new URL('/auth/login', request.url))
+  }
+
+  return response
+}
+
+export const config = {
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|share/.*|api/health).*)'],
+}
+```
+
+**Trade-offs:** Middleware runs on every matched request — keep it fast (no DB calls, only auth token refresh). The `try/catch` in `setAll` is required because Server Components cannot write cookies; the middleware does the actual writing.
+
+### Pattern 2: Chat Route with Stable ID (Generate-Then-Redirect)
+
+**What:** When users start a new chat, generate a `nanoid()` immediately and redirect to `/chat/[id]`. The chat page becomes a stable URL from the first message. The chat ID is passed through to the API route and used as the Supabase row key.
+
+**When to use:** Always. Never allow a chat to exist without an ID.
+
+**Implementation:**
+
+```typescript
+// app/chat/page.tsx — new entry point
+import { redirect } from 'next/navigation'
+import { nanoid } from 'nanoid'
+
+export default function NewChatPage() {
+  const id = nanoid()
+  redirect(`/chat/${id}`)
+}
+
+// app/chat/[id]/page.tsx — stable chat URL (Server Component)
+import { createClient } from '@/lib/supabase/server'
+import { loadChat } from '@/lib/db/chats'
+import { redirect } from 'next/navigation'
+import { ChatContent } from './chat-content'  // Client Component
+
+export default async function ChatPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/auth/login')
+
+  // Load saved messages — empty array for new chats
+  const initialMessages = await loadChat(id, user.id)
+
+  return <ChatContent id={id} initialMessages={initialMessages} />
+}
+```
+
+```typescript
+// ChatContent (Client Component) — receives initialMessages from Server Component
+const { messages, sendMessage } = useChat({
+  id: chatId,
+  messages: initialMessages,          // AISDKv6: populate from DB
+  transport: new DefaultChatTransport({
+    api: '/api/chat',
+    body: { chatId },                  // pass chatId to route handler
+  }),
+})
+```
+
+**Trade-offs:** The redirect from `/chat` to `/chat/[id]` adds one navigation. This is intentional — it makes the URL shareable and enables back-button support.
+
+### Pattern 3: API Route — onFinish Persistence
+
+**What:** The existing `app/api/chat/route.ts` is modified to: (1) auth-check the request, (2) pass `chatId` through to `toUIMessageStreamResponse`, and (3) persist the full message history in the `onFinish` callback. The streaming response to the client is unchanged.
+
+**When to use:** Every chat API call. Persistence happens server-side, transparent to the client.
+
+**Implementation:**
+
+```typescript
+// app/api/chat/route.ts — minimal additions
+export async function POST(req: Request) {
+  // 1. Auth check
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const body = await req.json()
+  const { messages, chatId } = body  // chatId added to body
+
+  // ... existing validation, buildSystemPrompt, etc. ...
+
+  const result = streamText({
+    model: chatModel,
+    system: buildSystemPrompt(userMode, locale),
+    messages: convertToModelMessages(messages),
+    tools: createChatTools(locale),
+    stopWhen: stepCountIs(5),
+  })
+
+  // 2. Persist on completion — does not block the stream
+  return result.toUIMessageStreamResponse({
+    originalMessages: messages,
+    onFinish: async ({ messages: allMessages }) => {
+      await saveChat(chatId, user.id, allMessages)
+    },
+  })
+}
+```
+
+**Trade-offs:** `onFinish` runs after the stream completes. If the user closes the tab before the stream finishes, the message won't be saved. This is acceptable for v1.1 — complete messages are captured, interrupted streams are not.
+
+### Pattern 4: Estimate Versioning Snapshot
+
+**What:** When the `runEstimate` tool fires, the `onFinish` callback also saves a snapshot of the `Estimate` object to a separate `estimates` table with a version counter. This lets users compare estimates over time.
+
+**When to use:** When `allMessages` in `onFinish` contain a `tool-runEstimate` part with `state: 'output-available'`.
+
+**Implementation:**
+
+```typescript
+// Inside onFinish callback
+const estimatePart = allMessages
+  .flatMap(m => m.parts)
+  .find(p => p.type === 'tool-runEstimate' && p.state === 'output-available')
+
+if (estimatePart) {
+  await saveEstimateVersion(chatId, user.id, estimatePart.output as Estimate)
+}
+```
+
+```typescript
+// src/lib/db/estimates.ts
+export async function saveEstimateVersion(chatId: string, userId: string, estimate: Estimate) {
+  const supabase = await createClient()
+  const { count } = await supabase
+    .from('estimates')
+    .select('*', { count: 'exact', head: true })
+    .eq('chat_id', chatId)
+
+  await supabase.from('estimates').insert({
+    id: nanoid(),
+    chat_id: chatId,
+    user_id: userId,
+    version: (count ?? 0) + 1,
+    snapshot: estimate,       // JSONB — full Estimate object
+    created_at: new Date().toISOString(),
+  })
+}
+```
+
+### Pattern 5: Shareable Links via Share Token + RLS
+
+**What:** A `shares` table stores `(token, estimate_id, user_id, expires_at)`. The token is a random string (nanoid). An RLS policy on `estimates` allows SELECT when the estimate's ID matches a valid, non-expired share token in `shares`. No auth required for the share page — it uses the anon key.
+
+**When to use:** User clicks "Share estimate" → API creates share token → user gets `/share/{token}` URL.
+
+**RLS Policies:**
+
+```sql
+-- chats: owner full access
+ALTER TABLE chats ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "owner access" ON chats
+  USING (auth.uid() = user_id);
+
+-- messages: owner full access
+ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "owner access" ON messages
+  USING (
+    EXISTS (SELECT 1 FROM chats WHERE chats.id = messages.chat_id AND chats.user_id = auth.uid())
+  );
+
+-- estimates: owner access + public read via valid share token
+ALTER TABLE estimates ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "owner access" ON estimates
+  USING (auth.uid() = user_id);
+CREATE POLICY "public read via share token" ON estimates
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM shares
+      WHERE shares.estimate_id = estimates.id
+        AND (shares.expires_at IS NULL OR shares.expires_at > now())
+    )
+  );
+
+-- shares: owner can create/delete their own
+ALTER TABLE shares ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "owner access" ON shares
+  USING (auth.uid() = user_id);
+
+-- Storage: floor-plans bucket — owner only
+CREATE POLICY "owner upload" ON storage.objects
+  FOR INSERT WITH CHECK (
+    bucket_id = 'floor-plans' AND auth.uid()::text = (storage.foldername(name))[1]
+  );
+CREATE POLICY "owner read" ON storage.objects
+  FOR SELECT USING (
+    bucket_id = 'floor-plans' AND auth.uid()::text = (storage.foldername(name))[1]
+  );
+```
+
+**Share page implementation:**
+
+```typescript
+// app/share/[token]/page.tsx — NO auth required
+export default async function SharePage({ params }: { params: Promise<{ token: string }> }) {
+  const { token } = await params
+  const supabase = await createClient()  // uses anon key, RLS enforces access
+
+  // Lookup estimate via share token
+  const { data: share } = await supabase
+    .from('shares')
+    .select('estimate_id, expires_at')
+    .eq('token', token)
+    .single()
+
+  if (!share || (share.expires_at && new Date(share.expires_at) < new Date())) {
+    notFound()
+  }
+
+  const { data: estimate } = await supabase
+    .from('estimates')
+    .select('snapshot')
+    .eq('id', share.estimate_id)
+    .single()  // RLS policy allows this via the share token match
+
+  return <CostBreakdown estimate={estimate.snapshot} readOnly />
+}
+```
 
 ---
 
-*This document should be read alongside PROJECT.md. Update at each significant architectural decision.*
+## Data Flow
+
+### New Chat Session Flow
+
+```
+User visits /chat
+    ↓
+app/chat/page.tsx (Server Component)
+    nanoid() → id = "abc123"
+    redirect('/chat/abc123')
+    ↓
+app/chat/[id]/page.tsx (Server Component)
+    supabase.auth.getUser() → user
+    loadChat('abc123', user.id) → [] (empty, new chat)
+    render <ChatContent id="abc123" initialMessages={[]} />
+    ↓
+ChatContent (Client Component)
+    useChat({ id: 'abc123', messages: [], transport: POST /api/chat })
+    URL is now shareable: /chat/abc123
+```
+
+### Message Send + Persist Flow
+
+```
+User sends message
+    ↓
+useChat.sendMessage({ text, chatId: 'abc123' })
+    ↓  POST /api/chat  { messages: UIMessage[], chatId: 'abc123' }
+    ↓
+app/api/chat/route.ts
+    supabase.auth.getUser() → user (from cookie)
+    convertToModelMessages(messages)
+    streamText({ model, system, tools }) → stream starts
+    ↓  streaming response to client (immediate)
+    ↓  client renders tokens as they arrive
+    ↓  (after stream complete) onFinish fires:
+    saveChat('abc123', user.id, allMessages)
+      → upsert into messages table: { chat_id, messages: allMessages as JSONB }
+    if runEstimate tool fired:
+      saveEstimateVersion('abc123', user.id, estimate)
+```
+
+### Return Visit / Load Saved Chat Flow
+
+```
+User returns, visits /chat/abc123
+    ↓
+middleware.ts
+    supabase.auth.getUser() → user (cookie still valid) → allow
+    ↓
+app/chat/[id]/page.tsx (Server Component)
+    loadChat('abc123', user.id)
+      → SELECT messages FROM messages WHERE chat_id = 'abc123'
+      → returns UIMessage[] (full history)
+    render <ChatContent id="abc123" initialMessages={savedMessages} />
+    ↓
+ChatContent
+    useChat({ messages: savedMessages }) → renders full history immediately
+    User continues conversation — new messages appended, full history sent on each POST
+```
+
+### Floor Plan Upload + Storage Flow
+
+```
+User uploads image
+    ↓
+ChatInput → sendMessage({ text, files })
+    ↓
+BEFORE sending to AI: upload file to Supabase Storage
+    app/api/floor-plan-upload/route.ts (NEW)
+      supabase.auth.getUser() → user
+      supabase.storage
+        .from('floor-plans')
+        .upload(`${user.id}/${chatId}/${filename}`, file)
+      → returns permanent URL
+    ↓
+sendMessage({ text, files: [{ url: permanentUrl, mediaType: 'image/png' }] })
+    ↓
+/api/chat receives message with permanent Storage URL (not base64)
+    Claude vision reads the image via the URL
+```
+
+**Note on floor plan upload timing:** The upload route is called before `sendMessage` in the client. This replaces the current base64 data URL approach with a permanent Supabase Storage URL. The AI SDK still receives the URL as a `FileUIPart`; the difference is the URL is now a stable `https://...supabase.co/storage/v1/object/public/...` URL rather than a 2MB base64 string in the message history.
+
+### Share Link Flow
+
+```
+User clicks "Share Estimate"
+    ↓
+share-button.tsx → POST /api/shares { estimateId, expiresIn: '7d' }
+    ↓
+app/api/shares/route.ts
+    supabase.auth.getUser() → user
+    INSERT INTO shares (id=nanoid(), estimate_id, user_id, token=nanoid(12), expires_at)
+    → returns { token }
+    ↓
+Client: copy /share/{token} to clipboard
+    ↓
+Recipient visits /share/{token}
+    ↓
+app/share/[token]/page.tsx (Server Component, no auth needed)
+    supabase (anon key) selects estimate
+    RLS "public read via share token" policy allows the SELECT
+    → renders read-only CostBreakdown
+```
+
+---
+
+## Database Schema
+
+```sql
+-- chats: one row per conversation
+CREATE TABLE chats (
+  id         TEXT PRIMARY KEY,          -- nanoid
+  user_id    UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  title      TEXT,                      -- auto-set from first user message
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX idx_chats_user_id ON chats(user_id);
+
+-- messages: full UIMessage[] history stored as JSONB, one row per chat
+-- Rationale: AI SDK messages are append-only, whole-history upsert is simplest
+--            and matches how the API reads/writes (full array per turn)
+CREATE TABLE messages (
+  chat_id    TEXT PRIMARY KEY REFERENCES chats(id) ON DELETE CASCADE,
+  messages   JSONB NOT NULL DEFAULT '[]'::jsonb,
+  saved_at   TIMESTAMPTZ DEFAULT now()
+);
+
+-- estimates: versioned snapshots of Estimate objects
+CREATE TABLE estimates (
+  id         TEXT PRIMARY KEY,          -- nanoid
+  chat_id    TEXT NOT NULL REFERENCES chats(id) ON DELETE CASCADE,
+  user_id    UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  version    INTEGER NOT NULL DEFAULT 1,
+  snapshot   JSONB NOT NULL,            -- full Estimate object
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX idx_estimates_chat_id ON estimates(chat_id);
+CREATE INDEX idx_estimates_user_id ON estimates(user_id);
+
+-- shares: share tokens for public estimate access
+CREATE TABLE shares (
+  id          TEXT PRIMARY KEY,          -- nanoid
+  estimate_id TEXT NOT NULL REFERENCES estimates(id) ON DELETE CASCADE,
+  user_id     UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  token       TEXT NOT NULL UNIQUE,      -- nanoid(12), in the URL
+  expires_at  TIMESTAMPTZ,              -- NULL = no expiry
+  created_at  TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX idx_shares_token ON shares(token);
+CREATE INDEX idx_shares_estimate_id ON shares(estimate_id);
+```
+
+**Why JSONB for messages (not normalized rows):**
+- AI SDK's `UIMessage[]` with `parts` arrays is arbitrarily nested. Normalizing into individual columns adds schema coupling to SDK internals that change.
+- The entire array is always read/written as a unit (sent whole to the model on every turn).
+- The messages JSON never needs to be queried by individual field — only fetched by `chat_id`.
+- JSONB gives query capability if needed later with `->` operators.
+
+**Why normalized for estimates (not inline in messages):**
+- Estimates need to be independently addressable (share tokens reference estimate IDs).
+- Version history requires separate rows.
+- The Estimate type is stable and well-defined — safe to rely on its structure.
+
+---
+
+## Integration Points
+
+### Existing Modules: What Changes vs. What Stays
+
+| Module | Change Required | Nature of Change |
+|--------|----------------|-----------------|
+| `src/app/api/chat/route.ts` | YES | Add auth check, accept `chatId` in body, add `onFinish` persistence |
+| `src/app/chat/page.tsx` | YES | Becomes redirect to `/chat/[id]` |
+| `src/app/chat/[id]/page.tsx` | NEW | Server Component: load chat, render ChatContent |
+| `src/components/chat-input.tsx` | MAYBE | Floor plan upload: replace base64 with Storage URL (separate upload step) |
+| `src/components/header.tsx` | MAYBE | Add share button, project name from DB title |
+| `src/components/sidebar.tsx` | YES | Fetch project list from Supabase instead of static data |
+| `src/lib/ai/tools.ts` | NO | Pure tool logic, no auth or persistence |
+| `src/lib/estimate/engine.ts` | NO | Pure calculation, unchanged |
+| `src/lib/pricing/` | NO | Static data, unchanged |
+| `src/lib/i18n/` | NO | Locale management, unchanged |
+
+### New External Service Boundaries
+
+| Boundary | Direction | Protocol |
+|----------|-----------|----------|
+| App → Supabase Auth | Server-side (middleware, route handlers) | Supabase JS client via @supabase/ssr |
+| App → Supabase Postgres | Server-side only (route handlers, Server Components) | Supabase JS client, never from client |
+| App → Supabase Storage | Server-side upload route + client direct upload | REST API via Supabase JS |
+| Client → Supabase Auth | Browser (login form, session check) | createBrowserClient |
+
+**Critical constraint:** Never call Supabase Postgres directly from Client Components. All data access goes through Server Components or API Route Handlers. The browser client is used only for Auth state and Storage uploads.
+
+---
+
+## Build Order (Dependency-Ordered)
+
+Dependencies flow top-to-bottom. Each layer unblocks the next.
+
+```
+Step 1 — Supabase Project Setup (no code)
+  Create Supabase project, run migrations, enable Storage bucket
+  Unblocks: everything
+
+Step 2 — Auth Infrastructure (no UI yet)
+  src/lib/supabase/server.ts
+  src/lib/supabase/client.ts
+  src/middleware.ts
+  app/auth/login/page.tsx          (magic link request form)
+  app/auth/confirm/route.ts        (token_hash callback)
+  Unblocks: all authenticated routes
+
+Step 3 — DB Access Layer
+  src/lib/db/chats.ts
+  src/lib/db/estimates.ts
+  src/lib/db/shares.ts
+  Unblocks: chat persistence, estimate versioning, share links
+
+Step 4 — Chat Route + Persistence (modifies existing code)
+  Modify app/api/chat/route.ts     (auth check + onFinish save)
+  Modify app/chat/page.tsx         (redirect to /chat/[id])
+  New app/chat/[id]/page.tsx       (load + render saved chat)
+  Unblocks: full persistence loop (send → save → reload)
+
+Step 5 — Estimate Versioning
+  Extend onFinish in route.ts to call saveEstimateVersion()
+  Add estimate history UI (optional for v1.1 MVP)
+  Unblocks: share links (need estimate IDs)
+
+Step 6 — Share Links
+  app/api/shares/route.ts          (create share token)
+  app/share/[token]/page.tsx       (public read-only view)
+  src/components/share-button.tsx
+  Unblocks: nothing (last feature)
+
+Step 7 — Floor Plan Storage (optional for v1.1)
+  app/api/floor-plan-upload/route.ts
+  Modify ChatInput to upload before sendMessage
+  Replaces base64 data URLs with Storage URLs
+```
+
+**Critical path:** Step 1 → Step 2 → Step 3 → Step 4. Cannot test persistence without auth. Cannot test auth without Supabase project.
+
+**Parallelizable:** Steps 5 and 6 can proceed in parallel once Step 4 is working. Step 7 is independent and can be deferred.
+
+---
+
+## Scaling Considerations
+
+| Scale | Architecture Adjustments |
+|-------|--------------------------|
+| 0–1k users (current) | Single JSONB column per chat for messages is fine; no indexing needed |
+| 1k–100k users | Add `updated_at` index on chats for "recent projects" queries; consider archiving old message arrays |
+| 100k+ users | Split messages into rows per message for fine-grained access; use Postgres LISTEN/NOTIFY for real-time updates |
+
+**First bottleneck:** The `messages` table stores entire `UIMessage[]` arrays that can be 100KB+ for long conversations. At scale, compress with `pg_compress` or move to a separate object store. For v1.1 this is not a concern.
+
+**Second bottleneck:** `onFinish` writes are synchronous server-side but async to the DB. If Supabase is slow, this doesn't block the stream. No action needed for v1.1.
+
+---
+
+## Anti-Patterns
+
+### Anti-Pattern 1: Calling Supabase Directly from Client Components
+
+**What people do:** Import `createBrowserClient` in client components and query Postgres tables directly.
+
+**Why it's wrong:** Exposes data access to the browser. Anon key is public, so the only protection is RLS. Any RLS mistake leaks data. Server Components + API routes give an extra defense layer.
+
+**Do this instead:** Query Postgres only in Server Components and API Route Handlers. Client Components get data via props (from Server Components) or via typed API routes.
+
+### Anti-Pattern 2: Using getSession() Instead of getUser() in Server Code
+
+**What people do:** Call `supabase.auth.getSession()` to check authentication in middleware or route handlers.
+
+**Why it's wrong:** `getSession()` reads the session from the cookie without re-validating with the Supabase Auth server. A forged or replayed cookie passes the check. `getUser()` makes a network call to verify the token.
+
+**Do this instead:** Always use `supabase.auth.getUser()` in server code. The Supabase docs state this explicitly: "Never trust `supabase.auth.getSession()` inside server code."
+
+### Anti-Pattern 3: Storing Base64 Images in the Messages JSONB
+
+**What people do (current v1.0):** Floor plan images are stored as data URLs in the AI SDK messages array, which gets persisted to the `messages` JSONB column.
+
+**Why it's wrong:** A single 1MB floor plan image becomes ~1.3MB of base64. Stored in JSONB, this makes every chat row 1–5MB. The AI SDK sends the full messages array on every turn — a 5MB body on every POST request.
+
+**Do this instead:** Upload floor plans to Supabase Storage before calling `sendMessage`. Store only the permanent Storage URL in the message. The AI SDK FileUIPart supports URLs natively.
+
+### Anti-Pattern 4: Generating Share Tokens Client-Side
+
+**What people do:** Generate a share token in the browser and POST it to the API.
+
+**Why it's wrong:** The client controls the token value. A malicious user could force a predictable token or enumerate tokens.
+
+**Do this instead:** Generate the token server-side in the API route handler (`nanoid(12)` in `app/api/shares/route.ts`). The client receives the generated token, never provides it.
+
+### Anti-Pattern 5: Protecting /share Routes with Auth Middleware
+
+**What people do:** Apply the auth redirect middleware to all routes including `/share/[token]`.
+
+**Why it's wrong:** Share pages are intentionally public. Redirecting unauthenticated users to login defeats the purpose of sharing.
+
+**Do this instead:** Exclude `/share/**` from the middleware's protected route matcher. RLS on the `estimates` table — scoped to valid share tokens — is the security boundary for share pages.
+
+---
+
+## Sources
+
+- [Supabase Server-Side Auth for Next.js](https://supabase.com/docs/guides/auth/server-side/nextjs) — SSR client patterns, middleware, cookie auth
+- [Supabase Creating a Client for SSR](https://supabase.com/docs/guides/auth/server-side/creating-a-client) — createServerClient/createBrowserClient with getAll/setAll
+- [Supabase Row Level Security Docs](https://supabase.com/docs/guides/database/postgres/row-level-security) — RLS policy syntax
+- [Supabase Storage Access Control](https://supabase.com/docs/guides/storage/security/access-control) — bucket RLS policies
+- [AI SDK v6 Chat Message Persistence](https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-message-persistence) — onFinish callback, initialMessages pattern
+- [AI SDK v6 Chatbot Docs](https://ai-sdk.dev/docs/ai-sdk-ui/chatbot) — useChat hook initialMessages, transport config
+- [Vercel AI SDK Discussion #4845](https://github.com/vercel/ai/discussions/4845) — Community guidance on persisting messages
+- [Ryan Katayi — Server-Side Auth in Next.js with Supabase](https://www.ryankatayi.com/blog/server-side-auth-in-next-js-with-supabase-my-setup) — Complete middleware.ts + confirm route patterns (MEDIUM confidence — community source, patterns match official docs)
+
+---
+
+*Architecture research for: Nelo v1.1 — Supabase persistence integration*
+*Researched: 2026-03-21*

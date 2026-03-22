@@ -1,295 +1,265 @@
-# Nelo — Feature Research: Construction Cost Estimation Products
+# Feature Research: Persistence & Sharing (v1.1 Milestone)
 
-*Research date: 2026-03-20. Context: 24-hour hackathon, AMBA region, AI chatbot estimator.*
+**Domain:** Auth + chat persistence + estimate versioning + shareable links for an existing Next.js 16 AI chatbot
+**Researched:** 2026-03-21
+**Confidence:** HIGH (auth, persistence patterns) / MEDIUM (versioning UX, sharing patterns)
 
----
-
-## 1. Table Stakes — Must-Have or Users Leave
-
-These are features that every credible construction cost estimator provides. Users trained by RSMeans, ProEst, Clear Estimates, or Handoff AI will expect them and will distrust or abandon an app that lacks them.
-
-### 1.1 Cost Output (the absolute minimum)
-
-| Feature | Why it's required | Competitive evidence |
-|---|---|---|
-| Price per m2 (or sqft) | Primary mental model for construction buyers; first thing an architect or homeowner asks | Every product from RSMeans to ConstruCalc surfaces this |
-| Total project cost | The actual number a budget decision hinges on | Universal across all products |
-| Category-by-category breakdown | Validates the total; lets users spot-check or challenge line items | RSMeans: 85k+ unit prices by division. ProEst: 23k+ line items. Clear Estimates: 12k parts |
-| Itemized line items within each category | Supports "why does this cost that?" questions | ProEst, RSMeans both expose material + labor + equipment splits |
-
-Without a breakdown, the output is a black box. Users in the construction industry — even consumers — know roughly what structure, finishes, and MEP should cost as a share of total. A single number with no breakdown earns no trust.
-
-### 1.2 Input Collection
-
-| Feature | Why it's required | Notes |
-|---|---|---|
-| Area (m2) collection | The single most important input; drives 60-70% of all quantities | Without it, no calculation is possible |
-| Room/space type identification | Bathrooms and kitchens are cost multipliers (plumbing, tile, fixtures) | Clear Estimates uses templates per space type |
-| Basic specification selection | Standard vs. premium finishes changes cost 40-60% | All tools offer quality tiers |
-| Transparent assumptions | When data is missing, state the assumed value | Builds trust; users can correct assumptions |
-
-### 1.3 Calculation Integrity
-
-| Feature | Why it's required | Notes |
-|---|---|---|
-| Localized pricing | National averages are useless; users know local market | Clear Estimates covers 400+ US areas. AMBA needs its own table |
-| Quantity derivation from base measurements | Users don't know how many m2 of paint or ml of baseboard they need | The core algorithm: ~14 inputs → ~80 line items |
-| Recalculation when inputs change | Real-time updates as the conversation collects more data | Users expect immediate feedback; static outputs feel broken |
-
-### 1.4 What Professional Users (RSMeans / ProEst Users) Expect
-
-Professional estimators (architects, engineers, contractors) using ProEst or RSMeans expect:
-- MasterFormat or equivalent category structure (familiar taxonomy)
-- Material + labor split per line item
-- Ability to override any value
-- A result that matches what a quantity surveyor would produce within ±20%
-
-Nelo serves this via the 21-category presupuesto de obra structure, which maps directly to Argentine professional conventions. The professional mode (15+ questions) targets this persona.
-
-### 1.5 What Consumer Users (Handoff AI / Clear Estimates Users) Expect
-
-Consumers (homeowners, small developers) expect:
-- Fast time-to-estimate (Handoff: "within a minute")
-- Plain language — no construction jargon required
-- A single "ballpark" number they can use to get a bank loan or decide whether to proceed
-- Guidance on what questions to answer, not an empty form to fill
-
-This is the consumer mode (8 questions) persona.
+> This file replaces the previous hackathon-scoped FEATURES.md. It focuses exclusively on
+> features being added in milestone v1.1. The original feature research (Table Stakes, AI chat,
+> floor plan, calculation engine) is complete and delivered.
 
 ---
 
-## 2. Differentiators — Competitive Advantage
+## Feature Landscape
 
-These are features that Nelo can use to differentiate from existing products in the Argentine/LatAm market.
+### Table Stakes (Users Expect These)
 
-### 2.1 AI Chatbot Interface (Conversational Data Collection)
+Features users assume exist in any product that requires a login. Missing any of these makes
+the product feel unfinished or untrustworthy.
 
-**Competitive gap:** No AI-first conversational estimator exists for the Argentine/LatAm market. DATAOBRA and Foco en Obra are form-based, desktop-era tools.
+| Feature | Why Expected | Complexity | Notes |
+|---------|--------------|------------|-------|
+| Auto-save chat messages | Users expect their work to survive a refresh or tab close — the pattern set by ChatGPT, Claude.ai | MEDIUM | Save on every AI response completion via `onFinish` callback; not on every keystroke |
+| Restore previous session on page load | Returning to `/chat/[id]` should show the full conversation history | LOW | Pass `initialMessages` to `useChat`; load from DB server-side |
+| Project list for returning users | A home page that shows "your past estimates" — without this, previous conversations are permanently lost | MEDIUM | Dashboard page listing projects by last-updated date |
+| Magic link email auth | Passwordless auth is now the expected UX for low-friction products; no user wants to create a password for a niche tool | LOW | Supabase `signInWithOtp` with email template configured as magic link |
+| Session persistence across tabs | Logging in once should work everywhere in the same browser | LOW | Supabase SSR client + cookie-based session; handled by `@supabase/ssr` |
+| Sign out | Obvious omission if missing | LOW | Single call to `supabase.auth.signOut()` |
 
-**Why it matters:** Shifting tedious form-filling into conversation increases completion rates significantly (documented in financial services; same dynamic applies here). Users who don't know construction terminology can describe their project in natural language and let the AI map it to structured fields.
+### Differentiators (Competitive Advantage)
 
-**What makes it good vs. gimmicky:**
-- The conversation must have a clear goal state (all required inputs collected)
-- Quick-reply buttons / structured options should supplement free text — pure open chat is slow for known-answer questions ("how many floors?" should offer 1/2/3/4+ buttons)
-- The AI should explain *why* it's asking each question ("I need the perimeter to calculate wall area")
-- Progress should be visible — users get anxious in an unbounded conversation
+Features that go beyond baseline expectations and create genuine product value.
 
-**Complexity: Medium.** AI SDK tools with Zod schemas handle structured extraction. The hard part is the system prompt design and conversation flow, not the plumbing.
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| OTP fallback in same email flow | When user opens magic link on a different device than they requested from, a 6-digit code in the same email lets them complete auth without switching devices — Okta, Supabase both support this as a dual-template approach | MEDIUM | Include both `{{ .ConfirmationURL }}` and `{{ .Token }}` in Supabase email template; UI shows "click the link OR enter the code below" |
+| Estimate versioning (snapshots) | Every time the user re-estimates (changes inputs, re-runs the calculation), the old estimate is preserved as a named version rather than overwritten — construction projects evolve and architects need to justify cost changes to clients | HIGH | Store each estimate result as an immutable snapshot with a `version` number and `created_at`; never mutate previous snapshots |
+| Side-by-side estimate comparison | View v1 and v2 estimates next to each other with delta indicators (arrows + percentages per category) — the key question is always "why did it change?" | HIGH | Comparison view as `/chat/[id]/compare?a=1&b=2`; diff computed client-side from two snapshot objects |
+| Shareable read-only estimate link | Share a final estimate with a client or collaborator without requiring them to create an account — the estimate is a deliverable | MEDIUM | Public URL `/share/[shareToken]`; token stored in `estimates` table; RLS policy allows anon read on matching token |
+| Floor plan storage (Supabase Storage) | Replace in-memory base64 with a persisted file URL so floor plans survive sessions and can be re-analyzed | MEDIUM | Private bucket with RLS; store path in `messages` or `chats` table; generate signed URL for display |
+| Named projects | Users can rename "Conversation 1" to "Casa Palermo 3BR" — improves the project list UX significantly | LOW | Editable `title` field on `chats` table; inline rename in the project list |
 
-### 2.2 Floor Plan Vision Analysis
+### Anti-Features (Commonly Requested, Often Problematic)
 
-**Competitive gap:** Handoff AI accepts "blueprints, photos, videos" but its extraction quality is opaque. No Argentine product does this at all.
+Features that seem valuable but create disproportionate complexity or undermine the UX.
 
-**Why it matters:** Eliminates the most tedious part of input collection. A floor plan upload can auto-populate 60-70% of required inputs (area, room counts, door/window counts, perimeter estimate).
-
-**Known limitation:** General LLMs achieve ~12% accuracy on precise measurements. Vision extracts *approximate* values, not survey-grade dimensions. This is a feature, not a bug — the user confirmation flow turns it into a trust-building moment.
-
-**What makes it good vs. gimmicky:**
-- Always show extracted values to the user before using them in the calculation
-- Frame it as "I found these values — do they look right?" not "I analyzed your floor plan precisely"
-- Allow field-by-field correction inline
-- If confidence is low on a value, ask rather than assume
-
-**Complexity: Medium-High.** Vision call + extraction prompt + confirmation UI is 3 pieces. The confirmation flow is the most complex UX piece.
-
-### 2.3 Spanish/English Multi-Language Support
-
-**Competitive gap:** RSMeans, ProEst, Clear Estimates, Handoff are English-only. Zero competition in Spanish.
-
-**Why it matters:** Primary persona is an Argentine user. A product in Spanish with Argentine construction terminology (presupuesto de obra, azotea, contrapisos, revoques) immediately signals local expertise.
-
-**What makes it good vs. gimmicky:**
-- Spanish must use Argentine conventions (vos, not tú; peso amounts, not dollar amounts)
-- Construction terms should be Argentine standard (carpinterias, not ventanas/puertas separately)
-- English mode is a differentiator for international architects or consultants comparing options
-
-**Complexity: Low.** Claude is excellent in Spanish. System prompt in Spanish, UI strings in both languages. No translation layer needed — the LLM handles natural language in both.
-
-### 2.4 Real-Time Calculation Updates
-
-**Competitive gap:** Most tools require "submit" and show a static result. Nelo can update the estimate live as each conversation turn adds more data.
-
-**Why it matters:** Users see the estimate improving in real time, which makes the conversation feel purposeful and demonstrates how each input affects cost. This is a UX advantage over form-based tools.
-
-**What makes it good vs. gimmicky:**
-- Only update when a meaningful new input is collected (not on every message)
-- Show a "with current info" qualifier on partial estimates
-- Animate the update so users notice the change
-
-**Complexity: Medium.** Requires keeping a running state of collected inputs and re-running the calculation engine whenever that state changes. The engine is deterministic so recalculation is cheap.
-
-### 2.5 Confidence / Accuracy Indicators
-
-**Competitive gap:** Professional tools (InEight, RSMeans) acknowledge estimate classes (ASPE Class 1-5, ranging from ±5% to ±75%) but don't surface this clearly to consumers. No consumer tool shows confidence explicitly.
-
-**Why it matters:** A single number without context is dangerous. An estimate based on only area + room count has ±40% accuracy. An estimate with full measurements + specification choices has ±15%. Users need to know which they're getting. This builds trust and incentivizes completing the conversation.
-
-**What to show:**
-- Three tiers: Quick (few inputs, ±40-50%), Standard (most inputs, ±20-25%), Detailed (all inputs, ±10-15%)
-- Show which inputs are still missing and how they would affect accuracy
-- Label prominently: "This is a conceptual estimate. A professional quantity surveyor will produce a precise figure."
-
-**Complexity: Low.** This is a display feature. Count collected inputs → determine tier → show label + range. No ML needed.
-
-### 2.6 Professional vs. Consumer Modes
-
-**Competitive gap:** Tools are either consumer-simple (Handoff) or professional-complex (RSMeans/ProEst). No product adapts to both within a single session.
-
-**Why it matters:** An architect wants to specify ceiling height, story count, finish quality per room, azotea type, and window sizes. A homeowner wants to say "3-bedroom house, mid-range finishes" and get a number. Forcing the architect through a simplified flow loses precision; forcing the homeowner through 15+ questions loses them.
-
-**What makes it good vs. gimmicky:**
-- Mode should be auto-detected or asked once at the start, not buried in settings
-- Professional mode unlocks additional question branches, not a completely different app
-- Consumer mode uses sensible defaults for all professional inputs (stated explicitly in the output)
-
-**Complexity: Low-Medium.** Implemented as a flag in the system prompt that controls which question branches the AI pursues and how deeply it probes each input.
+| Feature | Why Requested | Why Problematic | Alternative |
+|---------|---------------|-----------------|-------------|
+| Real-time sync across tabs | "If I have two tabs open, they should stay in sync" | Requires Supabase Realtime subscriptions, conflict resolution, and message ordering logic — significant complexity for a use case almost no construction estimator actually has | Each tab is independent; new messages from other tabs appear on next page load. Document this as a known limitation. |
+| Partial message save (mid-stream) | "Save the message even if the user closes the tab mid-stream" | Streaming means the message is incomplete when the tab closes. Saving a partial assistant message creates a broken state — the message looks done but is truncated with no indicator | Use `consumeStream()` on the server so the stream runs to completion and `onFinish` fires even after client disconnect. The user won't see the live stream but the message will be there when they reload. |
+| Branching conversation history | "Let me fork the conversation at message 5 and try a different answer" | Full branching requires a tree data structure, branch management UI, and branch-aware estimate calculation — this is a v3 feature at minimum | Estimate versioning (snapshots) solves 80% of the use case without tree complexity. Each re-estimate is a new snapshot off the same linear conversation. |
+| Email digest / notifications | "Send me my estimate by email" | Requires transactional email setup (Resend/Sendgrid), email templates, unsubscribe flows, and deliverability management | Shareable links solve the same problem. User shares the URL instead of getting an email. |
+| Share-to-social (WhatsApp, etc.) | Sharing an estimate on social media | Construction estimates are private financial documents. Social sharing of cost data is a trust liability, not a feature. Users share with specific people, not publicly. | Navigator Web Share API lets users share the link themselves through their preferred channel. No app-level integration needed. |
+| Password auth alongside magic link | "Some users prefer passwords" | Adds a second auth path that requires password reset flows, lockout handling, and credential storage. No user who uses a construction estimator twice a month needs a password. | Magic link + OTP covers all cases. If the user can't access email, they can't use the product (acceptable for this use case). |
+| Export to PDF | Already marked as out of scope in PROJECT.md; will come up again | Requires PDF rendering logic, layout decisions, and file storage. `window.print()` with `@media print` CSS is a 1-hour solution that satisfies 80% of the need. | Add print-optimized CSS to the estimate breakdown view. Defer real PDF export to v2. |
 
 ---
 
-## 3. Anti-Features — Deliberately NOT Building
-
-These are features that look appealing but should be excluded from the hackathon MVP. Each one carries implementation cost that exceeds its value within the 24-hour window.
-
-### 3.1 Real-Time Pricing APIs
-
-**Why it looks good:** Live peso/m2 data from INDEC, UOCRA, or materials suppliers would make the estimate current.
-
-**Why to skip:** API integration, auth, error handling, rate limits, and Argentine API reliability add 4-6 hours of risk for zero UX improvement in a demo. A hardcoded reference table updated at a known date is more honest and more reliable. Build the swap-in seam; don't build the integration.
-
-### 3.2 CAD File Parsing (DXF/DWG)
-
-**Why it looks good:** Architects use DXF/DWG. Supporting them signals professional credibility.
-
-**Why to skip:** Parsing binary CAD formats requires specialized libraries, coordinate transformation, and layer interpretation. This is a full engineering project, not a hackathon feature. Vision analysis of exported images (PNG/JPG/PDF) achieves 80% of the value.
-
-### 3.3 User Accounts and Project Persistence
-
-**Why it looks good:** Saves estimates for later, supports multiple projects, enables email delivery.
-
-**Why to skip:** Auth + database + session management adds 6-8 hours of plumbing. A hackathon demo lives in a single session. Persistence can be added in V2 when the core calculation engine is validated.
-
-### 3.4 Multi-Region Support (Beyond AMBA)
-
-**Why it looks good:** "Latin America" is a bigger market than Buenos Aires.
-
-**Why to skip:** Each region needs its own pricing table, construction norms, and category conventions. AMBA is a well-defined, single-source market. Expanding before the model is validated wastes effort on data problems, not product problems.
-
-### 3.5 3D Visualization / Building Renders
-
-**Why it looks good:** Wow factor in a demo.
-
-**Why to skip:** Zero relationship to cost estimation accuracy. Adds complexity with no feedback signal. Users evaluating an estimator care about number accuracy, not visuals.
-
-### 3.6 Subcontractor / Supplier Integration
-
-**Why it looks good:** "Get quotes from local contractors" closes the loop from estimate to procurement.
-
-**Why to skip:** Requires a supplier directory, quote request flow, and response handling. This is a marketplace product, not an estimator. Scope creep of the highest order.
-
-### 3.7 Historical Project Comparisons / ML Learning
-
-**Why it looks good:** "Learn from past projects to improve accuracy" is a compelling narrative.
-
-**Why to skip:** Requires a dataset of completed Argentine projects with actual costs. That data doesn't exist for V1. The hardcoded AMBA reference table is already the best available data.
-
-### 3.8 Bid Document / Contract Generation
-
-**Why it looks good:** Handoff AI does this; it looks like a complete workflow.
-
-**Why to skip:** Legal document generation in Argentina requires compliance review. Well outside scope for a 24-hour product. The estimate output is the product — stop there.
-
-### 3.9 Mobile App (Native iOS/Android)
-
-**Why it looks good:** Construction professionals work on-site on phones.
-
-**Why to skip:** Next.js is mobile-responsive. A native app build adds platform-specific deployment complexity. The web app running on a phone is sufficient for a hackathon demo.
-
----
-
-## 4. Feature Complexity Estimates (Hackathon Context)
-
-Estimates assume 4 developers with TypeScript/React experience, AI SDK familiarity, and 24 hours total. Complexity is in dev-hours.
-
-| Feature | Complexity | Hours | Risk |
-|---|---|---|---|
-| Calculation engine (21 categories, ~80 line items) | High | 6-8h | Medium — math is deterministic but 80 line items need careful testing |
-| AI chatbot conversation flow + tools | High | 4-6h | Medium — system prompt iteration is time-consuming |
-| Cost breakdown display UI | Medium | 2-3h | Low — table/card layout with totals |
-| Consumer / professional mode flag | Low | 1h | Low |
-| Price per m2 + total output | Low | 0.5h | Low — derived from engine output |
-| Confidence tier indicator | Low | 1h | Low — input count → label |
-| Real-time recalculation on input update | Medium | 2h | Low — engine is pure function, re-run on state change |
-| Floor plan upload + vision call | Medium | 2-3h | Medium — vision prompt tuning |
-| Floor plan confirmation/correction UI | Medium | 2-3h | Medium — inline editing UX |
-| Spanish / English language support | Low | 1h | Low — system prompt + UI strings |
-| Hardcoded AMBA pricing table | Low | 1-2h | Low — data entry, not engineering |
-| PDF export (nice-to-have) | Medium | 2-3h | Low — react-pdf or browser print |
-| **Total (core)** | | **~20-24h** | |
-
-Note: Core = chatbot + engine + breakdown display + mode + confidence + basic floor plan. PDF export is stretch.
-
----
-
-## 5. Feature Dependencies
+## Feature Dependencies
 
 ```
-AMBA pricing table
-    └── Calculation engine
-            ├── Price per m2 output
-            ├── Total price output
-            ├── Category breakdown display
-            ├── Real-time recalculation
-            └── Confidence tier indicator
+Supabase Auth (magic link + OTP)
+    └──required by──> ALL persistence features
+                          (unauthenticated users can only use the anonymous chat flow)
 
-AI chatbot (conversation flow + AI SDK tools)
-    ├── Consumer / professional mode
-    ├── Structured input state (Zod schemas)
-    │       ├── Calculation engine (feeds into)
-    │       └── Confidence tier indicator (input completeness check)
-    └── Floor plan vision call
-            └── Floor plan confirmation/correction UI
-                    └── Structured input state (merges extracted values)
+Chat Persistence (auto-save messages)
+    └──required by──> Project List (need chats to list)
+    └──required by──> Estimate Versioning (need persisted estimates to version)
+    └──required by──> Floor Plan Storage (need chat context to link file to)
 
-Calculation engine
-    └── PDF export (renders engine output)
+Estimate Versioning
+    └──required by──> Side-by-Side Comparison (need >=2 versions to compare)
+
+Chat Persistence ──enables──> Shareable Links
+    (shareable link references a persisted estimate snapshot)
+
+Floor Plan Storage (Supabase Storage bucket)
+    └──replaces──> In-memory base64 in existing useChat attachment flow
+    └──requires──> Chat Persistence (to store the file path alongside the message)
+
+useChat streaming flow (EXISTING)
+    └──constrains──> Chat Persistence implementation
+    (must use onFinish callback pattern; cannot intercept mid-stream)
 ```
 
-### Critical Path
+### Dependency Notes
 
-The calculation engine is the hardest dependency. Everything else is presentation or input collection. If the engine isn't working, there is nothing to show.
-
-**Recommended build order:**
-1. AMBA pricing table + calculation engine (testable in isolation, no UI needed)
-2. Hardcode a single example input → verify engine outputs correct breakdown
-3. AI chatbot conversation flow with tools (collects structured inputs)
-4. Cost breakdown display UI (connects engine output to screen)
-5. Confidence tier indicator (trivial once input state exists)
-6. Consumer/professional mode (single flag in system prompt)
-7. Real-time recalculation (connect state changes to engine re-run)
-8. Floor plan upload + vision call (parallel track if bandwidth allows)
-9. Floor plan confirmation UI (depends on vision call)
-10. PDF export (if time remains)
-
-### Risk Notes
-
-- **Engine risk:** The 21-category structure requires quantity derivation formulas (e.g., wall area = perimeter × height × stories − openings). These must be correct or all outputs are wrong. Prioritize unit tests on the engine.
-- **Vision risk:** Floor plan extraction quality is unpredictable. Build the manual input path first; treat vision as an enhancement, not a dependency.
-- **Conversation flow risk:** Getting the AI to reliably call the right tools in the right order requires prompt iteration. Budget time for this; it cannot be rushed.
+- **Auth required by everything:** Without a `user_id`, there is nothing to scope chats or estimates to. Auth must be phase 1.
+- **Chat persistence required by versioning:** Estimate versions are snapshots of data that first needs to exist in the database. Persistence must come before versioning.
+- **Existing `useChat` constrains persistence:** The current chat uses AI SDK `useChat` hook. Persistence must integrate via the `onFinish` callback on the server-side `streamText` call and `initialMessages` on the client — not by replacing `useChat`.
+- **Floor plan storage is independent:** Can be added alongside or after basic chat persistence. The base64 approach already works; storage is an upgrade, not a blocker.
 
 ---
 
-## 6. Summary: What Wins the Hackathon
+## MVP Definition
 
-The combination of features that no competitor offers in the Argentine market, and that can be built in 24 hours:
+### Launch With (v1.1 core)
 
-1. **Conversational input collection** — zero-friction, no form, no jargon
-2. **21-category Argentine presupuesto de obra output** — domain-specific, professional-grade
-3. **Floor plan upload → auto-populate inputs** — the demo moment
-4. **Confidence indicator** — honest about uncertainty, builds trust
-5. **Spanish-first** — speaks the user's language, literally
+Minimum needed to call the milestone "done" and deliver real user value.
 
-The engine + conversation + breakdown display is the irreducible core. Everything else is a multiplier.
+- [x] **Supabase Auth (magic link)** — without this, nothing is persisted per-user; also unblocks all downstream features
+- [x] **Chat auto-save on `onFinish`** — saves the full `UIMessage[]` array after each AI response; handles disconnect via `consumeStream()`
+- [x] **Load chat history on page load** — `useChat` initialized with `initialMessages` from DB; `/chat/[id]` restores full conversation
+- [x] **Project list page** — returning users can see and navigate their past estimates; simplest useful UI is a list sorted by `updated_at`
+- [x] **Estimate snapshot on calculate** — when the calculation engine produces a final cost breakdown, save it as an immutable snapshot linked to the chat; this is the foundation for versioning
+
+### Add After Validation (v1.1 stretch)
+
+Features to add once core persistence is working and verified correct.
+
+- [ ] **OTP fallback in email template** — add `{{ .Token }}` to the Supabase magic link email template and show "or enter code" UI; low effort, high value for mobile users
+- [ ] **Named projects (rename)** — inline rename of chat title; adds 1-2 hours, meaningfully improves returning-user UX
+- [ ] **Shareable estimate links** — generate a `shareToken` (nanoid) stored on the estimate snapshot; create a public `/share/[token]` route with anon RLS read access
+- [ ] **Floor plan storage** — upload to Supabase Storage private bucket; replace base64 in `messages` with a signed URL; prevents large base64 strings from bloating the `messages` table
+
+### Future Consideration (v2+)
+
+Features to defer until the persistence foundation is solid and validated.
+
+- [ ] **Side-by-side estimate comparison** — requires the UX design to be right; don't rush this; wait until there are real users with multiple versions to compare
+- [ ] **Estimate versioning UI** — a timeline/history view per chat showing previous estimate snapshots; useful but not urgent for launch
+- [ ] **Anon-to-auth session migration** — allow users who built an estimate before signing in to "claim" it post-auth; complex state migration, low priority
+- [ ] **Shared link expiry** — time-limited share tokens (7-day, 30-day); adds a cron job and token expiry check; not needed until sharing is validated as a real use pattern
 
 ---
 
-*Sources consulted: RSMeans Data Online, ProEst (Autodesk), Clear Estimates, Handoff AI (YC), DATAOBRA, Foco en Obra, iBeam AI, InEight Estimate, Zebel conceptual estimating, NN/G chatbot UX research, ASPE estimate classification standards.*
+## Feature Prioritization Matrix
+
+| Feature | User Value | Implementation Cost | Priority |
+|---------|------------|---------------------|----------|
+| Magic link auth | HIGH | LOW | P1 |
+| Chat auto-save (onFinish) | HIGH | MEDIUM | P1 |
+| Load chat history on page load | HIGH | LOW | P1 |
+| Project list page | HIGH | MEDIUM | P1 |
+| Estimate snapshot on calculate | HIGH | LOW | P1 |
+| OTP fallback (same email) | MEDIUM | LOW | P2 |
+| Named projects (rename) | MEDIUM | LOW | P2 |
+| Shareable estimate links | HIGH | MEDIUM | P2 |
+| Floor plan Supabase Storage | MEDIUM | MEDIUM | P2 |
+| Side-by-side comparison | MEDIUM | HIGH | P3 |
+| Estimate version history UI | MEDIUM | HIGH | P3 |
+| Anon-to-auth session migration | LOW | HIGH | P3 |
+| Shared link expiry / revoke | LOW | MEDIUM | P3 |
+
+---
+
+## Edge Cases and UX Patterns
+
+### Auth
+
+| Edge Case | Expected Behavior |
+|-----------|------------------|
+| Magic link clicked on different device than it was requested from | OTP code in the same email lets the user complete auth on the original device; do NOT open a new session silently on the new device |
+| Magic link expired (default 1 hour) | Show "this link has expired — request a new one" with a re-send button; do not just show a generic error |
+| User clicks magic link twice | Supabase invalidates the token after first use; second click should redirect to app home (already authenticated) |
+| User is already logged in and visits `/login` | Redirect to `/` or the project list |
+| Session expires mid-session | Supabase sessions are long-lived (7 days by default); on expiry, show auth prompt inline rather than losing draft |
+
+### Chat Persistence
+
+| Edge Case | Expected Behavior |
+|-----------|------------------|
+| Tab closed mid-stream (client disconnect) | `consumeStream()` on the server keeps stream running; `onFinish` fires; message saved; user sees complete message on reload |
+| Two tabs open, both sending messages to the same chat | Each tab saves independently via `onFinish`; last-write-wins on the messages array; this is a known limitation (no real-time sync) — acceptable for a single-user estimator |
+| Stream errors (LLM timeout, API error) | The error message itself should be saved (with `status: "error"`) so the user sees "something went wrong" after reload rather than a blank chat |
+| Very long chat (50+ messages) | Load full history on page load (no pagination needed for a construction estimator — conversations are bounded by the number of questions in the flow) |
+| User deletes a chat | Soft-delete (`deleted_at` timestamp) so data is recoverable; do not hard-delete |
+| First message in a chat — auto-title | On first user message, generate a title from the first ~50 characters of their message. Do not require the user to name a project before they can start. |
+
+### Estimate Versioning
+
+| Edge Case | Expected Behavior |
+|-----------|------------------|
+| User re-runs estimate without changing inputs | Save a new snapshot anyway — timestamps tell the story; do not deduplicate |
+| User wants to go back to an older estimate | All snapshots are read-only immutable records; "restore" means starting a new conversation initialized from the old snapshot's inputs |
+| First estimate in a chat | `version: 1`; always the baseline |
+| Comparison of more than 2 versions | Comparison view should support selecting any two snapshots from a dropdown; default to latest vs. previous |
+
+### Shareable Links
+
+| Edge Case | Expected Behavior |
+|-----------|------------------|
+| Recipient tries to edit a shared estimate | Read-only view; no chat input shown; show "Sign in to create your own estimate" CTA |
+| Share token is revoked by owner | 404 page with message "this estimate is no longer available" |
+| Shared estimate references a floor plan in private storage | Floor plan images in shared views must use signed URLs generated server-side at render time; never expose the internal storage path |
+| Anonymous user visits a shareable link | No auth required; the anon Supabase key can read the estimate via RLS policy that allows `SELECT WHERE share_token = $1` |
+
+---
+
+## Interaction With Existing `useChat` Flow
+
+The existing implementation uses:
+- Client: `useChat` hook from `@ai-sdk/react`
+- Server: `streamText` in a Next.js route handler returning `toUIMessageStreamResponse()`
+- No persistence today
+
+The persistence layer must slot in WITHOUT replacing `useChat`. The required integration points are:
+
+1. **Server — `onFinish` callback** on `toUIMessageStreamResponse`: receives `UIMessage[]` after stream completes; this is where `await saveMessages(chatId, messages)` goes.
+2. **Server — `consumeStream()`**: wrap the result to ensure `onFinish` fires even on client disconnect: `result.consumeStream()` before returning the response.
+3. **Client — `id` prop on `useChat`**: pass the chat ID so the hook tracks which conversation it's in.
+4. **Client — `initialMessages` prop on `useChat`**: pass messages loaded server-side (in the RSC page) to restore history.
+5. **Route — `/chat/[id]`**: each chat needs its own URL; the existing single-route approach (`/`) must become parameterized.
+
+These are additive changes. None require replacing `useChat` or changing the streaming behavior.
+
+---
+
+## Schema Outline (for ARCHITECTURE.md reference)
+
+```
+chats
+  id          text  PK (nanoid)
+  user_id     uuid  FK auth.users
+  title       text  (auto-generated or user-renamed)
+  created_at  timestamp
+  updated_at  timestamp
+  deleted_at  timestamp  (soft delete)
+
+messages
+  id          text  PK (server-generated via generateMessageId)
+  chat_id     text  FK chats.id
+  content     jsonb (UIMessage[] serialized — preserves parts, tool calls, attachments)
+  created_at  timestamp
+
+estimates
+  id          text  PK (nanoid)
+  chat_id     text  FK chats.id
+  version     int   (monotonically incrementing per chat)
+  snapshot    jsonb (full cost breakdown object — immutable after insert)
+  inputs      jsonb (the 14 base measurements used to produce this estimate)
+  share_token text  UNIQUE (nanoid, nullable — only present when shared)
+  share_expires_at timestamp (nullable — v2 feature)
+  created_at  timestamp
+
+storage bucket: floor-plans (private, RLS: owner read/write)
+  path pattern: {user_id}/{chat_id}/{filename}
+```
+
+RLS summary:
+- `chats`: user can SELECT/INSERT/UPDATE/DELETE their own rows; anon cannot access.
+- `messages`: same as chats, scoped by `chat_id` → `chats.user_id`.
+- `estimates`: owner full access; anon can SELECT WHERE `share_token = $1` (no auth required for that path).
+- `floor-plans` bucket: owner can upload/download; no anon access (signed URLs used for shared views).
+
+---
+
+## Sources
+
+- [AI SDK UI: Chatbot Message Persistence](https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-message-persistence) — official `onFinish` + `consumeStream` patterns
+- [AI SDK Core: streamText reference](https://ai-sdk.dev/docs/reference/ai-sdk-core/stream-text) — callback API
+- [Supabase Auth: Passwordless email logins](https://supabase.com/docs/guides/auth/auth-email-passwordless) — magic link + OTP same flow
+- [Supabase Auth: Login with Magic Link](https://supabase.com/docs/guides/auth/passwordless-login/auth-magic-link) — token expiry, `shouldCreateUser`
+- [Supabase Auth: Use with Next.js](https://supabase.com/docs/guides/auth/quickstarts/nextjs) — App Router SSR pattern
+- [Supabase Storage: Access Control](https://supabase.com/docs/guides/storage/security/access-control) — private buckets + RLS
+- [Supabase Storage: Signed URLs](https://supabase.com/docs/reference/javascript/storage-from-createsignedurl) — time-limited access for private files
+- [supabase-community/vercel-ai-chatbot](https://github.com/supabase-community/vercel-ai-chatbot) — reference implementation for Supabase + AI SDK chat persistence
+- [AI SDK v5 announcement (Vercel)](https://vercel.com/blog/ai-sdk-5) — `parts`-based message format, persistence patterns
+- [Okta: Email Magic Links + OTP fallback](https://developer.okta.com/docs/guides/email-magic-links-overview/main/) — dual-option auth UX pattern
+- [Stream resumption issue (vercel/ai #11865)](https://github.com/vercel/ai/issues/11865) — tab switch / background app stream recovery known issue
+- [Durable Sessions for AI apps (ElectricSQL)](https://electric-sql.com/blog/2026/01/12/durable-sessions-for-collaborative-ai) — concurrent tab / collaborative session patterns
+
+---
+
+*Feature research for: Nelo v1.1 — Persistence & Sharing*
+*Researched: 2026-03-21*
