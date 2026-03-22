@@ -9,11 +9,11 @@ import {
 } from "./icons";
 import { useLocale } from "@/lib/i18n/use-locale";
 
-type Tab = "chat" | "estimates" | "blueprints" | "profile";
+type Tab = "chat" | "projects" | "blueprints" | "profile";
 
 const tabs: { id: Tab; labelKey: string; icon: typeof IconChat; href: string }[] = [
   { id: "chat", labelKey: "mobileNav.chat", icon: IconChat, href: "/chat" },
-  { id: "estimates", labelKey: "mobileNav.estimates", icon: IconEstimates, href: "/projects" },
+  { id: "projects", labelKey: "mobileNav.projects", icon: IconEstimates, href: "/projects" },
   { id: "blueprints", labelKey: "mobileNav.blueprints", icon: IconBlueprints, href: "#" },
   { id: "profile", labelKey: "mobileNav.profile", icon: IconProfile, href: "#" },
 ];

@@ -17,15 +17,15 @@ describe("Sidebar", () => {
   it("renders navigation links", () => {
     renderWithLocale(<Sidebar />);
     expect(screen.getByText("Dashboard")).toBeInTheDocument();
-    expect(screen.getByText("Estimates")).toBeInTheDocument();
+    expect(screen.getByText("Projects")).toBeInTheDocument();
     expect(screen.getByText("Blueprints")).toBeInTheDocument();
     expect(screen.getByText("Settings")).toBeInTheDocument();
   });
 
   it("highlights the active nav item", () => {
-    renderWithLocale(<Sidebar activeItem="estimates" />);
-    const estimatesLink = screen.getByText("Estimates").closest("a");
-    expect(estimatesLink).toHaveClass("bg-primary");
+    renderWithLocale(<Sidebar activeItem="projects" />);
+    const projectsLink = screen.getByText("Projects").closest("a");
+    expect(projectsLink).toHaveClass("bg-primary");
   });
 
   it("is hidden on mobile by default", () => {

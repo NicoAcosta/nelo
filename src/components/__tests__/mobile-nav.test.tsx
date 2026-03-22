@@ -11,7 +11,7 @@ describe("MobileNav", () => {
   it("renders bottom navigation tabs", () => {
     renderWithLocale(<MobileNav />);
     expect(screen.getByText("Chat")).toBeInTheDocument();
-    expect(screen.getByText("Estimates")).toBeInTheDocument();
+    expect(screen.getByText("Projects")).toBeInTheDocument();
     expect(screen.getByText("Blueprints")).toBeInTheDocument();
     expect(screen.getByText("Profile")).toBeInTheDocument();
   });

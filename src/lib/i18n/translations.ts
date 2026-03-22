@@ -8,7 +8,7 @@ const en: Translations = {
   // sidebar
   "sidebar.brandSubtitle": "Project Architect",
   "sidebar.dashboard": "Dashboard",
-  "sidebar.estimates": "Estimates",
+  "sidebar.projects": "Projects",
   "sidebar.blueprints": "Blueprints",
   "sidebar.settings": "Settings",
   "sidebar.support": "Support",
@@ -16,7 +16,7 @@ const en: Translations = {
 
   // mobileNav
   "mobileNav.chat": "Chat",
-  "mobileNav.estimates": "Estimates",
+  "mobileNav.projects": "Projects",
   "mobileNav.blueprints": "Blueprints",
   "mobileNav.profile": "Profile",
 
@@ -205,7 +205,7 @@ const es: Translations = {
   // sidebar
   "sidebar.brandSubtitle": "Arquitecto de Proyectos",
   "sidebar.dashboard": "Panel",
-  "sidebar.estimates": "Estimaciones",
+  "sidebar.projects": "Proyectos",
   "sidebar.blueprints": "Planos",
   "sidebar.settings": "Configuracion",
   "sidebar.support": "Soporte",
@@ -213,7 +213,7 @@ const es: Translations = {
 
   // mobileNav
   "mobileNav.chat": "Chat",
-  "mobileNav.estimates": "Estimaciones",
+  "mobileNav.projects": "Proyectos",
   "mobileNav.blueprints": "Planos",
   "mobileNav.profile": "Perfil",
 

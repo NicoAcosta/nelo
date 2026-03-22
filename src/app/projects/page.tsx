@@ -20,7 +20,7 @@ export default async function ProjectsPage() {
 
   return (
     <div className="flex h-screen w-full overflow-hidden">
-      <Sidebar activeItem="estimates" />
+      <Sidebar activeItem="projects" />
       <div className="flex-1 flex flex-col min-w-0">
         <Header />
         <main className="flex-1 overflow-y-auto">
@@ -28,7 +28,7 @@ export default async function ProjectsPage() {
             <ProjectList projects={projects} />
           </div>
         </main>
-        <MobileNav activeTab="estimates" />
+        <MobileNav activeTab="projects" />
       </div>
     </div>
   );

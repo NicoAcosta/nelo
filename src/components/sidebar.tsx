@@ -11,11 +11,11 @@ import {
 } from "./icons";
 import { useLocale } from "@/lib/i18n/use-locale";
 
-type NavItem = "dashboard" | "estimates" | "blueprints" | "settings";
+type NavItem = "dashboard" | "projects" | "blueprints" | "settings";
 
 const navItems: { id: NavItem; labelKey: string; icon: typeof IconDashboard; href: string }[] = [
   { id: "dashboard", labelKey: "sidebar.dashboard", icon: IconDashboard, href: "/" },
-  { id: "estimates", labelKey: "sidebar.estimates", icon: IconEstimates, href: "/projects" },
+  { id: "projects", labelKey: "sidebar.projects", icon: IconEstimates, href: "/projects" },
   { id: "blueprints", labelKey: "sidebar.blueprints", icon: IconBlueprints, href: "#" },
   { id: "settings", labelKey: "sidebar.settings", icon: IconSettings, href: "#" },
 ];
