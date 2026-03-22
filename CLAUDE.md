@@ -92,7 +92,7 @@ An AI-powered chatbot that helps consumers and architects/engineers estimate con
 | **React Query / SWR** | No REST API data fetching needed. AI SDK `useChat` manages the streaming conversation state. Server Components handle any data loading. |
 | **Direct `@ai-sdk/anthropic` provider** | Use AI Gateway instead. Direct Anthropic gives you no observability, no fallback, and requires managing an API key. Gateway is strictly better when deploying to Vercel. |
 | **Zod v3** | Zod v4 is the current standard. AI SDK v6 supports it natively. No reason to use v3 on a greenfield project. |
-| **CAD/DXF parsing libs** (dxf-parser, etc.) | Explicitly out of scope. Vision-only floor plan analysis is the correct approach for the hackathon. |
+| **CAD/DXF parsing libs** (dxf-parser, etc.) | ~~Explicitly out of scope.~~ **Scope expanded**: use `dxf` (v5.3.1) for DXF parsing + rendering, `@mlightcad/libredwg-converter` for DWG→DXF conversion. See `docs/superpowers/specs/2026-03-22-document-pipeline-design.md`. |
 | **jsPDF / pdfmake** | PDF export is a nice-to-have explicitly out of scope. Do not add it during the hackathon. |
 ## Open Questions
 <!-- GSD:stack-end -->
