@@ -49,7 +49,7 @@ interface ChatContentProps {
 export function ChatContent({ id, initialMessages }: ChatContentProps) {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q");
-  const [hasSentInitial, setHasSentInitial] = useState(false);
+  const hasSentInitialRef = useRef(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { locale, t } = useLocale();
@@ -77,11 +77,11 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
 
   // Send initial query from landing page prompt cards
   useEffect(() => {
-    if (initialQuery && !hasSentInitial && messages.length === 0) {
-      setHasSentInitial(true);
+    if (initialQuery && !hasSentInitialRef.current && messages.length === 0) {
+      hasSentInitialRef.current = true;
       sendMessage({ text: initialQuery });
     }
-  }, [initialQuery, hasSentInitial, messages.length, sendMessage]);
+  }, [initialQuery, messages.length, sendMessage]);
 
   // Auto-scroll on new messages and during streaming
   const lastMessageContent =
