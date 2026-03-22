@@ -8,6 +8,7 @@ import { ChatInput } from "@/components/chat-input";
 import { PromptCard } from "@/components/prompt-card";
 import { IconNelo } from "@/components/icons";
 import { useLocale } from "@/lib/i18n/use-locale";
+import { storePendingFiles } from "@/lib/pending-files";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -35,8 +36,17 @@ export default function LandingPage() {
     },
   ];
 
-  function handleSend(message: string) {
+  async function handleSend(message: string, files?: FileList) {
     const encoded = encodeURIComponent(message);
+    if (files && files.length > 0) {
+      try {
+        await storePendingFiles(Array.from(files));
+        router.push(`/chat?q=${encoded}&files=pending`);
+      } catch {
+        router.push(`/chat?q=${encoded}`);
+      }
+      return;
+    }
     router.push(`/chat?q=${encoded}`);
   }
 
@@ -46,7 +56,7 @@ export default function LandingPage() {
 
   return (
     <div className="flex min-h-screen w-full">
-      <Sidebar activeItem="dashboard" />
+      <Sidebar activeItem="home" />
 
       <main className="flex-1 flex flex-col relative min-h-screen overflow-hidden bg-background">
         <Header />
@@ -103,7 +113,7 @@ export default function LandingPage() {
         </footer>
       </main>
 
-      <MobileNav activeTab="chat" />
+      <MobileNav activeTab="home" />
     </div>
   );
 }

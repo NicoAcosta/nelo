@@ -7,7 +7,7 @@ const en: Translations = {
 
   // sidebar
   "sidebar.brandSubtitle": "Project Architect",
-  "sidebar.dashboard": "Dashboard",
+  "sidebar.home": "Home",
   "sidebar.projects": "Projects",
   "sidebar.blueprints": "Blueprints",
   "sidebar.settings": "Settings",
@@ -15,10 +15,10 @@ const en: Translations = {
   "sidebar.soon": "Soon",
 
   // mobileNav
-  "mobileNav.chat": "Chat",
+  "mobileNav.home": "Home",
   "mobileNav.projects": "Projects",
   "mobileNav.blueprints": "Blueprints",
-  "mobileNav.profile": "Profile",
+  "mobileNav.settings": "Settings",
 
   // chatInput
   "chatInput.placeholder": "Write a message or upload a file...",
@@ -283,7 +283,7 @@ const es: Translations = {
 
   // sidebar
   "sidebar.brandSubtitle": "Arquitecto de Proyectos",
-  "sidebar.dashboard": "Panel",
+  "sidebar.home": "Inicio",
   "sidebar.projects": "Proyectos",
   "sidebar.blueprints": "Planos",
   "sidebar.settings": "Configuracion",
@@ -291,10 +291,10 @@ const es: Translations = {
   "sidebar.soon": "Pronto",
 
   // mobileNav
-  "mobileNav.chat": "Chat",
+  "mobileNav.home": "Inicio",
   "mobileNav.projects": "Proyectos",
   "mobileNav.blueprints": "Planos",
-  "mobileNav.profile": "Perfil",
+  "mobileNav.settings": "Configuracion",
 
   // chatInput
   "chatInput.placeholder": "Escribe un mensaje o subi un archivo...",

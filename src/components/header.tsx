@@ -26,7 +26,9 @@ export function Header({ projectName }: { projectName?: string }) {
   return (
     <header className="bg-white/70 backdrop-blur-md border-b border-outline/10 sticky top-0 z-50 flex justify-between items-center w-full px-6 py-4">
       <div className="flex items-center gap-4">
-        <NeloLogo size="md" className="text-on-surface" />
+        <Link href="/" aria-label="Go to home">
+          <NeloLogo size="md" className="text-on-surface" />
+        </Link>
         {projectName && (
           <>
             <div className="h-5 w-px bg-outline/30 mx-1 hidden md:block" />

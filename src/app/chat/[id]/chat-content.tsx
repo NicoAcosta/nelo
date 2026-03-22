@@ -342,7 +342,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
 
   return (
     <div className="flex h-screen w-full overflow-hidden">
-      <Sidebar activeItem="projects" />
+      <Sidebar activeItem="home" />
 
       <main className="flex-1 flex flex-col relative overflow-hidden bg-background">
         <h1 className="sr-only">Nelo Chat — Construction Cost Estimator</h1>
@@ -468,7 +468,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
         </div>
       </main>
 
-      <MobileNav activeTab="chat" />
+      <MobileNav activeTab="home" />
     </div>
   );
 }

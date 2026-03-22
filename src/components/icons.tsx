@@ -6,16 +6,17 @@
 
 type IconProps = { className?: string; "aria-hidden"?: boolean | "true" | "false" };
 
-export function IconDashboard({ className, ...rest }: IconProps) {
+export function IconHome({ className, ...rest }: IconProps) {
   return (
     <svg className={className} aria-hidden="true" {...rest} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="3" width="7" height="7" rx="1" />
-      <rect x="14" y="3" width="7" height="7" rx="1" />
-      <rect x="3" y="14" width="7" height="7" rx="1" />
-      <rect x="14" y="14" width="7" height="7" rx="1" />
+      <path d="M3 12l9-9 9 9" />
+      <path d="M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10" />
     </svg>
   );
 }
+
+/** @deprecated Use IconHome instead */
+export const IconDashboard = IconHome;
 
 export function IconProjects({ className, ...rest }: IconProps) {
   return (

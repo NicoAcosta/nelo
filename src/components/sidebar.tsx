@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import {
-  IconDashboard,
+  IconHome,
   IconProjects,
   IconBlueprints,
   IconSettings,
@@ -11,16 +11,16 @@ import {
 } from "./icons";
 import { useLocale } from "@/lib/i18n/use-locale";
 
-type NavItem = "dashboard" | "projects" | "blueprints" | "settings";
+type NavItem = "home" | "projects" | "blueprints" | "settings";
 
-const navItems: { id: NavItem; labelKey: string; icon: typeof IconDashboard; href: string }[] = [
-  { id: "dashboard", labelKey: "sidebar.dashboard", icon: IconDashboard, href: "/" },
+const navItems: { id: NavItem; labelKey: string; icon: typeof IconHome; href: string }[] = [
+  { id: "home", labelKey: "sidebar.home", icon: IconHome, href: "/" },
   { id: "projects", labelKey: "sidebar.projects", icon: IconProjects, href: "/projects" },
   { id: "blueprints", labelKey: "sidebar.blueprints", icon: IconBlueprints, href: "#" },
   { id: "settings", labelKey: "sidebar.settings", icon: IconSettings, href: "#" },
 ];
 
-export function Sidebar({ activeItem = "dashboard" }: { activeItem?: NavItem }) {
+export function Sidebar({ activeItem = "home" }: { activeItem?: NavItem }) {
   const { t } = useLocale();
 
   return (
@@ -28,7 +28,9 @@ export function Sidebar({ activeItem = "dashboard" }: { activeItem?: NavItem }) 
       <div className="flex flex-col h-full py-6">
         {/* Branding */}
         <div className="px-6 mb-8">
-          <NeloLogo size="md" className="text-on-surface" />
+          <Link href="/" aria-label="Go to home">
+            <NeloLogo size="md" className="text-on-surface" />
+          </Link>
           <p className="text-[10px] text-secondary/60 font-bold uppercase tracking-widest">
             {t("sidebar.brandSubtitle")}
           </p>

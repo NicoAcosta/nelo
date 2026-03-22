@@ -2,23 +2,23 @@
 
 import Link from "next/link";
 import {
-  IconChat,
+  IconHome,
   IconProjects,
   IconBlueprints,
-  IconProfile,
+  IconSettings,
 } from "./icons";
 import { useLocale } from "@/lib/i18n/use-locale";
 
-type Tab = "chat" | "projects" | "blueprints" | "profile";
+type Tab = "home" | "projects" | "blueprints" | "settings";
 
-const tabs: { id: Tab; labelKey: string; icon: typeof IconChat; href: string }[] = [
-  { id: "chat", labelKey: "mobileNav.chat", icon: IconChat, href: "/chat" },
+const tabs: { id: Tab; labelKey: string; icon: typeof IconHome; href: string }[] = [
+  { id: "home", labelKey: "mobileNav.home", icon: IconHome, href: "/" },
   { id: "projects", labelKey: "mobileNav.projects", icon: IconProjects, href: "/projects" },
   { id: "blueprints", labelKey: "mobileNav.blueprints", icon: IconBlueprints, href: "#" },
-  { id: "profile", labelKey: "mobileNav.profile", icon: IconProfile, href: "#" },
+  { id: "settings", labelKey: "mobileNav.settings", icon: IconSettings, href: "#" },
 ];
 
-export function MobileNav({ activeTab = "chat" }: { activeTab?: Tab }) {
+export function MobileNav({ activeTab = "home" }: { activeTab?: Tab }) {
   const { t } = useLocale();
 
   return (

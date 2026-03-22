@@ -10,10 +10,10 @@ function renderWithLocale(ui: React.ReactElement) {
 describe("MobileNav", () => {
   it("renders bottom navigation tabs", () => {
     renderWithLocale(<MobileNav />);
-    expect(screen.getByText("Chat")).toBeInTheDocument();
+    expect(screen.getByText("Home")).toBeInTheDocument();
     expect(screen.getByText("Projects")).toBeInTheDocument();
     expect(screen.getByText("Blueprints")).toBeInTheDocument();
-    expect(screen.getByText("Profile")).toBeInTheDocument();
+    expect(screen.getByText("Settings")).toBeInTheDocument();
   });
 
   it("is only visible on mobile", () => {
@@ -23,8 +23,8 @@ describe("MobileNav", () => {
   });
 
   it("highlights the active tab", () => {
-    renderWithLocale(<MobileNav activeTab="chat" />);
-    const chatTab = screen.getByText("Chat").closest("a");
-    expect(chatTab).toHaveClass("text-on-surface");
+    renderWithLocale(<MobileNav activeTab="home" />);
+    const homeTab = screen.getByText("Home").closest("a");
+    expect(homeTab).toHaveClass("text-on-surface");
   });
 });

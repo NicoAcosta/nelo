@@ -10,13 +10,13 @@ function renderWithLocale(ui: React.ReactElement) {
 describe("Sidebar", () => {
   it("renders the Nelo AI branding", () => {
     renderWithLocale(<Sidebar />);
-    expect(screen.getByText("Nelo AI")).toBeInTheDocument();
+    expect(screen.getByText("NELO")).toBeInTheDocument();
     expect(screen.getByText("Project Architect")).toBeInTheDocument();
   });
 
   it("renders navigation links", () => {
     renderWithLocale(<Sidebar />);
-    expect(screen.getByText("Dashboard")).toBeInTheDocument();
+    expect(screen.getByText("Home")).toBeInTheDocument();
     expect(screen.getByText("Projects")).toBeInTheDocument();
     expect(screen.getByText("Blueprints")).toBeInTheDocument();
     expect(screen.getByText("Settings")).toBeInTheDocument();
