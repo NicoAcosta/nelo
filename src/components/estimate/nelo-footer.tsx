@@ -1,10 +1,14 @@
 "use client";
 
+import { useLocale } from "@/lib/i18n/use-locale";
+
 interface NeloFooterProps {
   chatId: string;
 }
 
 export function NeloFooter({ chatId }: NeloFooterProps) {
+  const { t } = useLocale();
+
   return (
     <>
       <div className="relative px-8 pt-16 pb-12 text-center overflow-hidden border-t border-white/[0.06] mx-8">
@@ -18,6 +22,7 @@ export function NeloFooter({ chatId }: NeloFooterProps) {
             height="72"
             viewBox="0 0 24 24"
             fill="none"
+            aria-hidden="true"
             className="opacity-25 drop-shadow-[0_0_30px_rgba(204,255,0,0.2)]"
           >
             <path
@@ -31,7 +36,7 @@ export function NeloFooter({ chatId }: NeloFooterProps) {
         </div>
 
         {/* Wordmark */}
-        <div className="relative text-[80px] font-black tracking-[20px] text-[#ccff00] opacity-[0.12] leading-none select-none">
+        <div className="relative text-[80px] font-black tracking-[20px] text-[#ccff00] opacity-[0.12] leading-none select-none" aria-hidden="true">
           NELO
         </div>
 
@@ -47,25 +52,25 @@ export function NeloFooter({ chatId }: NeloFooterProps) {
         <div className="relative mt-6 flex gap-2.5 justify-center">
           <a
             href="/"
-            className="px-5 py-2.5 rounded-lg text-[13px] font-medium border border-white/[0.06] text-[#a1a1aa] hover:bg-[#18181b] hover:text-white transition-all"
+            className="px-5 py-2.5 rounded-lg text-[13px] font-medium border border-white/[0.06] text-[#a1a1aa] hover:bg-[#18181b] hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-[#ccff00]"
           >
-            Start New Estimate
+            {t("estimate.newEstimate")}
           </a>
           <a
             href={`/chat/${chatId}`}
-            className="px-5 py-2.5 rounded-lg text-[13px] font-medium border border-white/[0.06] text-[#a1a1aa] hover:bg-[#18181b] hover:text-white transition-all"
+            className="px-5 py-2.5 rounded-lg text-[13px] font-medium border border-white/[0.06] text-[#a1a1aa] hover:bg-[#18181b] hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-[#ccff00]"
           >
-            Back to Chat →
+            {t("estimate.backToChat")}
           </a>
         </div>
       </div>
 
       {/* Powered by strip */}
       <div className="text-center py-6 text-[11px] text-[#3f3f46] flex items-center justify-center gap-2">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="opacity-40">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="opacity-40" aria-hidden="true">
           <path d="M3 2h6l6 10V2h6v20h-6L9 12v10H3z" fill="currentColor" />
         </svg>
-        Powered by Nelo — nelo.archi
+        {t("estimate.poweredBy")} — nelo.archi
       </div>
     </>
   );
