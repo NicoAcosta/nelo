@@ -3,6 +3,7 @@
 import type { Estimate, LocationZone } from "@/lib/estimate/types";
 import { AnimatedCounter } from "./animated-counter";
 import { formatARS, formatUSD } from "./format";
+import { useLocale } from "@/lib/i18n/use-locale";
 
 const ZONE_LABELS: Record<LocationZone, string> = {
   caba: "CABA",
@@ -16,6 +17,7 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ estimate }: HeroSectionProps) {
+  const { t } = useLocale();
   const confidencePercent =
     estimate.inputsTotal > 0
       ? Math.round((estimate.inputsProvided / estimate.inputsTotal) * 100)
@@ -50,6 +52,7 @@ export function HeroSection({ estimate }: HeroSectionProps) {
           height="48"
           viewBox="0 0 24 24"
           fill="none"
+          aria-hidden="true"
           className="drop-shadow-[0_0_20px_rgba(204,255,0,0.3)]"
         >
           <path
@@ -64,7 +67,7 @@ export function HeroSection({ estimate }: HeroSectionProps) {
 
       {/* Eyebrow */}
       <div className="relative text-[11px] font-semibold tracking-[4px] uppercase text-[#71717a] mb-4">
-        Construction Estimate
+        {t("estimate.title")}
       </div>
 
       {/* Total price */}
@@ -78,7 +81,7 @@ export function HeroSection({ estimate }: HeroSectionProps) {
       </div>
 
       {/* USD */}
-      <div className="relative font-mono text-[20px] font-medium text-[#3f3f46] mt-2.5">
+      <div className="relative font-mono text-[20px] font-medium text-[#3f3f46] mt-2.5 tabular-nums">
         ≈ USD <AnimatedCounter value={estimate.totalPriceUsd} format={formatUSD} />
       </div>
 
@@ -115,18 +118,18 @@ export function HeroSection({ estimate }: HeroSectionProps) {
             }}
           />
           <span
-            className="absolute -top-5 text-[10px] font-bold text-[#ccff00] font-mono tracking-wide"
+            className="absolute -top-5 text-[10px] font-bold text-[#ccff00] font-mono tracking-wide tabular-nums"
             style={{
               left: `${Math.min(Math.max(confidencePosition, 10), 90)}%`,
               transform: "translateX(-50%)",
             }}
           >
-            {confidencePercent}% confidence
+            {t("estimate.confidencePercent").replace("{n}", String(confidencePercent))}
           </span>
         </div>
-        <div className="flex justify-between mt-1.5 text-[10px] font-mono text-[#3f3f46]">
-          <span>${formatARS(lowPrice)} (low)</span>
-          <span>${formatARS(highPrice)} (high)</span>
+        <div className="flex justify-between mt-1.5 text-[10px] font-mono text-[#3f3f46] tabular-nums">
+          <span>${formatARS(lowPrice)} {t("estimate.rangeLow")}</span>
+          <span>${formatARS(highPrice)} {t("estimate.rangeHigh")}</span>
         </div>
       </div>
     </div>

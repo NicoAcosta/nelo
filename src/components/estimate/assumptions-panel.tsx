@@ -1,6 +1,7 @@
 "use client";
 
 import type { Estimate, ProjectInputs } from "@/lib/estimate/types";
+import { useLocale } from "@/lib/i18n/use-locale";
 
 interface AssumptionsPanelProps {
   estimate: Estimate;
@@ -8,20 +9,22 @@ interface AssumptionsPanelProps {
 }
 
 export function AssumptionsPanel({ estimate, inputs }: AssumptionsPanelProps) {
+  const { t } = useLocale();
+
   const inputRows = [
-    { label: "Structure", value: inputs.structureType ?? "—" },
-    { label: "Roof", value: inputs.roofType ?? "—" },
-    { label: "Finish", value: inputs.finishLevel ?? "—" },
-    { label: "Zone", value: estimate.locationZone ?? "—" },
-    { label: "Bedrooms", value: inputs.bedroomCount != null ? String(inputs.bedroomCount) : "—" },
-    { label: "Bathrooms", value: inputs.bathroomCount != null ? String(inputs.bathroomCount) : "—" },
+    { label: t("estimate.structure"), value: inputs.structureType ?? "—" },
+    { label: t("estimate.roof"), value: inputs.roofType ?? "—" },
+    { label: t("estimate.finish"), value: inputs.finishLevel ?? "—" },
+    { label: t("estimate.zone"), value: estimate.locationZone ?? "—" },
+    { label: t("estimate.bedrooms"), value: inputs.bedroomCount != null ? String(inputs.bedroomCount) : "—" },
+    { label: t("estimate.bathrooms"), value: inputs.bathroomCount != null ? String(inputs.bathroomCount) : "—" },
   ];
 
   return (
     <div className="bg-[#111113] p-6">
-      <h3 className="text-sm font-semibold text-[#fafafa] mb-2">Assumptions</h3>
+      <h3 className="text-sm font-semibold text-[#fafafa] mb-2">{t("estimate.assumptions")}</h3>
       <p className="text-[13px] text-[#71717a] mb-3.5 leading-relaxed">
-        Nelo assumed these values where not specified. Refine in chat for a more accurate estimate.
+        {t("estimate.assumptionsDesc")}
       </p>
 
       {/* Assumption tags */}

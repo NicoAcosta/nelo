@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { CategoryTotal } from "@/lib/estimate/types";
 import { assignCategoryColors } from "./category-colors";
 import { formatCompact, formatPercent } from "./format";
+import { useLocale } from "@/lib/i18n/use-locale";
 
 interface DonutChartProps {
   categories: CategoryTotal[];
@@ -24,6 +25,7 @@ type Segment = {
 };
 
 export function DonutChart({ categories, totalPrice }: DonutChartProps) {
+  const { t } = useLocale();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const active = categories
@@ -48,7 +50,7 @@ export function DonutChart({ categories, totalPrice }: DonutChartProps) {
   if (restTotal > 0) {
     segments.push({
       id: "__rest__",
-      name: `+ ${rest.length} more`,
+      name: t("estimate.nMoreCategories").replace("{n}", String(rest.length)),
       value: restTotal,
       percent: directCost > 0 ? (restTotal / directCost) * 100 : 0,
       color: "#52525b",
@@ -92,11 +94,11 @@ export function DonutChart({ categories, totalPrice }: DonutChartProps) {
           ))}
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-mono text-[22px] font-bold text-[#fafafa]">
+          <span className="font-mono text-[22px] font-bold text-[#fafafa] tabular-nums">
             {formatCompact(totalPrice)}
           </span>
           <span className="text-[11px] text-[#71717a] mt-0.5">
-            {active.length} categories
+            {t("estimate.nCategories").replace("{n}", String(active.length))}
           </span>
         </div>
       </div>
@@ -118,7 +120,7 @@ export function DonutChart({ categories, totalPrice }: DonutChartProps) {
             <span className="text-xs text-[#a1a1aa] flex-1 truncate">
               {seg.name}
             </span>
-            <span className="font-mono text-[11px] text-[#71717a] flex-shrink-0">
+            <span className="font-mono text-[11px] text-[#71717a] flex-shrink-0 tabular-nums">
               {formatPercent(seg.percent)}
             </span>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useLocale } from "@/lib/i18n/use-locale";
 
 interface EstimateTopbarProps {
   projectName: string;
@@ -13,6 +14,7 @@ export function EstimateTopbar({
   chatId,
   locationLabel,
 }: EstimateTopbarProps) {
+  const { t } = useLocale();
   const [copied, setCopied] = useState(false);
 
   const handleShare = useCallback(async () => {
@@ -40,20 +42,20 @@ export function EstimateTopbar({
           onClick={handleShare}
           className="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-white/[0.06] text-[#a1a1aa] hover:bg-[#18181b] hover:text-white transition-colors flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#ccff00]"
         >
-          {copied ? "Copied!" : "↗ Share"}
+          {copied ? t("estimate.copied") : `↗ ${t("estimate.share")}`}
         </button>
         <button
           disabled
-          title="Coming soon"
+          title={t("estimate.comingSoon")}
           className="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-white/[0.06] text-[#3f3f46] cursor-not-allowed flex items-center gap-1.5"
         >
-          ⬇ Export
+          ⬇ {t("estimate.export")}
         </button>
         <a
           href={`/chat/${chatId}`}
           className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#ccff00] text-black border border-[#ccff00] hover:bg-[#E2FF00] transition-colors focus-visible:ring-2 focus-visible:ring-[#ccff00] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090b]"
         >
-          ← Back to Chat
+          {t("estimate.backToChat")}
         </a>
       </div>
     </div>

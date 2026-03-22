@@ -5,6 +5,7 @@ import type { CategoryTotal } from "@/lib/estimate/types";
 import { CATEGORIES } from "@/lib/pricing/categories-config";
 import { assignCategoryColors } from "./category-colors";
 import { formatARS, formatPercent } from "./format";
+import { useLocale } from "@/lib/i18n/use-locale";
 
 // Module-level constant — CATEGORIES never changes at runtime
 const ENGLISH_NAMES = new Map<string, string>(
@@ -16,6 +17,7 @@ interface CategoryBreakdownProps {
 }
 
 export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
+  const { t } = useLocale();
   const [activeTab, setActiveTab] = useState<"cost" | "percent" | "grouped">("cost");
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
@@ -36,16 +38,16 @@ export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
   };
 
   const tabs = [
-    { key: "cost" as const, label: "By Cost" },
-    { key: "percent" as const, label: "By %" },
-    { key: "grouped" as const, label: "Grouped" },
+    { key: "cost" as const, label: t("estimate.byCost") },
+    { key: "percent" as const, label: t("estimate.byPercent") },
+    { key: "grouped" as const, label: t("estimate.grouped") },
   ];
 
   return (
     <div className="bg-[#111113] p-6 flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-[#fafafa]">Category Breakdown</h3>
+        <h3 className="text-sm font-semibold text-[#fafafa]">{t("estimate.categoryBreakdown")}</h3>
         <div className="flex gap-0.5 bg-[#18181b] p-0.5 rounded-lg">
           {tabs.map((tab) => (
             <button
@@ -85,7 +87,7 @@ export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
                 title={ENGLISH_NAMES.get(cat.id) ?? cat.name}
                 aria-expanded={isExpanded}
               >
-                <span className="font-mono text-[10px] text-[#3f3f46] text-center">
+                <span className="font-mono text-[10px] text-[#3f3f46] text-center tabular-nums">
                   {i + 1}
                 </span>
                 <span className="text-[13px] text-[#a1a1aa] truncate">
@@ -100,7 +102,7 @@ export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
                     }}
                   />
                 </div>
-                <span className="font-mono text-xs text-[#a1a1aa] text-right font-medium">
+                <span className="font-mono text-xs text-[#a1a1aa] text-right font-medium tabular-nums">
                   {displayValue}
                 </span>
               </button>
@@ -118,7 +120,7 @@ export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
                         <span className="text-[#71717a] truncate mr-4">
                           {li.code} — {li.description}
                         </span>
-                        <span className="font-mono text-[#3f3f46] flex-shrink-0">
+                        <span className="font-mono text-[#3f3f46] flex-shrink-0 tabular-nums">
                           ${formatARS(li.subtotal)}
                         </span>
                       </div>

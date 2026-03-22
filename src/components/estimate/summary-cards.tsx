@@ -3,54 +3,58 @@
 import type { Estimate } from "@/lib/estimate/types";
 import { AnimatedCounter } from "./animated-counter";
 import { formatARS } from "./format";
+import { useLocale } from "@/lib/i18n/use-locale";
 
 interface SummaryCardsProps {
   estimate: Estimate;
 }
 
 export function SummaryCards({ estimate }: SummaryCardsProps) {
+  const { t } = useLocale();
   const activeCategories = estimate.categories.filter(
     (c) => c.subtotal > 0,
   ).length;
 
   const confidenceLabel =
     estimate.confidence === "quick"
-      ? "Quick"
+      ? t("estimate.confidenceQuick")
       : estimate.confidence === "standard"
-        ? "Standard"
-        : "Detailed";
+        ? t("estimate.confidenceStandard")
+        : t("estimate.confidenceDetailed");
 
   const cards = [
     {
-      label: "Price / m²",
+      label: t("estimate.pricePerM2"),
       value: estimate.pricePerM2,
       format: (n: number) => `$${formatARS(Math.round(n))}`,
-      sub: "ARS per square meter",
+      sub: t("estimate.arsPerM2"),
       accent: true,
     },
     {
-      label: "Total Area",
+      label: t("estimate.totalArea"),
       value: estimate.floorAreaM2,
       format: (n: number) => `${Math.round(n)} m²`,
       sub: null,
     },
     {
-      label: "Categories",
+      label: t("estimate.categories"),
       value: activeCategories,
       format: (n: number) => String(Math.round(n)),
-      sub: "construction categories",
+      sub: t("estimate.constructionCategories"),
     },
     {
-      label: "Line Items",
+      label: t("estimate.lineItems"),
       value: estimate.activeLineItems,
       format: (n: number) => String(Math.round(n)),
-      sub: "individual cost items",
+      sub: t("estimate.individualCostItems"),
     },
     {
-      label: "Confidence",
+      label: t("estimate.confidence"),
       value: null,
       staticText: confidenceLabel,
-      sub: `${estimate.inputsProvided} of ${estimate.inputsTotal} inputs`,
+      sub: t("estimate.inputsOf")
+        .replace("{provided}", String(estimate.inputsProvided))
+        .replace("{total}", String(estimate.inputsTotal)),
       green: true,
     },
   ];
@@ -66,7 +70,7 @@ export function SummaryCards({ estimate }: SummaryCardsProps) {
             {card.label}
           </div>
           <div
-            className={`font-mono text-xl font-bold ${
+            className={`font-mono text-xl font-bold tabular-nums ${
               card.accent
                 ? "text-[#ccff00]"
                 : card.green
