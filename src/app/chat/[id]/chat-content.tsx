@@ -52,6 +52,8 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
   const hasSentInitialRef = useRef(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLElement>(null);
+  const isNearBottomRef = useRef(true);
   const { locale, t } = useLocale();
 
   // Use a ref so the transport reads the latest locale without being recreated
@@ -83,7 +85,21 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
     }
   }, [initialQuery, messages.length, sendMessage]);
 
-  // Auto-scroll on new messages and during streaming
+  // Track scroll position to avoid fighting user scroll
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const threshold = 80;
+      isNearBottomRef.current =
+        el.scrollTop + el.clientHeight >= el.scrollHeight - threshold;
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Auto-scroll only when user is near bottom
+  const lastMessagePartsCount = messages.at(-1)?.parts?.length ?? 0;
   const lastMessageContent =
     messages
       .at(-1)
@@ -94,10 +110,14 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
       .join("") ?? "";
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages.length, lastMessageContent]);
+    if (isNearBottomRef.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
+    }
+  }, [messages.length, lastMessageContent, lastMessagePartsCount]);
 
   async function handleSend(text: string, files?: FileList) {
+    // Always scroll to bottom when user sends a message
+    isNearBottomRef.current = true;
     if (files && files.length > 0) {
       setIsProcessing(true);
       try {
@@ -269,6 +289,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
         {/* Messages area */}
         <div className="flex-1 min-h-0 relative">
           <section
+            ref={scrollContainerRef}
             role="log"
             aria-live="polite"
             aria-label="Chat messages"
