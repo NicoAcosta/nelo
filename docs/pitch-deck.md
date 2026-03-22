@@ -195,6 +195,7 @@ Nelo handles two critical stages of construction estimation:
 - **Built from real pain** — Our architect co-founder has spent his career dealing with this problem
 - **Waitlist ready** — Architects we've talked to want to use it
 - **400+ line items** — Real Argentine pricing across 26 construction categories, vision analysis, bilingual UI
+- **Closed beta → $14/mo** — Free beta with partner architects. Launching with individual and team plans.
 
 Right side: QR code to try it live, or the app URL.
 
@@ -313,9 +314,11 @@ Right side: QR code to try it live, or the app URL.
 >
 > Nelo is a working AI estimator with vision analysis, a twenty-six-category engine with over four hundred line items, bilingual UI, and real pricing data from the Argentine market.
 >
+> We're currently in free beta with partner architects. Public launch at fourteen dollars a month, with team plans for firms.
+>
 > Construction cost transparency for everyone — not just those who can afford an architect.
 >
-> Try it live.
+> Try it at nelo.archi.
 >
 > *[QR code / URL on screen]*
 
