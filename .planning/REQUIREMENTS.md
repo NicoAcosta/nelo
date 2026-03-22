@@ -78,27 +78,27 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | TBD | Pending |
-| AUTH-02 | TBD | Pending |
-| AUTH-03 | TBD | Pending |
-| AUTH-04 | TBD | Pending |
-| PERS-01 | TBD | Pending |
-| PERS-02 | TBD | Pending |
-| PERS-03 | TBD | Pending |
-| PERS-04 | TBD | Pending |
-| VERS-01 | TBD | Pending |
-| VERS-02 | TBD | Pending |
-| VERS-03 | TBD | Pending |
-| VERS-04 | TBD | Pending |
-| SHARE-01 | TBD | Pending |
-| SHARE-02 | TBD | Pending |
-| SHARE-03 | TBD | Pending |
+| AUTH-01 | Phase 9 | Pending |
+| AUTH-02 | Phase 9 | Pending |
+| AUTH-03 | Phase 9 | Pending |
+| AUTH-04 | Phase 9 | Pending |
+| PERS-01 | Phase 10 | Pending |
+| PERS-02 | Phase 10 | Pending |
+| PERS-03 | Phase 11 | Pending |
+| PERS-04 | Phase 11 | Pending |
+| VERS-01 | Phase 12 | Pending |
+| VERS-02 | Phase 12 | Pending |
+| VERS-03 | Phase 12 | Pending |
+| VERS-04 | Phase 12 | Pending |
+| SHARE-01 | Phase 13 | Pending |
+| SHARE-02 | Phase 13 | Pending |
+| SHARE-03 | Phase 13 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 15 total
-- Mapped to phases: 0
-- Unmapped: 15 ⚠️
+- Mapped to phases: 15
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-20*
-*Last updated: 2026-03-22 after v1.1 requirements definition*
+*Last updated: 2026-03-22 after v1.1 roadmap creation*
