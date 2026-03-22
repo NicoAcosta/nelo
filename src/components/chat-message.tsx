@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { IconNelo } from "./icons";
 
 interface ChatMessageProps {
@@ -38,8 +39,8 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
       </div>
       <div className="space-y-4">
         <div className="glass-card rounded-2xl p-6 border border-white/40 shadow-sm">
-          <div className="text-on-surface text-lg leading-relaxed font-medium break-words overflow-wrap-anywhere [&_strong]:font-bold [&_em]:italic [&_p]:my-3 first:[&_p]:mt-0 last:[&_p]:mb-0 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:my-1 [&_code]:bg-black/10 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-base">
-            <ReactMarkdown>{content}</ReactMarkdown>
+          <div className="text-on-surface text-lg leading-relaxed font-medium break-words overflow-wrap-anywhere [&_strong]:font-bold [&_em]:italic [&_p]:my-3 first:[&_p]:mt-0 last:[&_p]:mb-0 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:my-1 [&_code]:bg-black/10 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-base [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mt-6 [&_h2]:mb-3 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mt-5 [&_h3]:mb-2 [&_h4]:text-base [&_h4]:font-bold [&_h4]:mt-4 [&_h4]:mb-2 [&_hr]:border-on-surface/20 [&_hr]:my-4 [&_table]:w-full [&_table]:my-4 [&_table]:border-collapse [&_table]:text-base [&_th]:text-left [&_th]:font-bold [&_th]:px-3 [&_th]:py-2 [&_th]:border-b [&_th]:border-on-surface/20 [&_td]:px-3 [&_td]:py-2 [&_td]:border-b [&_td]:border-on-surface/10">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
           </div>
         </div>
       </div>

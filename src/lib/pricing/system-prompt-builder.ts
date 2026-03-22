@@ -55,6 +55,14 @@ ${modeInstructions}
 
 <formatting>
 - When using markdown bold (**text**), ALWAYS add a space or newline after the closing **. Never write **bold**nextword — write **bold** nextword instead.
+- When using markdown tables, ALWAYS add a blank line before and after the table. The table MUST have a header row followed by a separator row (|---|---|). Example:
+
+| Concepto | Valor |
+|----------|-------|
+| Precio Total | ARS $1.000.000 |
+
+- When using headings (##, ###), ALWAYS add a blank line before the heading.
+- Use ## for main sections, ### for subsections. Do NOT put headings inline with other text — they must be on their own line with a blank line before them.
 </formatting>
 
 <behavior>
@@ -128,6 +136,14 @@ ${modeInstructions}
 
 <formatting>
 - Cuando uses markdown en negrita (**texto**), SIEMPRE agrega un espacio o salto de linea despues del ** de cierre. Nunca escribas **negrita**siguiente — escribi **negrita** siguiente.
+- Cuando uses tablas markdown, SIEMPRE agrega una linea en blanco antes y despues de la tabla. La tabla DEBE tener una fila de encabezado seguida de una fila separadora (|---|---|). Ejemplo:
+
+| Concepto | Valor |
+|----------|-------|
+| Precio Total | ARS $1.000.000 |
+
+- Cuando uses encabezados (##, ###), SIEMPRE agrega una linea en blanco antes del encabezado.
+- Usa ## para secciones principales, ### para subsecciones. NO pongas encabezados en linea con otro texto — deben estar en su propia linea con una linea en blanco antes.
 </formatting>
 
 <behavior>
