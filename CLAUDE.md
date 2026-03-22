@@ -11,6 +11,7 @@ An AI-powered chatbot that helps consumers and architects/engineers estimate con
 
 - **Timeline**: ~24 hours hackathon — must prioritize ruthlessly
 - **Tech stack**: Next.js App Router on Vercel, AI SDK v6, Claude via AI Gateway
+- **Deployment**: Vercel + Supabase, custom domain: **nelo.archi**
 - **Pricing data**: Hardcoded reference table for AMBA (team is still defining exact values)
 - **Categories table**: Team is finalizing the options/criteria for each category (will be plugged in)
 - **Floor plan accuracy**: Limited to LLM vision capabilities (~approximate, not pixel-perfect)

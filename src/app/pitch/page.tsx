@@ -480,7 +480,7 @@ function Slide7() {
         <svg className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
       </a>
       <p className="text-[10px] text-[#1a1a1a]/25 uppercase tracking-[0.25em] mt-4" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>
-        nelo.vercel.app
+        nelo.archi
       </p>
     </div>
   );
