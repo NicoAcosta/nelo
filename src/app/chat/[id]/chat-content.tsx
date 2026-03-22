@@ -11,10 +11,13 @@ import { MobileNav } from "@/components/mobile-nav";
 import { ChatMessage } from "@/components/chat-message";
 import { ChatInput } from "@/components/chat-input";
 import { ChatOptions } from "@/components/chat-options";
+import { CostBreakdown } from "@/components/cost-breakdown";
 import { EstimatePreview } from "@/components/estimate-preview";
 import { FloorPlanPanel } from "@/components/floor-plan-panel";
 import { IconNelo } from "@/components/icons";
 import { buildPreamble } from "@/lib/documents/preamble";
+import { filterClaudeCompatible } from "@/lib/documents/filter-compatible";
+import { retrievePendingFiles } from "@/lib/pending-files";
 import type { DocumentAnalysis } from "@/lib/documents/types";
 import { getSelectedValue } from "./get-selected-value";
 import { useLocale } from "@/lib/i18n/use-locale";
@@ -27,7 +30,19 @@ interface FloorPlanResult {
 
 function renderToolResult(toolName: string, result: unknown, id: string) {
   if (toolName === "runEstimate" && result) {
-    return <EstimatePreview estimate={result as Estimate} chatId={id} />;
+    const estimate = result as Estimate & {
+      _persistedId?: string;
+      _version?: number;
+    };
+    return (
+      <CostBreakdown
+        estimate={estimate}
+        persistedId={estimate._persistedId}
+        version={estimate._version}
+        totalVersions={estimate._version}
+        conversationId={id}
+      />
+    );
   }
   if (toolName === "analyzeFloorPlan" && result) {
     const data = result as FloorPlanResult;
@@ -77,10 +92,27 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
 
   const isStreaming = status === "streaming" || status === "submitted";
 
-  // Send initial query from landing page prompt cards
+  // Send initial query from landing page (with optional pending files)
   useEffect(() => {
-    if (initialQuery && !hasSentInitialRef.current && messages.length === 0) {
-      hasSentInitialRef.current = true;
+    if (!initialQuery || hasSentInitialRef.current || messages.length > 0) return;
+    hasSentInitialRef.current = true;
+
+    const hasPendingFiles = searchParams.get("files") === "pending";
+    if (hasPendingFiles) {
+      retrievePendingFiles()
+        .then((files) => {
+          if (files && files.length > 0) {
+            const dt = new DataTransfer();
+            for (const f of files) dt.items.add(f);
+            handleSend(initialQuery, dt.files);
+          } else {
+            sendMessage({ text: initialQuery });
+          }
+        })
+        .catch(() => {
+          sendMessage({ text: initialQuery });
+        });
+    } else {
       sendMessage({ text: initialQuery });
     }
   }, [initialQuery, messages.length, sendMessage]);
@@ -132,8 +164,15 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
         });
 
         if (!response.ok) {
-          // Fall back to sending files directly (image-only path)
-          sendMessage({ text, files });
+          // Fall back to sending only Claude-compatible files (images/PDFs)
+          const compatible = filterClaudeCompatible(Array.from(files));
+          if (compatible.length > 0) {
+            const dt = new DataTransfer();
+            for (const f of compatible) dt.items.add(f);
+            sendMessage({ text, files: dt.files });
+          } else {
+            sendMessage({ text });
+          }
           return;
         }
 
@@ -171,8 +210,15 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
           sendMessage({ text: preambleText });
         }
       } catch {
-        // Fallback: send files directly
-        sendMessage({ text, files });
+        // Fallback: send only Claude-compatible files (images/PDFs)
+        const compatible = filterClaudeCompatible(Array.from(files));
+        if (compatible.length > 0) {
+          const dt = new DataTransfer();
+          for (const f of compatible) dt.items.add(f);
+          sendMessage({ text, files: dt.files });
+        } else {
+          sendMessage({ text });
+        }
       } finally {
         setIsProcessing(false);
       }

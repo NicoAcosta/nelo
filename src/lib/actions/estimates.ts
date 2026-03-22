@@ -6,6 +6,7 @@ import {
   listEstimates,
   getEstimate,
   updateEstimateLabel,
+  getConversationId,
 } from "@/lib/db/estimates";
 import type { EstimateSummary, EstimateRow } from "@/lib/db/estimates";
 
@@ -46,4 +47,12 @@ export async function updateEstimateLabelAction(
   }
   revalidatePath("/chat");
   return {};
+}
+
+export async function getConversationIdAction(
+  projectId: string,
+): Promise<string | null> {
+  if (!UUID_RE.test(projectId)) return null;
+  const supabase = await createClient();
+  return getConversationId(projectId, supabase);
 }

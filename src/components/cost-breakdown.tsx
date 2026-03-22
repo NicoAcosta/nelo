@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { Estimate } from "@/lib/estimate/types";
 import { useLocale } from "@/lib/i18n/use-locale";
+import { VersionHistorySheet } from "@/components/version-history-sheet";
 
 function formatARS(value: number): string {
   return new Intl.NumberFormat("es-AR", {
@@ -12,10 +14,29 @@ function formatARS(value: number): string {
 
 interface CostBreakdownProps {
   estimate: Estimate;
+  persistedId?: string;
+  version?: number;
+  totalVersions?: number;
+  conversationId?: string;
 }
 
-export function CostBreakdown({ estimate }: CostBreakdownProps) {
+export function CostBreakdown({
+  estimate,
+  persistedId,
+  version,
+  totalVersions,
+  conversationId,
+}: CostBreakdownProps) {
   const { locale, t } = useLocale();
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [showSavedBanner, setShowSavedBanner] = useState(!!persistedId);
+
+  // Auto-dismiss saved banner after 8 seconds
+  useEffect(() => {
+    if (!showSavedBanner) return;
+    const timer = setTimeout(() => setShowSavedBanner(false), 8000);
+    return () => clearTimeout(timer);
+  }, [showSavedBanner]);
 
   const confidenceLabels: Record<string, string> = {
     quick: t("costBreakdown.confidenceQuick"),
@@ -29,6 +50,45 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
 
   return (
     <div className="bg-[#1a1a1a] text-[#f2f2f2] rounded-lg overflow-hidden shadow-2xl">
+      {/* Version badge + "View history" trigger */}
+      {persistedId && version != null && (
+        <div className="px-6 pt-4 flex items-center gap-3">
+          <span className="bg-[#ccff00] text-black py-1 px-2 text-[10px] font-bold uppercase tracking-widest rounded">
+            {t("versionHistory.versionBadge")
+              .replace("{n}", String(version))
+              .replace("{total}", String(totalVersions ?? version))}
+          </span>
+          <button
+            type="button"
+            onClick={() => setSheetOpen(true)}
+            className="text-[10px] font-bold text-[#ccff00] uppercase tracking-wider hover:underline cursor-pointer"
+          >
+            {t("versionHistory.viewHistory")}
+          </button>
+        </div>
+      )}
+
+      {/* Saved banner — auto-dismisses after 8s */}
+      {showSavedBanner && persistedId && version != null && (
+        <div className="mx-6 mt-2 flex items-center gap-3 p-3 bg-[#ccff00]/5 rounded-lg border border-[#ccff00]/20">
+          <p className="text-[11px] font-bold text-[#999] uppercase tracking-widest">
+            {t("versionHistory.savedBanner")
+              .split("--")[0]
+              .replace("{n}", String(version))}
+            <button
+              type="button"
+              onClick={() => {
+                setShowSavedBanner(false);
+                setSheetOpen(true);
+              }}
+              className="text-[#ccff00] hover:underline ml-1 normal-case tracking-normal"
+            >
+              {t("versionHistory.viewHistory")}
+            </button>
+          </p>
+        </div>
+      )}
+
       {/* Hero */}
       <div className="p-6 md:p-8 border-b border-white/5 bg-gradient-to-br from-white/5 to-transparent">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -172,6 +232,17 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
           {t("costBreakdown.iccDisclaimer")}
         </p>
       </div>
+
+      {/* Version history sheet — only rendered when estimate is persisted */}
+      {conversationId && persistedId && (
+        <VersionHistorySheet
+          projectId={conversationId}
+          currentVersion={version ?? 1}
+          totalVersions={totalVersions ?? version ?? 1}
+          open={sheetOpen}
+          onOpenChange={setSheetOpen}
+        />
+      )}
     </div>
   );
 }
