@@ -209,7 +209,7 @@ function ChatContent() {
                   <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:150ms]" />
                   <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:300ms]" />
                 </div>
-                <span className="sr-only">Nelo is typing...</span>
+                <span className="sr-only">{t("chat.typing")}</span>
               </div>
             </div>
           )}

@@ -15,7 +15,7 @@ interface CostBreakdownProps {
 }
 
 export function CostBreakdown({ estimate }: CostBreakdownProps) {
-  const { t } = useLocale();
+  const { locale, t } = useLocale();
 
   const confidenceLabels: Record<string, string> = {
     quick: t("costBreakdown.confidenceQuick"),
@@ -77,7 +77,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
               />
             </div>
             <p className="text-[10px] mt-2 text-[#999] opacity-60 leading-tight">
-              Based on {estimate.activeLineItems} cost items calculated for this project.
+              {t("costBreakdown.basedOn").replace("{n}", String(estimate.activeLineItems))}
             </p>
           </div>
         </div>
@@ -87,7 +87,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
       <div className="bg-white/5 px-4 sm:px-6 py-3 flex flex-wrap gap-3 sm:gap-6 border-b border-white/5">
         {estimate.assumptions.map((a) => (
           <div key={a.field} className="flex items-center gap-2 max-w-[280px] min-w-0">
-            <span className="text-[10px] font-bold text-[#999] uppercase tracking-wider shrink-0">{a.field}:</span>
+            <span className="text-[10px] font-bold text-[#999] uppercase tracking-wider shrink-0">{a.label}:</span>
             <span className="text-xs font-bold text-white/80 uppercase tracking-tighter truncate" title={a.assumedValue}>
               {a.assumedValue}
             </span>
@@ -95,7 +95,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
         ))}
         <div className="ml-auto flex items-center gap-2">
           <span className="text-[9px] font-black text-[#999]/60 uppercase tracking-widest">
-            Prices as of {new Date(estimate.priceBaseDate).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}
+            {t("costBreakdown.pricesAsOf")} {new Date(estimate.priceBaseDate).toLocaleDateString(locale === "es" ? "es-AR" : "en-US", { day: "numeric", month: "short", year: "numeric" })}
           </span>
         </div>
       </div>
@@ -110,7 +110,7 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
                 {t("costBreakdown.category")}
               </th>
               <th className="px-6 py-4 text-[10px] font-black text-[#999] uppercase tracking-[0.2em] text-right">
-                Subtotal (ARS)
+                {t("costBreakdown.subtotal")}
               </th>
               <th className="px-6 py-4 text-[10px] font-black text-[#999] uppercase tracking-[0.2em] text-right">
                 {t("costBreakdown.incidence")} (%)
@@ -154,26 +154,22 @@ export function CostBreakdown({ estimate }: CostBreakdownProps) {
       {/* Actions */}
       <div className="p-4 sm:p-6 bg-white/5 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-center justify-between">
         <div className="flex items-center gap-4">
-          <button type="button" disabled aria-label="Download PDF — available soon" className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Available soon">
-            Download PDF
+          <button type="button" disabled aria-label={t("costBreakdown.downloadPdf")} className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title={t("costBreakdown.availableSoon")}>
+            {t("costBreakdown.downloadPdf")}
           </button>
-          <button type="button" disabled aria-label="Export to Excel — available soon" className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title="Available soon">
-            Export Excel
+          <button type="button" disabled aria-label={t("costBreakdown.exportExcel")} className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black uppercase tracking-widest opacity-40 cursor-not-allowed" title={t("costBreakdown.availableSoon")}>
+            {t("costBreakdown.exportExcel")}
           </button>
         </div>
-        <button type="button" disabled aria-label="Recalculate estimate — available soon" className="bg-[#ccff00]/40 text-black/40 px-8 py-2 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] cursor-not-allowed" title="Available soon">
-          Recalculate
+        <button type="button" disabled aria-label={t("costBreakdown.recalculate")} className="bg-[#ccff00]/40 text-black/40 px-8 py-2 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] cursor-not-allowed" title={t("costBreakdown.availableSoon")}>
+          {t("costBreakdown.recalculate")}
         </button>
       </div>
 
       {/* ICC disclaimer */}
       <div className="mx-6 mb-6 flex items-center gap-3 p-4 bg-[#ccff00]/5 rounded-lg border border-[#ccff00]/20 backdrop-blur-sm">
         <p className="text-xs text-[#999] leading-relaxed">
-          Prices are adjusted using the{" "}
-          <span className="text-[#ccff00] font-bold">
-            Construction Cost Index (ICC)
-          </span>
-          . Final costs may vary depending on your choice of finishes, fixtures, and materials.
+          {t("costBreakdown.iccDisclaimer")}
         </p>
       </div>
     </div>

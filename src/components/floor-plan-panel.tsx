@@ -41,8 +41,7 @@ export function FloorPlanPanel({
         {t("floorPlanPanel.analysisComplete")}
       </h2>
       <p className="text-on-surface-variant max-w-2xl text-lg font-medium leading-relaxed mb-10">
-        Nelo extracted measurements from your floor plan. Review the values
-        below and adjust if needed before calculating your estimate.
+        {t("floorPlanPanel.description")}
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -58,14 +57,14 @@ export function FloorPlanPanel({
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-background">
                 <span className="text-on-surface/20 text-sm font-bold uppercase">
-                  Floor Plan Preview
+                  {t("floorPlanPanel.preview")}
                 </span>
               </div>
             )}
           </div>
           <div className="flex items-center gap-4 px-5 py-4 bg-surface-container-high rounded-2xl">
             <p className="text-xs text-on-surface-variant font-medium">
-              {extraction.rawNotes || "No additional notes from the analysis."}
+              {extraction.rawNotes || t("floorPlanPanel.noNotes")}
             </p>
           </div>
         </div>
@@ -74,7 +73,7 @@ export function FloorPlanPanel({
         <div className="lg:col-span-5 flex flex-col gap-8">
           <div className="glass rounded-3xl p-8 border border-outline/30 shadow-sm">
             <h3 className="text-xl font-headline font-black text-on-surface mb-8 uppercase tracking-tight">
-              Extracted Values
+              {t("floorPlanPanel.extractedValues")}
             </h3>
 
             <div className="space-y-6">
@@ -93,7 +92,7 @@ export function FloorPlanPanel({
                 disabled={area <= 0}
                 className="w-full bg-primary py-5 rounded-2xl text-on-primary font-headline font-black text-lg uppercase tracking-widest shadow-lg shadow-primary/20 hover:brightness-95 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {area <= 0 ? "Enter area to calculate" : t("floorPlanPanel.confirm")}
+                {area <= 0 ? t("floorPlanPanel.enterArea") : t("floorPlanPanel.confirm")}
               </button>
               <button disabled className="w-full py-5 rounded-2xl text-on-surface/40 font-headline font-black text-sm uppercase tracking-widest border border-outline/20 cursor-not-allowed" title="Available soon">
                 {t("floorPlanPanel.edit")}
