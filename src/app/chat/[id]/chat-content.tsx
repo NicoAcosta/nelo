@@ -166,6 +166,8 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
         for (const file of Array.from(files)) {
           formData.append("files", file);
         }
+        // Send projectId so Storage upload can path files correctly
+        formData.append("projectId", id);
         const response = await fetch("/api/documents/process", {
           method: "POST",
           body: formData,
@@ -185,6 +187,16 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
         }
 
         const { results } = await response.json();
+
+        // Build floor-plan-ref annotations for Storage paths (D-18)
+        // Used by loadConversation to inject signed URLs on next load
+        const floorPlanAnnotations = results
+          .filter((r: DocumentAnalysis & { storagePath?: string }) => r.storagePath)
+          .map((r: DocumentAnalysis & { storagePath?: string }, i: number) => ({
+            type: "floor-plan-ref" as const,
+            name: files[i]?.name ?? `file-${i}`,
+            storagePath: r.storagePath!,
+          }));
 
         // Build preamble from all results with structured data
         const preambles = results
@@ -220,12 +232,16 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
           renderedImagesRef.current = firstImage.renderedImage;
         }
 
+        // Attach floor-plan-ref annotations if any Storage paths were returned
+        const annotations =
+          floorPlanAnnotations.length > 0 ? floorPlanAnnotations : undefined;
+
         if (renderedFiles.length > 0) {
           const dt = new DataTransfer();
           for (const f of renderedFiles) dt.items.add(f);
-          sendMessage({ text: preambleText, files: dt.files });
+          sendMessage({ text: preambleText, files: dt.files, annotations });
         } else {
-          sendMessage({ text: preambleText });
+          sendMessage({ text: preambleText, annotations });
         }
       } catch {
         // Fallback: send only Claude-compatible files (images/PDFs)

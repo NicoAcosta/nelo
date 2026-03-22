@@ -1,6 +1,5 @@
 import { detectFileType } from "./validation";
 import { extractFromDxf } from "./cad-pipeline";
-import { convertDwgToDxf } from "./dwg-converter";
 import { extractFromPdf } from "./pdf-pipeline";
 import type { DocumentAnalysis } from "./types";
 
@@ -24,6 +23,7 @@ export async function processDocument(
   const processPromise = (async (): Promise<DocumentAnalysis> => {
     switch (fileType) {
       case "dwg": {
+        const { convertDwgToDxf } = await import("./dwg-converter");
         const dxfContent = await convertDwgToDxf(fileBuffer);
         const analysis = await extractFromDxf(dxfContent);
         return {
