@@ -97,7 +97,7 @@ export function HeroSection({ estimate }: HeroSectionProps) {
 
       {/* Confidence bar */}
       <div className="max-w-[380px] mx-auto mt-6 relative">
-        <div className="h-[3px] bg-[#222225] rounded-full relative" role="meter" aria-valuenow={confidencePercent} aria-valuemin={0} aria-valuemax={100} aria-label="Estimate confidence">
+        <div className="h-[3px] bg-[#222225] rounded-full relative" role="meter" aria-valuenow={confidencePercent} aria-valuemin={0} aria-valuemax={100} aria-label={t("estimate.confidenceAriaLabel")}>
           <div
             className="absolute h-full bg-gradient-to-r from-[rgba(204,255,0,0.2)] via-[#ccff00] to-[rgba(204,255,0,0.2)] rounded-full"
             style={{ left: "20%", right: "20%" }}

@@ -51,7 +51,7 @@ export function EstimateTopbar({
         <button
           disabled
           title={t("estimate.comingSoon")}
-          className="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-white/[0.06] text-[#3f3f46] cursor-not-allowed flex items-center gap-1.5"
+          className="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-white/[0.06] text-[#52525b] cursor-not-allowed flex items-center gap-1.5"
         >
           ⬇ {t("estimate.export")}
         </button>

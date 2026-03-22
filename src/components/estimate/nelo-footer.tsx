@@ -42,7 +42,7 @@ export function NeloFooter({ chatId }: NeloFooterProps) {
 
         {/* Tagline */}
         <div className="relative text-sm text-[#71717a] mt-3 font-medium">
-          AI Construction Cost Estimation
+          {t("estimate.tagline")}
         </div>
         <div className="relative font-mono text-[13px] text-[#3f3f46] mt-1.5 tracking-wider">
           nelo.archi

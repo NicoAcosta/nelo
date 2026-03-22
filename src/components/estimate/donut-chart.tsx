@@ -8,7 +8,6 @@ import { useLocale } from "@/lib/i18n/use-locale";
 
 interface DonutChartProps {
   categories: CategoryTotal[];
-  totalPrice: number;
 }
 
 const RADIUS = 80;
@@ -24,7 +23,7 @@ type Segment = {
   color: string;
 };
 
-export function DonutChart({ categories, totalPrice }: DonutChartProps) {
+export function DonutChart({ categories }: DonutChartProps) {
   const { t } = useLocale();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
@@ -69,7 +68,7 @@ export function DonutChart({ categories, totalPrice }: DonutChartProps) {
   return (
     <div className="bg-[#111113] p-8 flex flex-col items-center justify-center gap-6">
       <div className="w-[260px] h-[260px] relative">
-        <svg viewBox="0 0 200 200" className="w-full h-full -rotate-90" role="img" aria-label="Cost distribution chart showing category breakdown">
+        <svg viewBox="0 0 200 200" className="w-full h-full -rotate-90" role="img" aria-label={t("estimate.donutAriaLabel")}>
           {segmentData.map((seg) => (
             <circle
               key={seg.id}

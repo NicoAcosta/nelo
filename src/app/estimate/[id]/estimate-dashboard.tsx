@@ -56,7 +56,6 @@ export function EstimateDashboard({
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-px bg-white/[0.06] mx-4 md:mx-8 my-5 rounded-xl overflow-hidden border border-white/[0.06] min-h-[480px] animate-fade-up delay-3">
           <DonutChart
             categories={estimate.categories}
-            totalPrice={estimate.totalPrice}
           />
           <CategoryBreakdown categories={estimate.categories} />
         </div>
