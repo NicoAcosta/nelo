@@ -254,4 +254,18 @@ describe("UploadDialog", () => {
     expect(screen.getByText("new.dxf")).toBeInTheDocument();
     expect(screen.getByText("existing.pdf")).toBeInTheDocument();
   });
+
+  it("deduplicates files with same name, size, and lastModified", () => {
+    renderWithLocale(<UploadDialog {...defaultProps} />);
+    const fileInput = screen.getByTestId("upload-dialog-file-input") as HTMLInputElement;
+    const file = createFile("plan.dxf", 5000);
+    selectFiles(fileInput, [file]);
+    expect(screen.getByText("plan.dxf")).toBeInTheDocument();
+
+    // Try adding the exact same file again
+    selectFiles(fileInput, [file]);
+    // Should still only have one instance
+    const items = screen.getAllByText("plan.dxf");
+    expect(items.length).toBe(1);
+  });
 });

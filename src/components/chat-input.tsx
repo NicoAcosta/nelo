@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { IconSend, IconAttach } from "./icons";
-import { UploadDialog, getFileTypeIcon } from "./upload-dialog";
+import { UploadDialog, getFileTypeIcon, formatSize } from "./upload-dialog";
 import { useLocale } from "@/lib/i18n/use-locale";
 
 const MAX_MESSAGE_LENGTH = 5000;
@@ -66,7 +66,7 @@ export function ChatInput({
               <span key={`${file.name}-${i}`} className="inline-flex items-center gap-1.5 text-xs font-bold text-on-surface/60 bg-white/40 px-3 py-1 rounded-lg">
                 {(() => { const Icon = getFileTypeIcon(file.name); return <Icon className="w-3.5 h-3.5" />; })()}
                 <span className="truncate max-w-[150px]">{file.name}</span>
-                <span className="text-on-surface/30">{(file.size / 1024 / 1024).toFixed(1)}MB</span>
+                <span className="text-on-surface/30">{formatSize(file.size)}</span>
                 <button
                   type="button"
                   onClick={() => removeFile(i)}

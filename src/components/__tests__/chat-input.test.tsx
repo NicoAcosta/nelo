@@ -108,4 +108,27 @@ describe("ChatInput", () => {
     fireEvent.click(screen.getByLabelText("Remove a.png"));
     expect(screen.queryByText("a.png")).not.toBeInTheDocument();
   });
+
+  it("enables send button when files are attached and clears chips after sending", () => {
+    const onSend = vi.fn();
+    renderWithLocale(<ChatInput onSend={onSend} />);
+
+    // Send button starts disabled
+    expect(screen.getByRole("button", { name: /send/i })).toBeDisabled();
+
+    // Add file via dialog
+    fireEvent.click(screen.getByRole("button", { name: /attach/i }));
+    const fileInput = screen.getByTestId("upload-dialog-file-input") as HTMLInputElement;
+    const file = new File([new ArrayBuffer(1024)], "plan.dxf", { type: "application/octet-stream" });
+    Object.defineProperty(fileInput, "files", {
+      value: { length: 1, item: () => file, 0: file, [Symbol.iterator]: function* () { yield file; } } as unknown as FileList,
+      configurable: true,
+    });
+    fireEvent.change(fileInput);
+    fireEvent.click(screen.getByText("Upload Files"));
+    expect(screen.getByText("plan.dxf")).toBeInTheDocument();
+
+    // Send button is now enabled with files attached
+    expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+  });
 });

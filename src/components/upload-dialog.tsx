@@ -42,12 +42,15 @@ export function UploadDialog({ open, onClose, onConfirm, initialFiles = [] }: Up
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<Element | null>(null);
   const dragCounterRef = useRef(0);
+  // Ref to avoid initialFiles array identity triggering effect loops
+  const initialFilesRef = useRef(initialFiles);
+  initialFilesRef.current = initialFiles;
 
   // Reset state when dialog opens/closes
   useEffect(() => {
     if (open) {
       previousFocusRef.current = document.activeElement;
-      setFiles(initialFiles);
+      setFiles(initialFilesRef.current);
       setFileError(null);
       setIsDragOver(false);
       dragCounterRef.current = 0;
@@ -86,7 +89,18 @@ export function UploadDialog({ open, onClose, onConfirm, initialFiles = [] }: Up
         }
       }
       setFiles((prev) => {
-        const combined = [...prev, ...newFiles];
+        // Deduplicate by name + size + lastModified
+        const dedupedNew = newFiles.filter(
+          (f) =>
+            !prev.some(
+              (p) =>
+                p.name === f.name &&
+                p.size === f.size &&
+                p.lastModified === f.lastModified,
+            ),
+        );
+        if (dedupedNew.length === 0) return prev;
+        const combined = [...prev, ...dedupedNew];
         if (combined.length > MAX_FILES_PER_MESSAGE) {
           setFileError(t("uploadDialog.maxFiles"));
           return prev;
@@ -144,6 +158,7 @@ export function UploadDialog({ open, onClose, onConfirm, initialFiles = [] }: Up
   function handleConfirm() {
     if (files.length > 0) {
       onConfirm(files);
+      onClose();
     }
   }
 
@@ -251,6 +266,7 @@ export function UploadDialog({ open, onClose, onConfirm, initialFiles = [] }: Up
                 onChange={handleFileChange}
                 className="hidden"
                 data-testid="upload-dialog-file-input"
+                aria-label="Select files"
                 tabIndex={-1}
               />
 
