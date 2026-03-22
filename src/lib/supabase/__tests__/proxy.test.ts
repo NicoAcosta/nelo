@@ -166,16 +166,13 @@ describe("src/proxy.ts — route protection", () => {
     );
   });
 
-  it("redirects unauthenticated user on /api/chat to /auth/sign-in?next=/api/chat", async () => {
+  it("does NOT redirect unauthenticated user on /api/chat (API routes use own 401 guard)", async () => {
     mockGetUser.mockResolvedValue({ data: { user: null }, error: null });
     const { NextResponse } = await import("next/server");
     const { proxy } = await import("../../../proxy");
-    await proxy(makeRequest("/api/chat"));
-    expect(NextResponse.redirect).toHaveBeenCalledWith(
-      expect.objectContaining({
-        href: expect.stringMatching(/\/auth\/sign-in\?next=%2Fapi%2Fchat/),
-      })
-    );
+    const result = await proxy(makeRequest("/api/chat"));
+    expect(NextResponse.redirect).not.toHaveBeenCalled();
+    expect(result).toBe(mockNextResponse);
   });
 
   it("allows unauthenticated user on / (no redirect)", async () => {

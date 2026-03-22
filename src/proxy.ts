@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/lib/supabase/proxy";
 
-const PROTECTED_PREFIXES = ["/chat", "/projects", "/api/chat"];
+const PROTECTED_PREFIXES = ["/chat", "/projects"];
 
 export async function proxy(request: NextRequest) {
   const { supabaseResponse, user } = await updateSession(request);
@@ -25,5 +25,5 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher:
-    "/((?!_next/static|_next/image|favicon.ico|share/|auth/|api/health|api/cron/).*)",
+    "/((?!_next/static|_next/image|favicon.ico|share/|auth/callback|api/health|api/cron/).*)",
 };

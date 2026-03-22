@@ -80,7 +80,9 @@ export function SignInForm() {
         setOtp(["", "", "", "", "", ""]);
         inputRefs.current[0]?.focus();
       } else {
-        router.push(searchParams.get("next") ?? "/projects");
+        const raw = searchParams.get("next") ?? "/projects";
+        const safeDest = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/projects";
+        router.push(safeDest);
       }
     } catch {
       setError(t("auth.networkError"));

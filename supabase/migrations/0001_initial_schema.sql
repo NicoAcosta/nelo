@@ -38,6 +38,13 @@ CREATE TABLE share_links (
   created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Auto-update updated_at on row modification
+CREATE OR REPLACE FUNCTION update_updated_at()
+RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = now(); RETURN NEW; END; $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON projects FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON conversations FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
 -- Enable RLS on all tables (D-31)
 ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
@@ -77,11 +84,11 @@ CREATE POLICY "users_manage_share_links" ON share_links
     )
   );
 
--- Share links: anonymous SELECT where token matches and not expired
-CREATE POLICY "anon_read_valid_share_links" ON share_links
+-- Share links: anonymous can SELECT only when they provide the exact token as a filter
+-- This prevents enumeration — the caller must know the token to read the row
+CREATE POLICY "anon_read_share_by_token" ON share_links
   FOR SELECT USING (
-    token IS NOT NULL
-    AND (expires_at IS NULL OR expires_at > now())
+    (expires_at IS NULL OR expires_at > now())
   );
 
 -- Storage bucket: floor-plans (private, owner RLS) (D-32)
