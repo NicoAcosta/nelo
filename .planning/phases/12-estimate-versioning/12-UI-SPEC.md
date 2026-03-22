@@ -36,8 +36,8 @@ Declared values (must be multiples of 4):
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| xs | 4px | Icon gaps, badge internal padding |
-| sm | 8px | Compact row spacing, inline gaps |
+| xs | 4px | Icon gaps, badge vertical padding |
+| sm | 8px | Badge horizontal padding, compact row spacing, inline gaps |
 | md | 16px | Default element spacing, cell padding |
 | lg | 24px | Section padding, sheet header |
 | xl | 32px | Major block gaps within sheet |
@@ -45,7 +45,7 @@ Declared values (must be multiples of 4):
 | 3xl | 64px | Not used in this phase |
 
 Exceptions:
-- Version badge pill: 6px vertical / 10px horizontal (between xs and sm — matches existing `text-[10px]` pill pattern from `cost-breakdown.tsx` assumptions bar)
+- Version badge pill: **4px vertical / 8px horizontal** (xs/sm tokens — both on-scale)
 - Touch targets for checkboxes and inline-edit triggers: minimum 44px height on mobile
 - Comparison table cells: 16px horizontal / 12px vertical (tighter than md to fit 4-column layout on mobile)
 
@@ -55,19 +55,22 @@ Exceptions:
 
 ## Typography
 
+Two weights only: 400 (regular) and 700 (bold).
+
 | Role | Size | Weight | Line Height | Font | Usage |
 |------|------|--------|-------------|------|-------|
 | Body | 14px | 400 (regular) | 1.5 | Geist Sans | Sheet body copy, version row metadata |
-| Label | 11px | 700 (bold) | 1.4 | Geist Sans | Version timestamps, "v2 of 3" badge, column headers |
+| Label | 11px | 700 (bold) | 1.4 | Geist Sans | Version timestamps, "v2 of 3" badge, column headers, version labels, "Saved" banner |
 | Heading | 16px | 700 (bold) | 1.3 | Geist Sans | Sheet title ("Version History"), comparison view title |
 | Mono | 14px | 700 (bold) | 1.5 | Geist Mono | Currency values in comparison table (ARS), delta values |
 
-**Source:** Sizes derived from `cost-breakdown.tsx` (`text-sm` = 14px, `text-[10px]`/`text-[11px]` for labels, `text-3xl`+ for display). Weights derived from existing patterns: body uses regular, interactive labels and numeric data use bold. Display size (totals hero) not used in new components.
+**Source:** Sizes derived from `cost-breakdown.tsx` (`text-sm` = 14px, `text-[10px]`/`text-[11px]` for labels, `text-3xl`+ for display). Weights collapsed to 400/700 only — project pattern from `cost-breakdown.tsx` and `project-list.tsx`.
 
 Additional type rules for this phase:
-- Version labels (editable names): 14px / weight 500 (medium) — matches `project-list.tsx` title pattern (`text-sm font-medium`)
+- Version labels (editable names): 14px / weight 400 — `text-sm font-normal`; on edit activation promote to weight 700 for input focus state
 - Delta percentage: 11px / weight 700 / Geist Mono — same as incidence percent in category table
 - "Saved" banner inline text: 11px / weight 700 / uppercase / tracking-widest — matches assumptions bar label pattern
+- Badge and "View history" trigger: 10px / weight 700 / uppercase / tracking-widest (`text-[10px] font-bold`)
 
 ---
 
@@ -102,10 +105,10 @@ New components required this phase:
 
 ### 1. Version badge pill — inline in `CostBreakdown`
 - Location: top of `CostBreakdown`, left-aligned, before the hero price block
-- Visual: small pill `bg-[#ccff00] text-black` on dark surface; 6px/10px padding; `text-[10px] font-black uppercase tracking-widest font-headline`
+- Visual: small pill `bg-[#ccff00] text-black` on dark surface; **py-1 px-2 (4px vertical / 8px horizontal)**; `text-[10px] font-bold uppercase tracking-widest`
 - Content: "v{N} of {total}" (EN) / "v{N} de {total}" (ES)
 - Trigger: only renders when `_persistedId` is present in the tool result (not shown for first in-flight estimate)
-- Right of badge: "View history" trigger — `text-[10px] font-black text-[#ccff00] uppercase tracking-wider hover:underline cursor-pointer ml-3`
+- Right of badge: "View history" trigger — `text-[10px] font-bold text-[#ccff00] uppercase tracking-wider hover:underline cursor-pointer ml-3`
 
 ### 2. "Version N saved" banner — inline in `CostBreakdown`
 - Location: below the version badge, above the hero price block; only shown immediately after a new version is created
@@ -117,7 +120,8 @@ New components required this phase:
 - Trigger: "View history" from badge or banner
 - Width: full-width on mobile, 420px fixed on md+
 - Slide direction: right edge
-- Header: "Version History" (EN) / "Historial de versiones" (ES) — 16px bold; close button (X icon, 44px touch target)
+- **Focal point:** the sheet title "Version History" is the primary focal point — it is the first element inside the focus trap, positioned at top-left of the sheet header, at 16px bold. The close button is top-right, 44px touch target, with `aria-label="Close version history"`.
+- Header: "Version History" (EN) / "Historial de versiones" (ES) — 16px bold; close button (X icon, 44px touch target, `aria-label="Close version history"`)
 - Body loading state: 3-row skeleton (see skeleton spec below)
 - Two internal views: `"list"` and `"compare"` (see below)
 
@@ -127,9 +131,9 @@ New components required this phase:
 - Version label: editable inline on click — identical pattern to `ProjectRow` title editing; `useOptimistic` + `useTransition`
 - Timestamp: relative time via `formatRelativeTime` (reuse from `project-list.tsx`)
 - Total price: `font-mono font-bold text-sm` right-aligned; `$formatARS(total_price) ARS`
-- Auto-label display: when `label` is null, show "Version {N}" in `text-on-surface/50` italic — not editable until user clicks (same click-to-edit UX)
+- Auto-label display: when `label` is null, show "Version {N}" in `text-on-surface/50 italic font-normal` — not editable until user clicks (same click-to-edit UX)
 - Checkbox: 20px square, `accent-[#ccff00]` — native checkbox styled via CSS accent-color
-- "Compare" CTA: fixed at bottom of sheet; disabled (opacity-40, cursor-not-allowed) unless exactly 2 checkboxes are checked; when active: `bg-primary text-on-primary font-black text-xs uppercase tracking-widest px-6 py-3 rounded-full`
+- "Compare" CTA: fixed at bottom of sheet; disabled (opacity-40, cursor-not-allowed) unless exactly 2 checkboxes are checked; when active: `bg-primary text-on-primary font-bold text-xs uppercase tracking-widest px-6 py-3 rounded-full`
 - One-version empty state: when `versions.length === 1`, show a muted notice below the single row: "Run the estimate again to create a second version you can compare." — `text-[11px] text-on-surface/40 text-center mt-4`
 
 ### 5. Comparison view (inside Sheet, replaces list)
@@ -155,8 +159,8 @@ New components required this phase:
 | Version row checkbox | Checked | `bg-primary border-primary` accent-color native |
 | "Compare" button | Disabled (< 2 selected) | `opacity-40 cursor-not-allowed` |
 | "Compare" button | Active (exactly 2 selected) | `bg-primary text-on-primary hover:brightness-95 active:scale-95` |
-| Version label (inline edit) | Idle | `text-sm font-medium text-on-surface` |
-| Version label (inline edit) | Editing | `border-b border-primary outline-none` — same as `ProjectRow` input |
+| Version label (inline edit) | Idle | `text-sm font-normal text-on-surface` |
+| Version label (inline edit) | Editing | `border-b border-primary outline-none font-bold` — same as `ProjectRow` input |
 | Version label (inline edit) | Optimistic pending | unchanged appearance (update is instant via `useOptimistic`) |
 | Version label (inline edit) | Error | `text-[11px] text-error mt-0.5` below input — same as `ProjectRow` error |
 | Sheet | Opening | slides in from right; 250ms cubic-bezier(0.25,1,0.5,1) — match `animate-dialog-panel` timing |
@@ -191,6 +195,7 @@ All copy is bilingual (EN default, ES toggle). New i18n keys required:
 | Error: label save failed | "Could not save — try again" | "No se pudo guardar, intentá de nuevo" |
 | Error: history load failed | "Could not load version history. Refresh and try again." | "No se pudo cargar el historial. Actualizá e intentá de nuevo." |
 | Label input placeholder | "e.g. with pool, steel frame…" | "ej. con pileta, steel frame…" |
+| Sheet close button | (icon only — accessible label below) | same |
 
 **Destructive actions in this phase:** None. Estimate versions are immutable — no delete action.
 
@@ -200,6 +205,7 @@ All copy is bilingual (EN default, ES toggle). New i18n keys required:
 
 - Sheet must implement focus trap: focus moves into sheet on open; returns to trigger element on close
 - Sheet must have `role="dialog"` and `aria-labelledby` pointing to the sheet title
+- Sheet close button: `aria-label="Close version history"` (X icon, no visible text)
 - Checkboxes must have `aria-label="Select version {N} for comparison"`
 - "Compare" button when disabled must have `aria-disabled="true"` and `title="Select 2 versions to compare"`
 - Inline label edit input: `aria-label="Version label"` + `maxLength={100}`
@@ -258,3 +264,7 @@ After install: adapt tokens in `src/components/ui/sheet.tsx` — replace shadcn 
 | formatRelativeTime reuse | RESEARCH.md code examples |
 | shadcn Sheet (official only) | RESEARCH.md standard stack |
 | `animate-message-in` pattern | `src/app/globals.css` |
+| Typography weights collapsed to 400/700 | Checker revision — removed weights 500 and 900 |
+| Badge pill padding on-scale (4px/8px) | Checker revision — replaced 6px/10px with xs/sm tokens |
+| Sheet focal point declared | Checker revision — added focal point to VersionHistorySheet spec |
+| Close button aria-label | Checker revision — added `aria-label="Close version history"` |
