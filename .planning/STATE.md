@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Persistence & Sharing
 status: unknown
-stopped_at: Completed 12-estimate-versioning/12-02-PLAN.md
-last_updated: "2026-03-22T09:44:11.454Z"
+stopped_at: Completed 13-shareable-links-floor-plan-storage/13-01-PLAN.md
+last_updated: "2026-03-22T11:03:00.757Z"
 last_activity: 2026-03-22
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 9
-  completed_plans: 9
+  total_plans: 11
+  completed_plans: 10
 ---
 
 # Project State: Nelo
@@ -19,12 +19,12 @@ progress:
 
 See: .planning/PROJECT.md (updated 2026-03-21)
 **Core value:** Accurate, transparent construction cost estimation through natural conversation
-**Current focus:** Phase 12 — estimate-versioning
+**Current focus:** Phase 13 — shareable-links-floor-plan-storage
 
 ## Current Position
 
-Phase: 13
-Plan: Not started
+Phase: 13 (shareable-links-floor-plan-storage) — EXECUTING
+Plan: 2 of 2
 
 ## Performance Metrics
 
@@ -49,6 +49,7 @@ Plan: Not started
 | Phase 11-project-management P02 | 20 | 3 tasks | 4 files |
 | Phase 12-estimate-versioning P01 | 5 | 2 tasks | 9 files |
 | Phase 12-estimate-versioning P02 | 45min | 3 tasks | 6 files |
+| Phase 13-shareable-links-floor-plan-storage P01 | 10 | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,8 @@ Plan: Not started
 - 12-01: saveEstimate callback bound at route handler — supabase client never created inside tool execute
 - 12-02: VersionHistorySheet accepts projectId (not conversationId) — resolves UUID lazily via getConversationIdAction on sheet open
 - 12-02: Comparison view fetches both EstimateRows in parallel (Promise.all) then calls compareEstimates client-side
+- 13-01: FloorPlanRefMetadata stored in message.metadata (not annotations) — AI SDK v6 sendMessage does not support annotations; metadata is the correct v6 pattern
+- 13-01: Custom Popover component (no Radix/shadcn CLI) — project has no components.json; follows existing Sheet pattern
 
 ### Pending Todos
 
@@ -98,6 +101,6 @@ None yet.
 
 Last activity: 2026-03-22
 
-Last session: 2026-03-22T09:39:52.671Z
-Stopped at: Completed 12-estimate-versioning/12-02-PLAN.md
+Last session: 2026-03-22T11:03:00.754Z
+Stopped at: Completed 13-shareable-links-floor-plan-storage/13-01-PLAN.md
 Resume file: None

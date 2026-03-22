@@ -34,9 +34,9 @@ Requirements for Persistence & Sharing milestone. Each maps to roadmap phases.
 
 ### Sharing
 
-- [ ] **SHARE-01**: User can generate a shareable link for any estimate (public read-only, nanoid token)
-- [ ] **SHARE-02**: Shared links support optional expiration dates
-- [ ] **SHARE-03**: Floor plan images stored in Supabase Storage (replaces base64 in-memory)
+- [x] **SHARE-01**: User can generate a shareable link for any estimate (public read-only, nanoid token)
+- [x] **SHARE-02**: Shared links support optional expiration dates
+- [x] **SHARE-03**: Floor plan images stored in Supabase Storage (replaces base64 in-memory)
 
 ## Future Requirements
 
@@ -98,9 +98,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | VERS-02 | Phase 12 | Complete |
 | VERS-03 | Phase 12 | Complete |
 | VERS-04 | Phase 12 | Complete |
-| SHARE-01 | Phase 13 | Pending |
-| SHARE-02 | Phase 13 | Pending |
-| SHARE-03 | Phase 13 | Pending |
+| SHARE-01 | Phase 13 | Complete |
+| SHARE-02 | Phase 13 | Complete |
+| SHARE-03 | Phase 13 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 15 total
