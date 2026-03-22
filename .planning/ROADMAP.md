@@ -119,7 +119,12 @@ Plans:
   3. Unauthenticated user visiting `/chat` or `/projects` is redirected to the sign-in page and lands on their intended destination after signing in.
   4. User can click "Sign out" and is redirected to the landing page; returning to `/chat` or `/projects` requires signing in again.
   5. `/share/**` routes are accessible without authentication (public read-only paths are not blocked by auth middleware).
-**Plans**: TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Supabase packages, client factories, proxy.ts session middleware, database migration SQL
+- [ ] 09-02-PLAN.md — AuthProvider context, sign-in page (email + OTP), PKCE callback route, i18n strings
+- [ ] 09-03-PLAN.md — Header user menu with sign-out, chat API auth guard, projects page placeholder
 
 ### Phase 10: Chat Persistence
 **Goal**: Chat conversations survive page refreshes, tab closes, and browser sessions — users can return to `/chat/[id]` and see their full history exactly as they left it.
@@ -179,7 +184,7 @@ Plans:
 | 6. Floor Plan Upload | v1.0 | - | Complete | 2026-03-21 |
 | 7. Bilingual i18n | v1.0 | 4/4 | Complete | 2026-03-21 |
 | 8. Real Pricing Data Pipeline | v1.0 | 5/5 | Complete | 2026-03-21 |
-| 9. Supabase Auth Infrastructure | v1.1 | 0/TBD | Not started | - |
+| 9. Supabase Auth Infrastructure | v1.1 | 0/3 | Planning complete | - |
 | 10. Chat Persistence | v1.1 | 0/TBD | Not started | - |
 | 11. Project Management | v1.1 | 0/TBD | Not started | - |
 | 12. Estimate Versioning | v1.1 | 0/TBD | Not started | - |
