@@ -162,11 +162,12 @@ function ChatContent() {
         <Header projectName={messages.length > 0 ? t("header.newEstimate") : undefined} />
 
         {/* Messages area */}
+        <div className="flex-1 min-h-0 relative">
         <section
           role="log"
           aria-live="polite"
           aria-label="Chat messages"
-          className="flex-1 overflow-y-auto p-6 md:p-12 pb-20 md:pb-12 space-y-12 max-w-5xl mx-auto w-full"
+          className="absolute inset-0 overflow-y-auto p-6 md:p-12 pb-20 md:pb-12 space-y-12 max-w-5xl mx-auto w-full"
         >
           {messages.length === 0 && !isStreaming && (
             <div className="flex flex-col items-center justify-center h-full text-center">
@@ -236,6 +237,7 @@ function ChatContent() {
 
           <div ref={messagesEndRef} />
         </section>
+        </div>
 
         {/* Input */}
         <div className="p-6 pb-24 md:pb-6 bg-transparent relative z-10">
