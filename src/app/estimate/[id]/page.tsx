@@ -46,12 +46,15 @@ export default async function EstimatePage({
 
   const projectName = project.title || "Construction Estimate";
 
+  const persistedId = (estimateData.estimate as Estimate & { _persistedId?: string })._persistedId;
+
   return (
     <EstimateDashboard
       estimate={estimateData.estimate}
       inputs={estimateData.inputs}
       projectName={projectName}
       chatId={id}
+      estimateId={persistedId}
     />
   );
 }

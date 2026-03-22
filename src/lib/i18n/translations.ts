@@ -274,6 +274,27 @@ const en: Translations = {
   "projects.renameHint": "Click to rename",
   "projects.titleTooLong": "Title too long (100 chars max)",
   "projects.titleEmpty": "Title cannot be empty",
+
+  // share
+  "share.createLink": "Create shareable link",
+  "share.copyLink": "Copy link",
+  "share.copied": "Copied!",
+  "share.revokeLink": "Revoke link",
+  "share.revokeConfirm": "Are you sure?",
+  "share.expiration": "Expiration",
+  "share.noExpiration": "No expiration",
+  "share.7days": "7 days",
+  "share.30days": "30 days",
+  "share.90days": "90 days",
+  "share.expiresOn": "Expires {date}",
+  "share.noExpiry": "No expiration",
+  "share.linkCreated": "Link created",
+  "share.error": "Failed to create link",
+  "share.expired": "This estimate link has expired. Ask the owner for a new link.",
+  "share.notFound": "Estimate not found",
+  "share.sharedVia": "Estimate shared via Nelo",
+  "share.poweredBy": "Powered by Nelo",
+  "share.getEstimate": "Get your own estimate",
 };
 
 const es: Translations = {
@@ -551,6 +572,27 @@ const es: Translations = {
   "projects.renameHint": "Hacer click para renombrar",
   "projects.titleTooLong": "Titulo demasiado largo (max 100 caracteres)",
   "projects.titleEmpty": "El titulo no puede estar vacio",
+
+  // share
+  "share.createLink": "Crear enlace compartible",
+  "share.copyLink": "Copiar enlace",
+  "share.copied": "Copiado!",
+  "share.revokeLink": "Revocar enlace",
+  "share.revokeConfirm": "Estas seguro?",
+  "share.expiration": "Vencimiento",
+  "share.noExpiration": "Sin vencimiento",
+  "share.7days": "7 dias",
+  "share.30days": "30 dias",
+  "share.90days": "90 dias",
+  "share.expiresOn": "Vence el {date}",
+  "share.noExpiry": "Sin vencimiento",
+  "share.linkCreated": "Enlace creado",
+  "share.error": "Error al crear enlace",
+  "share.expired": "Este enlace ha expirado. Pedile al propietario un nuevo enlace.",
+  "share.notFound": "Presupuesto no encontrado",
+  "share.sharedVia": "Presupuesto compartido via Nelo",
+  "share.poweredBy": "Creado con Nelo",
+  "share.getEstimate": "Obtene tu propio presupuesto",
 };
 
 export const translations: Record<Locale, Translations> = { en, es };

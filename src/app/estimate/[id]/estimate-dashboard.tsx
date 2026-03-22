@@ -16,6 +16,7 @@ interface EstimateDashboardProps {
   inputs: ProjectInputs;
   projectName: string;
   chatId: string;
+  estimateId?: string;
 }
 
 export function EstimateDashboard({
@@ -23,6 +24,7 @@ export function EstimateDashboard({
   inputs,
   projectName,
   chatId,
+  estimateId,
 }: EstimateDashboardProps) {
   const locationLabel = ZONE_LABELS[estimate.locationZone] ?? "";
 
@@ -41,6 +43,7 @@ export function EstimateDashboard({
         projectName={projectName}
         chatId={chatId}
         locationLabel={locationLabel}
+        estimateId={estimateId}
       />
 
       <main>
