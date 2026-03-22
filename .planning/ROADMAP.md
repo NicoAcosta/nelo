@@ -180,7 +180,11 @@ Plans:
   2. Anyone with the share link can view the full cost breakdown at `/share/{token}` without signing in — the page is publicly readable.
   3. User can optionally set an expiration date when creating a share link; once expired, the link returns a "This link has expired" message rather than the estimate.
   4. Floor plan images uploaded during a chat session are stored in a private Supabase Storage bucket and served via signed URLs — they are not embedded as base64 strings anywhere in the database or shared pages.
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 13-01-PLAN.md — Data layer: share-links DB/actions, service-role client, migration, floor plan Storage upload + signed URLs (TDD)
+- [ ] 13-02-PLAN.md — UI: SharePopover in topbar, public /share/[token] page, i18n keys, end-to-end verification
 
 ---
 
@@ -200,7 +204,7 @@ Plans:
 | 10. Chat Persistence | v1.1 | 2/2 | Complete    | 2026-03-22 |
 | 11. Project Management | v1.1 | 2/2 | Complete    | 2026-03-22 |
 | 12. Estimate Versioning | v1.1 | 2/2 | Complete    | 2026-03-22 |
-| 13. Shareable Links and Floor Plan Storage | v1.1 | 0/TBD | Not started | - |
+| 13. Shareable Links and Floor Plan Storage | v1.1 | 0/2 | In progress | - |
 
 ---
 
