@@ -5,7 +5,7 @@ import Link from "next/link";
 import { updateProjectTitle } from "@/lib/actions/projects";
 import type { ProjectSummary } from "@/lib/db/conversations";
 import { useLocale } from "@/lib/i18n/use-locale";
-import { IconEstimates } from "@/components/icons";
+import { IconProjects } from "@/components/icons";
 
 function formatRelativeTime(dateStr: string, locale: string): string {
   const now = Date.now();
@@ -113,7 +113,7 @@ function ProjectRow({ project, onRename, locale, t, index }: ProjectRowProps) {
       </div>
       <Link
         href={"/chat/" + project.id}
-        className="ml-4 px-4 py-2 text-[10px] font-bold uppercase tracking-wider border border-primary/30 rounded-full text-primary hover:bg-primary hover:text-on-primary transition-all active:scale-95 shrink-0"
+        className="ml-4 px-4 py-2 text-[10px] font-bold uppercase tracking-wider border border-on-surface/20 rounded-full text-on-surface/70 hover:bg-primary hover:text-on-primary hover:border-primary transition-all active:scale-95 shrink-0"
         aria-label={"Open " + project.title}
       >
         <span className="hidden md:inline">{t("projects.open")}</span>
@@ -141,7 +141,7 @@ export function ProjectList({ projects }: { projects: ProjectSummary[] }) {
 
       {optimisticProjects.length === 0 ? (
         <div className="text-center py-20">
-          <IconEstimates className="w-10 h-10 text-on-surface/20 mx-auto mb-4" />
+          <IconProjects className="w-10 h-10 text-on-surface/20 mx-auto mb-4" />
           <p className="text-sm font-medium text-on-surface/40 mb-1">
             {t("projects.empty")}
           </p>
