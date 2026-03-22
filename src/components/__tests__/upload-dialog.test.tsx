@@ -230,7 +230,7 @@ describe("UploadDialog", () => {
     expect(screen.getByText("dropped.pdf")).toBeInTheDocument();
   });
 
-  it("resets files when dialog reopens", () => {
+  it("resets files when dialog reopens without initialFiles", () => {
     const { rerender } = renderWithLocale(<UploadDialog {...defaultProps} />);
     const fileInput = screen.getByTestId("upload-dialog-file-input") as HTMLInputElement;
     selectFiles(fileInput, [createFile("plan.dxf", 5000)]);
@@ -240,5 +240,18 @@ describe("UploadDialog", () => {
     rerender(<LocaleProvider><UploadDialog {...defaultProps} open={false} /></LocaleProvider>);
     rerender(<LocaleProvider><UploadDialog {...defaultProps} open={true} /></LocaleProvider>);
     expect(screen.queryByText("plan.dxf")).not.toBeInTheDocument();
+  });
+
+  it("pre-populates with initialFiles when provided", () => {
+    const existingFile = createFile("existing.pdf", 2048);
+    renderWithLocale(
+      <UploadDialog {...defaultProps} initialFiles={[existingFile]} />,
+    );
+    expect(screen.getByText("existing.pdf")).toBeInTheDocument();
+    // Can still add more files
+    const fileInput = screen.getByTestId("upload-dialog-file-input") as HTMLInputElement;
+    selectFiles(fileInput, [createFile("new.dxf", 1024)]);
+    expect(screen.getByText("new.dxf")).toBeInTheDocument();
+    expect(screen.getByText("existing.pdf")).toBeInTheDocument();
   });
 });

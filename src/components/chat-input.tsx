@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { IconSend, IconAttach, IconAutoCAD, IconPDF, IconPhoto } from "./icons";
-import { UploadDialog } from "./upload-dialog";
+import { IconSend, IconAttach } from "./icons";
+import { UploadDialog, getFileTypeIcon } from "./upload-dialog";
 import { useLocale } from "@/lib/i18n/use-locale";
-import { detectFileType } from "@/lib/documents/validation";
 
 const MAX_MESSAGE_LENGTH = 5000;
 
@@ -12,13 +11,6 @@ interface ChatInputProps {
   onSend: (message: string, files?: FileList) => void;
   disabled?: boolean;
   placeholder?: string;
-}
-
-function FileTypeIcon({ fileName }: { fileName: string }) {
-  const type = detectFileType(fileName);
-  if (type === "dwg" || type === "dxf") return <IconAutoCAD className="w-3.5 h-3.5" />;
-  if (type === "pdf") return <IconPDF className="w-3.5 h-3.5" />;
-  return <IconPhoto className="w-3.5 h-3.5" />;
 }
 
 export function ChatInput({
@@ -72,7 +64,7 @@ export function ChatInput({
           <div className="flex flex-wrap items-center gap-2 px-4 py-2 mb-1">
             {selectedFiles.map((file, i) => (
               <span key={`${file.name}-${i}`} className="inline-flex items-center gap-1.5 text-xs font-bold text-on-surface/60 bg-white/40 px-3 py-1 rounded-lg">
-                <FileTypeIcon fileName={file.name} />
+                {(() => { const Icon = getFileTypeIcon(file.name); return <Icon className="w-3.5 h-3.5" />; })()}
                 <span className="truncate max-w-[150px]">{file.name}</span>
                 <span className="text-on-surface/30">{(file.size / 1024 / 1024).toFixed(1)}MB</span>
                 <button
@@ -128,6 +120,7 @@ export function ChatInput({
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
         onConfirm={handleDialogConfirm}
+        initialFiles={selectedFiles}
       />
     </div>
   );

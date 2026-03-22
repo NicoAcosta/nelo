@@ -15,23 +15,25 @@ interface UploadDialogProps {
   open: boolean;
   onClose: () => void;
   onConfirm: (files: File[]) => void;
+  /** Pre-populate with already-selected files so users can add incrementally */
+  initialFiles?: File[];
 }
 
-function getFileTypeIcon(fileName: string) {
+export function getFileTypeIcon(fileName: string) {
   const type = detectFileType(fileName);
   if (type === "dwg" || type === "dxf") return IconAutoCAD;
   if (type === "pdf") return IconPDF;
   return IconPhoto;
 }
 
-function formatSize(bytes: number): string {
+export function formatSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   const mb = bytes / (1024 * 1024);
   if (mb >= 1) return `${mb.toFixed(1)} MB`;
   return `${(bytes / 1024).toFixed(0)} KB`;
 }
 
-export function UploadDialog({ open, onClose, onConfirm }: UploadDialogProps) {
+export function UploadDialog({ open, onClose, onConfirm, initialFiles = [] }: UploadDialogProps) {
   const { t } = useLocale();
   const [files, setFiles] = useState<File[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -45,7 +47,7 @@ export function UploadDialog({ open, onClose, onConfirm }: UploadDialogProps) {
   useEffect(() => {
     if (open) {
       previousFocusRef.current = document.activeElement;
-      setFiles([]);
+      setFiles(initialFiles);
       setFileError(null);
       setIsDragOver(false);
       dragCounterRef.current = 0;
