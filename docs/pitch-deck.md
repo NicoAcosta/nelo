@@ -192,7 +192,7 @@ Nelo handles two critical stages of construction estimation:
 **Layout:** Left side: three bullet points. Right side: large QR code or URL.
 
 **Content on slide:**
-- **Built from real pain** — Our architect co-founder spent the last year dealing with this problem
+- **Built from real pain** — Our architect co-founder has spent his career dealing with this problem
 - **Waitlist ready** — Architects we've talked to want to use it
 - **Shipped in 24h** — Full estimation engine, vision analysis, bilingual UI, real pricing data
 
@@ -231,7 +231,7 @@ Right side: QR code to try it live, or the app URL.
 >
 > And if you're the architect? You're spending weeks on every project — calling suppliers, researching prices, filling spreadsheets. The same repetitive work, over and over.
 >
-> Our co-founder Juan Cruz is an architect. He spent the last year dealing with this exact problem. So we built the solution.
+> Our co-founder Juan Cruz is an architect. He has spent his career dealing with this exact problem. So we built the solution.
 
 ---
 
@@ -307,7 +307,7 @@ Right side: QR code to try it live, or the app URL.
 
 ### [SLIDE 7 — TRACTION & CLOSE] (2:40 - 3:00)
 
-> Nelo isn't a hackathon idea. Juan Cruz spent the last year burning time on estimates — this is the tool he needed.
+> Nelo isn't a hackathon idea. Juan Cruz has spent his career burning time on estimates — this is the tool he needed.
 >
 > We've already talked to other architects. They want to use it. We have a waitlist of professionals ready to try it the moment we open access.
 >

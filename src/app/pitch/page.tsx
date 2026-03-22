@@ -130,7 +130,7 @@ function Slide1() {
       <div className="w-full max-w-6xl mx-auto px-10 md:px-20 grid md:grid-cols-[1.4fr_1fr] gap-16 items-center">
         {/* Left — statement */}
         <div>
-          <p className="text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/50 font-semibold mb-8">The problem</p>
+          <p className="text-[11px] uppercase tracking-[0.3em] text-[#6b8a00] font-semibold mb-8">The problem</p>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[0.92] mb-8 text-[#1a1a1a]">
             Getting a construction
             <br />
@@ -139,7 +139,7 @@ function Slide1() {
             <span className="text-[#1a1a1a]/25">take weeks.</span>
           </h1>
           <p className="text-base md:text-lg text-[#1a1a1a]/65 leading-relaxed max-w-xl">
-            Juan Cruz is an architect. He spent the last year burning time and money on estimates for every project. This isn&apos;t a hypothetical &mdash; this is his daily frustration.
+            Juan Cruz is an architect. Throughout his career, he&apos;s burned countless hours on cost estimates for every single project. This isn&apos;t a hypothetical &mdash; this is his daily reality.
           </p>
         </div>
 
@@ -162,7 +162,7 @@ function Slide1() {
           <div className="flex items-baseline gap-4">
             <span className="text-2xl md:text-3xl font-black text-[#1a1a1a]/15 line-through decoration-2 decoration-[#1a1a1a]/20">2-3 weeks</span>
             <span className="text-[#1a1a1a]/25 text-lg">&rarr;</span>
-            <span className="text-2xl md:text-3xl font-black text-[#1a1a1a]">5 minutes</span>
+            <span className="text-2xl md:text-3xl font-black text-[#4d7a00]">5 minutes</span>
           </div>
         </div>
       </div>
@@ -354,7 +354,7 @@ const team = [
   {
     name: "Juan Cruz Feres",
     role: "Architect",
-    desc: "Uses this budget structure every day. Spent the last year dealing with this exact problem.",
+    desc: "Uses this budget structure every day. Has dealt with this exact problem throughout his career.",
     initial: "JC",
     photo: "/images/team/jc.jpg",
   },
@@ -403,7 +403,7 @@ function Slide6() {
   return (
     <div className="w-screen h-screen flex-shrink-0 bg-[#f2f2f0] text-[#1a1a1a] flex items-center">
       <div className="w-full max-w-5xl mx-auto px-10 md:px-20">
-        <p className="text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/50 font-semibold mb-8">The team</p>
+        <p className="text-[11px] uppercase tracking-[0.3em] text-[#6b8a00] font-semibold mb-8">The team</p>
         <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-[0.92] mb-16 text-[#1a1a1a]">
           Built by people who<br />know the problem.
         </h2>
@@ -413,7 +413,7 @@ function Slide6() {
             <div key={member.name}>
               <TeamPhoto member={member} />
               <h3 className="text-lg font-black uppercase tracking-tight text-[#1a1a1a] mt-5">{member.name}</h3>
-              <p className="text-xs text-[#1a1a1a]/55 uppercase tracking-[0.2em] font-bold mt-1 mb-3">{member.role}</p>
+              <p className="text-xs text-[#6b8a00] uppercase tracking-[0.2em] font-bold mt-1 mb-3">{member.role}</p>
               <p className="text-sm text-[#1a1a1a]/60 leading-relaxed">{member.desc}</p>
             </div>
           ))}
@@ -430,7 +430,7 @@ function Slide6() {
 function Slide7() {
   return (
     <div className="w-screen h-screen flex-shrink-0 bg-[#f2f2f0] text-[#1a1a1a] flex flex-col items-center justify-center px-8 md:px-16">
-      <p className="text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/50 font-semibold mb-6">Already validated</p>
+      <p className="text-[11px] uppercase tracking-[0.3em] text-[#6b8a00] font-semibold mb-6">Already validated</p>
       <h2 className="text-4xl md:text-6xl font-black tracking-tight text-center text-[#1a1a1a] mb-14 leading-[0.92]">
         From weeks to minutes.
       </h2>
@@ -451,8 +451,8 @@ function Slide7() {
 
         <div className="flex flex-col gap-6">
           <div>
-            <div className="text-2xl font-black text-[#1a1a1a]/70 mb-1" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>1 year</div>
-            <p className="text-xs text-[#1a1a1a]/60">of real pain &mdash; our architect lived this problem every day</p>
+            <div className="text-2xl font-black text-[#1a1a1a]/70 mb-1" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>Real pain</div>
+            <p className="text-xs text-[#1a1a1a]/60">our architect has dealt with this problem his entire career</p>
           </div>
           <div>
             <div className="text-2xl font-black text-[#1a1a1a]/70 mb-1" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>Waitlist</div>
