@@ -242,6 +242,23 @@ const en: Translations = {
   "estimate.bedrooms": "Bedrooms",
   "estimate.bathrooms": "Bathrooms",
 
+  // versionHistory
+  "versionHistory.viewHistory": "View history",
+  "versionHistory.compareVersions": "Compare versions",
+  "versionHistory.versionBadge": "v{n} of {total}",
+  "versionHistory.savedBanner": "Version {n} saved -- View history",
+  "versionHistory.sheetTitle": "Version History",
+  "versionHistory.autoLabel": "Version {n}",
+  "versionHistory.oneVersionNotice": "Run the estimate again to create a second version you can compare.",
+  "versionHistory.comparingHeader": "Comparing v{a} and v{b}",
+  "versionHistory.totalChange": "Total change",
+  "versionHistory.pricePerM2Change": "Price/m2 change",
+  "versionHistory.percentChange": "% change",
+  "versionHistory.backToList": "Back to list",
+  "versionHistory.labelSaveFailed": "Could not save -- try again",
+  "versionHistory.historyLoadFailed": "Could not load version history. Refresh and try again.",
+  "versionHistory.labelPlaceholder": "e.g. with pool, steel frame...",
+
   // projects
   "projects.title": "Projects",
   "projects.empty": "No projects yet.",
@@ -495,6 +512,23 @@ const es: Translations = {
   "estimate.zone": "Zona",
   "estimate.bedrooms": "Dormitorios",
   "estimate.bathrooms": "Baños",
+
+  // versionHistory
+  "versionHistory.viewHistory": "Ver historial",
+  "versionHistory.compareVersions": "Comparar versiones",
+  "versionHistory.versionBadge": "v{n} de {total}",
+  "versionHistory.savedBanner": "Version {n} guardada -- Ver historial",
+  "versionHistory.sheetTitle": "Historial de versiones",
+  "versionHistory.autoLabel": "Version {n}",
+  "versionHistory.oneVersionNotice": "Volve a estimar para crear una segunda version y poder comparar.",
+  "versionHistory.comparingHeader": "Comparando v{a} y v{b}",
+  "versionHistory.totalChange": "Cambio total",
+  "versionHistory.pricePerM2Change": "Cambio precio/m2",
+  "versionHistory.percentChange": "% cambio",
+  "versionHistory.backToList": "Volver a lista",
+  "versionHistory.labelSaveFailed": "No se pudo guardar, intenta de nuevo",
+  "versionHistory.historyLoadFailed": "No se pudo cargar el historial. Actualiza e intenta de nuevo.",
+  "versionHistory.labelPlaceholder": "ej. con pileta, steel frame...",
 
   // projects
   "projects.title": "Proyectos",
