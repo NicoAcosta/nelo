@@ -39,8 +39,9 @@ export function buildPreamble(
     const values = structuredData.dimensions.map((d) => d.value).sort((a, b) => a - b);
     const min = values[0];
     const max = values[values.length - 1];
+    const rangeText = min === max ? `${min}m` : `${min}m – ${max}m`;
     lines.push(
-      `- Dimensions: ${values.length} measurements found (range ${min}m – ${max}m)`,
+      `- Dimensions: ${values.length} measurement${values.length === 1 ? "" : "s"} found (${rangeText})`,
     );
   }
 
