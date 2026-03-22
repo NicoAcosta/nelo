@@ -7,6 +7,7 @@ import {
 } from "@/lib/db/conversations";
 import { EstimateDashboard } from "./estimate-dashboard";
 import { NoEstimateFallback } from "./no-estimate-fallback";
+import type { Estimate } from "@/lib/estimate/types";
 
 export async function generateMetadata({
   params,
