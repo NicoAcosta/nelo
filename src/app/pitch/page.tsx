@@ -346,7 +346,7 @@ function Slide5() {
               <h3 className="text-lg font-black uppercase tracking-tight text-white/90">Domain-Expert Computation</h3>
             </div>
             <p className="text-[15px] text-white/50 leading-relaxed pl-5">
-              400+ line items. 26 categories. Real Argentine pricing &mdash; UOCRA labor rates, material costs, blue-rate USD, inflation-adjusted daily.
+              400+ line items. 26 categories. Real Argentine pricing &mdash; UOCRA labor rates, MercadoLibre and supplier pricing, blue-rate USD, INDEC inflation-adjusted. Updated daily.
             </p>
           </div>
         </div>

@@ -160,7 +160,7 @@ Nelo handles two critical stages of construction estimation:
 |-----------|------------|
 | **Conversational reasoning** | Collects data through dialogue. Fills gaps with smart defaults. Shows what it assumed. |
 | **Vision understanding** | Reads floor plans in any format. Extracts rooms, dimensions, openings. Asks to confirm. |
-| **Domain-expert computation** | 400+ line items. 26 categories. Real Argentine pricing. Daily-updated data sources. |
+| **Domain-expert computation** | 400+ line items. 26 categories. UOCRA labor, MercadoLibre + supplier pricing, blue-rate USD, INDEC inflation-adjusted. Updated daily. |
 
 **Visual direction:** Could use icons for each row (chat bubble, eye, calculator). Keep it scannable — judges should get this in 3 seconds of looking at the slide.
 
@@ -294,7 +294,7 @@ Right side: QR code to try it live, or the app URL.
 >
 > Second — vision understanding. Upload a floor plan in any format and AI extracts the layout. Rooms, doors, windows, dimensions.
 >
-> Third — domain-expert computation. Over four hundred line items across twenty-six construction categories, with real Argentine pricing — labor rates, material costs, inflation-adjusted, updated daily. This is the same budget structure architects actually use.
+> Third — domain-expert computation. Over four hundred line items across twenty-six construction categories, with real Argentine pricing — UOCRA labor rates, MercadoLibre and supplier pricing, blue-rate dollar, INDEC inflation-adjusted. Updated daily. This is the same budget structure architects actually use.
 
 ---
 
