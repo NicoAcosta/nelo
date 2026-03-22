@@ -36,7 +36,7 @@ export function NeloFooter({ chatId }: NeloFooterProps) {
         </div>
 
         {/* Wordmark */}
-        <div className="relative text-[80px] font-black tracking-[20px] text-[#ccff00] opacity-[0.12] leading-none select-none" aria-hidden="true">
+        <div className="relative text-[40px] md:text-[60px] lg:text-[80px] font-black tracking-[8px] md:tracking-[14px] lg:tracking-[20px] text-[#ccff00] opacity-[0.12] leading-none select-none" aria-hidden="true">
           NELO
         </div>
 

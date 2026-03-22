@@ -60,7 +60,7 @@ export function SummaryCards({ estimate }: SummaryCardsProps) {
   ];
 
   return (
-    <div className="grid grid-cols-5 gap-px bg-white/[0.06] mx-8 rounded-xl overflow-hidden border border-white/[0.06]">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-px bg-white/[0.06] mx-4 md:mx-8 rounded-xl overflow-hidden border border-white/[0.06]">
       {cards.map((card) => (
         <div
           key={card.label}
@@ -87,7 +87,7 @@ export function SummaryCards({ estimate }: SummaryCardsProps) {
             )}
           </div>
           {card.sub && (
-            <div className="text-[11px] text-[#3f3f46] mt-0.5">{card.sub}</div>
+            <div className="text-[11px] text-[#52525b] mt-0.5">{card.sub}</div>
           )}
         </div>
       ))}

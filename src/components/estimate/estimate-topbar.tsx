@@ -39,9 +39,9 @@ export function EstimateTopbar({
         </svg>
         <span className="text-[15px] font-black tracking-[2px] text-[#ccff00]">NELO</span>
         <span className="w-px h-4 bg-[#3f3f46]" />
-        <span className="text-[13px] text-[#71717a] font-medium truncate max-w-[300px]">{displayName}</span>
+        <span className="text-[13px] text-[#71717a] font-medium truncate max-w-[300px] hidden md:inline">{displayName}</span>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         <button
           onClick={handleShare}
           className="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-white/[0.06] text-[#a1a1aa] hover:bg-[#18181b] hover:text-white transition-colors flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#ccff00]"

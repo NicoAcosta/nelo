@@ -49,19 +49,26 @@ export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold text-[#fafafa]">{t("estimate.categoryBreakdown")}</h3>
         <div className="flex gap-0.5 bg-[#18181b] p-0.5 rounded-lg">
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`px-3 py-1 rounded-md text-[11px] font-medium transition-colors ${
-                activeTab === tab.key
-                  ? "bg-[#222225] text-[#fafafa]"
-                  : "text-[#71717a] hover:text-[#a1a1aa]"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+          {tabs.map((tab) => {
+            const isGrouped = tab.key === "grouped";
+            return (
+              <button
+                key={tab.key}
+                disabled={isGrouped}
+                title={isGrouped ? t("estimate.comingSoon") : undefined}
+                onClick={() => !isGrouped && setActiveTab(tab.key)}
+                className={`px-3 py-1 rounded-md text-[11px] font-medium transition-colors ${
+                  isGrouped
+                    ? "cursor-not-allowed opacity-50 text-[#71717a]"
+                    : activeTab === tab.key
+                      ? "bg-[#222225] text-[#fafafa]"
+                      : "text-[#71717a] hover:text-[#a1a1aa]"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -87,7 +94,7 @@ export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
                 title={ENGLISH_NAMES.get(cat.id) ?? cat.name}
                 aria-expanded={isExpanded}
               >
-                <span className="font-mono text-[10px] text-[#3f3f46] text-center tabular-nums">
+                <span className="font-mono text-[10px] text-[#52525b] text-center tabular-nums">
                   {i + 1}
                 </span>
                 <span className="text-[13px] text-[#a1a1aa] truncate">
@@ -120,7 +127,7 @@ export function CategoryBreakdown({ categories }: CategoryBreakdownProps) {
                         <span className="text-[#71717a] truncate mr-4">
                           {li.code} — {li.description}
                         </span>
-                        <span className="font-mono text-[#3f3f46] flex-shrink-0 tabular-nums">
+                        <span className="font-mono text-[#52525b] flex-shrink-0 tabular-nums">
                           ${formatARS(li.subtotal)}
                         </span>
                       </div>

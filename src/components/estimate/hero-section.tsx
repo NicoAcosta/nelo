@@ -23,7 +23,7 @@ export function HeroSection({ estimate }: HeroSectionProps) {
   const highPrice = Math.round(estimate.totalPrice * (rangeHigh / 100));
 
   return (
-    <div className="relative px-8 pt-14 pb-10 text-center overflow-hidden">
+    <div className="relative px-4 md:px-8 pt-14 pb-10 text-center overflow-hidden">
       {/* Breathing glow */}
       <div className="absolute w-[700px] h-[350px] top-[10%] left-1/2 -translate-x-1/2 bg-[radial-gradient(ellipse,rgba(204,255,0,0.06)_0%,transparent_70%)] blur-[80px] pointer-events-none animate-[breathe_5s_ease-in-out_infinite]" />
 
@@ -65,8 +65,8 @@ export function HeroSection({ estimate }: HeroSectionProps) {
 
       {/* Total price */}
       <div className="relative">
-        <span className="font-mono text-[80px] font-extrabold leading-none tracking-[-3px] bg-gradient-to-b from-white/100 via-white/90 to-[#888] bg-clip-text text-transparent">
-          <span className="text-[36px] font-medium !text-[#ccff00] tracking-normal mr-1.5 align-top leading-[80px] bg-none bg-clip-border [-webkit-text-fill-color:#ccff00]">
+        <span className="font-mono text-[40px] md:text-[60px] lg:text-[80px] font-extrabold leading-none tracking-[-3px] bg-gradient-to-b from-white/100 via-white/90 to-[#888] bg-clip-text text-transparent">
+          <span className="text-[20px] md:text-[28px] lg:text-[36px] font-medium !text-[#ccff00] tracking-normal mr-1.5 align-top leading-[40px] md:leading-[60px] lg:leading-[80px] bg-none bg-clip-border [-webkit-text-fill-color:#ccff00]">
             ARS
           </span>
           <AnimatedCounter value={estimate.totalPrice} format={formatARS} />
@@ -74,7 +74,7 @@ export function HeroSection({ estimate }: HeroSectionProps) {
       </div>
 
       {/* USD */}
-      <div className="relative font-mono text-[20px] font-medium text-[#3f3f46] mt-2.5 tabular-nums">
+      <div className="relative font-mono text-[20px] font-medium text-[#52525b] mt-2.5 tabular-nums">
         ≈ USD <AnimatedCounter value={estimate.totalPriceUsd} format={formatUSD} />
       </div>
 
@@ -119,7 +119,7 @@ export function HeroSection({ estimate }: HeroSectionProps) {
             {t("estimate.confidencePercent").replace("{n}", String(confidencePercent))}
           </span>
         </div>
-        <div className="flex justify-between mt-1.5 text-[10px] font-mono text-[#3f3f46] tabular-nums">
+        <div className="flex justify-between mt-1.5 text-[10px] font-mono text-[#52525b] tabular-nums">
           <span>${formatARS(lowPrice)} {t("estimate.rangeLow")}</span>
           <span>${formatARS(highPrice)} {t("estimate.rangeHigh")}</span>
         </div>
