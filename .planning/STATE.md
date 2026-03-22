@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Persistence & Sharing
 status: unknown
-stopped_at: Completed 10-02-PLAN.md — chat routing RSC split, /chat redirect + /chat/[id] with history hydration
-last_updated: "2026-03-22T07:11:06.967Z"
+stopped_at: Completed 11-01-PLAN.md — listProjects, updateProjectTitle, and projects i18n keys
+last_updated: "2026-03-22T07:52:33.743Z"
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
+  total_plans: 7
+  completed_plans: 6
 ---
 
 # Project State: Nelo
@@ -18,12 +18,12 @@ progress:
 
 See: .planning/PROJECT.md (updated 2026-03-21)
 **Core value:** Accurate, transparent construction cost estimation through natural conversation
-**Current focus:** Phase 10 — chat-persistence
+**Current focus:** Phase 11 — project-management
 
 ## Current Position
 
-Phase: 11
-Plan: Not started
+Phase: 11 (project-management) — EXECUTING
+Plan: 2 of 2
 
 ## Performance Metrics
 
@@ -44,6 +44,7 @@ Plan: Not started
 | Phase 09-supabase-auth-infrastructure P03 | 5 | 2 tasks | 4 files |
 | Phase 10-chat-persistence P01 | 3 | 2 tasks | 4 files |
 | Phase 10-chat-persistence P02 | 30 | 2 tasks | 4 files |
+| Phase 11-project-management P01 | 2 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -63,6 +64,8 @@ Plan: Not started
 - 09-02: AuthProvider uses getUser() not getSession() client-side — consistent with server-side anti-spoofing rule
 - 09-02: OTP uses 6 individual inputs (not one maxLength=6 input) — enables auto-advance + backspace nav + paste support
 - 09-02: AuthProvider wraps outside LocaleProvider — auth is app-global, locale preference is within auth scope
+- 11-01: listProjects() takes no userId — RLS on projects table scopes results to authenticated user automatically
+- 11-01: Server actions in src/lib/actions/ separated from DB query functions in src/lib/db/
 
 ### Pending Todos
 
@@ -76,6 +79,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-22T07:08:21.089Z
-Stopped at: Completed 10-02-PLAN.md — chat routing RSC split, /chat redirect + /chat/[id] with history hydration
+Last session: 2026-03-22T07:52:33.740Z
+Stopped at: Completed 11-01-PLAN.md — listProjects, updateProjectTitle, and projects i18n keys
 Resume file: None
