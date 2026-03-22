@@ -4,6 +4,7 @@ import { useState, useRef, KeyboardEvent, ClipboardEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useLocale } from "@/lib/i18n/use-locale";
+import { sanitizeRedirect } from "@/lib/auth/sanitize-redirect";
 import { NeloLogo } from "@/components/icons";
 
 type Step = "email" | "otp";
@@ -80,9 +81,7 @@ export function SignInForm() {
         setOtp(["", "", "", "", "", ""]);
         inputRefs.current[0]?.focus();
       } else {
-        const raw = searchParams.get("next") ?? "/projects";
-        const safeDest = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/projects";
-        router.push(safeDest);
+        router.push(sanitizeRedirect(searchParams.get("next") ?? "/projects"));
       }
     } catch {
       setError(t("auth.networkError"));

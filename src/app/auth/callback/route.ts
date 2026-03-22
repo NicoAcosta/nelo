@@ -1,13 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { sanitizeRedirect } from "@/lib/auth/sanitize-redirect";
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin: requestOrigin } = new URL(request.url);
   const origin = process.env.NEXT_PUBLIC_SITE_URL ?? requestOrigin;
   const code = searchParams.get("code");
-  const raw = searchParams.get("next") ?? "/projects";
-  const next = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/projects";
+  const next = sanitizeRedirect(searchParams.get("next") ?? "/projects");
 
   if (code) {
     const cookieStore = await cookies();

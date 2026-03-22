@@ -218,23 +218,16 @@ describe("src/proxy.ts — config.matcher", () => {
     expect(config).toHaveProperty("matcher");
   });
 
-  it("matcher excludes _next/static paths", () => {
-    // The matcher is a regex string — we verify exclusion patterns are present
-    const matcherStr =
-      '/((?!_next/static|_next/image|favicon.ico|share/|auth/|api/health|api/cron/).*)';
-    expect(matcherStr).toContain("_next");
-    expect(matcherStr).toContain("favicon.ico");
-    expect(matcherStr).toContain("share/");
-    expect(matcherStr).toContain("auth/");
-    expect(matcherStr).toContain("api/health");
-    expect(matcherStr).toContain("api/cron/");
-  });
-
-  it("config.matcher contains a pattern that excludes share routes", async () => {
+  it("matcher excludes expected paths", async () => {
     const { config } = await import("../../../proxy");
     const matcher = Array.isArray(config.matcher)
       ? config.matcher.join(",")
       : config.matcher;
-    expect(matcher).toContain("share");
+    expect(matcher).toContain("_next/static");
+    expect(matcher).toContain("favicon.ico");
+    expect(matcher).toContain("share/");
+    expect(matcher).toContain("auth/callback");
+    expect(matcher).toContain("api/health");
+    expect(matcher).toContain("api/cron/");
   });
 });
