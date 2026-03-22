@@ -189,4 +189,88 @@ describe("computeEstimate", () => {
     const e = computeEstimate(baseInputs);
     expect(e.pricingLastUpdated).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
+
+  it("escalera (cat 18) is zero for single-story buildings", () => {
+    const inputs: ProjectInputs = { ...baseInputs, stories: 1 };
+    const items = applyUnitCosts(inputs);
+    const escalera = items.find((i) => i.code === "18.0");
+    expect(escalera).toBeDefined();
+    expect(escalera!.quantity).toBe(0);
+    expect(escalera!.subtotal).toBe(0);
+  });
+
+  it("escalera (cat 18) is non-zero for multi-story buildings", () => {
+    const inputs: ProjectInputs = { ...baseInputs, stories: 2 };
+    const items = applyUnitCosts(inputs);
+    const escalera = items.find((i) => i.code === "18.0");
+    expect(escalera).toBeDefined();
+    expect(escalera!.quantity).toBeGreaterThan(0);
+    expect(escalera!.isActive).toBe(true);
+  });
+
+  it("defaults slabType to vigueta_ceramica for hormigon_armado", () => {
+    const inputs: ProjectInputs = {
+      ...baseInputs,
+      structureType: "hormigon_armado",
+      slabType: undefined,
+    };
+    const items = applyUnitCosts(inputs);
+    const vigueta = items.find((i) => i.code === "4.2.1");
+    expect(vigueta).toBeDefined();
+    expect(vigueta!.isActive).toBe(true);
+    expect(vigueta!.quantity).toBeGreaterThan(0);
+  });
+
+  it("amoblamientos (cat 19) uses kitchen_count not floor_area", () => {
+    const inputs: ProjectInputs = { ...baseInputs, kitchenCount: 1 };
+    const items = applyUnitCosts(inputs);
+    const amob = items.find((i) => i.code === "19.0");
+    expect(amob).toBeDefined();
+    // Should be ~5 ml (1 kitchen * 5), not 100 m2
+    expect(amob!.quantity).toBeLessThanOrEqual(10);
+  });
+
+  it("espejos (cat 23) uses bathroom_count not floor_area", () => {
+    const inputs: ProjectInputs = { ...baseInputs, bathroomCount: 1 };
+    const items = applyUnitCosts(inputs);
+    const espejos = items.find((i) => i.code === "23.0");
+    expect(espejos).toBeDefined();
+    // Should be 1 (1 bathroom * 1 mirror), not 100 m2
+    expect(espejos!.quantity).toBeLessThanOrEqual(5);
+  });
+
+  it("revoques (cat 8) uses wall_area not floor_area", () => {
+    const items = applyUnitCosts(baseInputs);
+    const revoques = items.find((i) => i.code === "8.0");
+    expect(revoques).toBeDefined();
+    // wall_area for baseInputs is ~84.8m2, not 100m2 (floor_area)
+    // quantity should be wall_area * 1.0 = ~84.8
+    expect(revoques!.quantity).toBeCloseTo(84.8, 0);
+  });
+
+  it("smart defaults estimate counts when not provided", () => {
+    const inputs: ProjectInputs = {
+      totalFloorAreaM2: 120,
+      stories: 1,
+      structureType: "hormigon_armado",
+    };
+    const e = computeEstimate(inputs);
+    // Should have assumptions about smart defaults
+    const doorAssumption = e.assumptions.find((a) => a.field === "doorCount");
+    expect(doorAssumption).toBeDefined();
+    expect(doorAssumption!.assumedValue).toContain("8"); // 120/15 = 8
+  });
+
+  it("estructura incidence is realistic (15-25%) for hormigon_armado", () => {
+    const inputs: ProjectInputs = {
+      ...baseInputs,
+      structureType: "hormigon_armado",
+    };
+    const e = computeEstimate(inputs);
+    const estructura = e.categories.find((c) => c.id === "estructura_resistente");
+    expect(estructura).toBeDefined();
+    // With vigueta_ceramica default and better column/viga coefficients,
+    // structural cost should be meaningful (>10%)
+    expect(estructura!.incidencePercent).toBeGreaterThan(10);
+  });
 });

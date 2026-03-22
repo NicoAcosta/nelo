@@ -121,4 +121,98 @@ describe("evaluateConditions", () => {
     expect(evaluateConditions([], baseInputs)).toBe(true);
     expect(evaluateConditions(undefined, baseInputs)).toBe(true);
   });
+
+  it("supports greater_than operator", () => {
+    const multiStory: ProjectInputs = { ...baseInputs, stories: 2 };
+    expect(
+      evaluateConditions(
+        [{ field: "stories", operator: "greater_than", value: 1 }],
+        multiStory,
+      ),
+    ).toBe(true);
+  });
+
+  it("returns false for greater_than when value is equal", () => {
+    expect(
+      evaluateConditions(
+        [{ field: "stories", operator: "greater_than", value: 1 }],
+        baseInputs, // stories = 1
+      ),
+    ).toBe(false);
+  });
+
+  it("returns false for greater_than when value is less", () => {
+    expect(
+      evaluateConditions(
+        [{ field: "stories", operator: "greater_than", value: 5 }],
+        baseInputs, // stories = 1
+      ),
+    ).toBe(false);
+  });
+
+  it("returns false for greater_than when field is undefined", () => {
+    const inputs: ProjectInputs = { totalFloorAreaM2: 100 };
+    expect(
+      evaluateConditions(
+        [{ field: "stories", operator: "greater_than", value: 1 }],
+        inputs,
+      ),
+    ).toBe(false);
+  });
+});
+
+describe("deriveBaseQuantities smart defaults", () => {
+  it("estimates doorCount from floor area when not provided", () => {
+    const inputs: ProjectInputs = { totalFloorAreaM2: 120, stories: 1 };
+    const q = deriveBaseQuantities(inputs);
+    // Math.max(3, Math.round(120 / 15)) = Math.max(3, 8) = 8
+    expect(q.doorCount).toBe(8);
+  });
+
+  it("estimates windowCount from floor area when not provided", () => {
+    const inputs: ProjectInputs = { totalFloorAreaM2: 120, stories: 1 };
+    const q = deriveBaseQuantities(inputs);
+    // Math.max(2, Math.round(120 / 12)) = Math.max(2, 10) = 10
+    expect(q.windowCount).toBe(10);
+  });
+
+  it("estimates bathroomCount from floor area when not provided", () => {
+    const inputs: ProjectInputs = { totalFloorAreaM2: 120, stories: 1 };
+    const q = deriveBaseQuantities(inputs);
+    // Math.max(1, Math.round(120 / 50)) = Math.max(1, 2) = 2
+    expect(q.bathroomCount).toBe(2);
+  });
+
+  it("defaults kitchenCount to 1 when not provided", () => {
+    const inputs: ProjectInputs = { totalFloorAreaM2: 120, stories: 1 };
+    const q = deriveBaseQuantities(inputs);
+    expect(q.kitchenCount).toBe(1);
+  });
+
+  it("uses provided counts instead of smart defaults", () => {
+    const inputs: ProjectInputs = {
+      totalFloorAreaM2: 120,
+      stories: 1,
+      doorCount: 3,
+      windowCount: 4,
+      bathroomCount: 1,
+      kitchenCount: 2,
+    };
+    const q = deriveBaseQuantities(inputs);
+    expect(q.doorCount).toBe(3);
+    expect(q.windowCount).toBe(4);
+    expect(q.bathroomCount).toBe(1);
+    expect(q.kitchenCount).toBe(2);
+  });
+
+  it("applies minimum values for small floor areas", () => {
+    const inputs: ProjectInputs = { totalFloorAreaM2: 30, stories: 1 };
+    const q = deriveBaseQuantities(inputs);
+    // 30/15=2 < 3 → doorCount = 3 (minimum)
+    expect(q.doorCount).toBe(3);
+    // 30/12=2.5→3 >= 2 → windowCount = 3
+    expect(q.windowCount).toBe(3);
+    // 30/50=0.6→1 >= 1 → bathroomCount = 1
+    expect(q.bathroomCount).toBe(1);
+  });
 });
