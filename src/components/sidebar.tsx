@@ -15,7 +15,7 @@ type NavItem = "dashboard" | "estimates" | "blueprints" | "settings";
 
 const navItems: { id: NavItem; labelKey: string; icon: typeof IconDashboard; href: string }[] = [
   { id: "dashboard", labelKey: "sidebar.dashboard", icon: IconDashboard, href: "/" },
-  { id: "estimates", labelKey: "sidebar.estimates", icon: IconEstimates, href: "/chat" },
+  { id: "estimates", labelKey: "sidebar.estimates", icon: IconEstimates, href: "/projects" },
   { id: "blueprints", labelKey: "sidebar.blueprints", icon: IconBlueprints, href: "#" },
   { id: "settings", labelKey: "sidebar.settings", icon: IconSettings, href: "#" },
 ];
