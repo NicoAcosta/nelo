@@ -7,7 +7,7 @@
  * shows only the user's intent, not the raw technical data.
  */
 
-const MARKER = "<!-- doc-analysis -->";
+export const PREAMBLE_MARKER = "<!-- doc-analysis -->";
 
 /** Regex to extract file name from preamble line: "- File: name.ext, ..." */
 const FILE_NAME_RE = /^- File:\s*(.+?)(?:,|$)/m;
@@ -31,21 +31,21 @@ export function splitPreambleFromDisplay(text: string): SplitResult {
     return { displayText: "", hasPreamble: false, files: [] };
   }
 
-  const firstIdx = text.indexOf(MARKER);
+  const firstIdx = text.indexOf(PREAMBLE_MARKER);
   if (firstIdx === -1) {
     return { displayText: text, hasPreamble: false, files: [] };
   }
 
-  const secondIdx = text.indexOf(MARKER, firstIdx + MARKER.length);
+  const secondIdx = text.indexOf(PREAMBLE_MARKER, firstIdx + PREAMBLE_MARKER.length);
   if (secondIdx === -1) {
     return { displayText: text, hasPreamble: false, files: [] };
   }
 
   // Extract preamble content between markers
-  const preambleContent = text.slice(firstIdx + MARKER.length, secondIdx);
+  const preambleContent = text.slice(firstIdx + PREAMBLE_MARKER.length, secondIdx);
 
   // Extract display text after the closing marker
-  const displayText = text.slice(secondIdx + MARKER.length).trim();
+  const displayText = text.slice(secondIdx + PREAMBLE_MARKER.length).trim();
 
   // Parse files from preamble — split by "Document Analysis" sections
   const sections = preambleContent.split(/Document Analysis/);

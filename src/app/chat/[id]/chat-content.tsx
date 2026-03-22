@@ -16,6 +16,7 @@ import { EstimatePreview } from "@/components/estimate-preview";
 import { FloorPlanPanel } from "@/components/floor-plan-panel";
 import { IconNelo } from "@/components/icons";
 import { buildPreamble } from "@/lib/documents/preamble";
+import { PREAMBLE_MARKER } from "@/lib/documents/split-preamble";
 import { filterClaudeCompatible } from "@/lib/documents/filter-compatible";
 import { retrievePendingFiles } from "@/lib/pending-files";
 import type { DocumentAnalysis } from "@/lib/documents/types";
@@ -186,7 +187,6 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
         const { results } = await response.json();
 
         // Build preamble from all results with structured data
-        const PREAMBLE_MARKER = "<!-- doc-analysis -->";
         const preambles = results
           .map((r: DocumentAnalysis) => buildPreamble(r))
           .filter(Boolean);

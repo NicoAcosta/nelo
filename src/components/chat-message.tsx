@@ -31,9 +31,9 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
             </p>
             {hasPreamble && files.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-black/10">
-                {files.map((file) => (
+                {files.map((file, i) => (
                   <span
-                    key={file.name}
+                    key={`${file.name}-${i}`}
                     className="inline-flex items-center gap-1.5 text-xs font-bold text-black/60 bg-black/8 px-2.5 py-1 rounded-lg"
                   >
                     <svg
