@@ -13,10 +13,10 @@ Requirements for Persistence & Sharing milestone. Each maps to roadmap phases.
 
 ### Authentication
 
-- [ ] **AUTH-01**: User can sign in via email with magic link (clickable) and OTP (6-digit code) in the same email
+- [x] **AUTH-01**: User can sign in via email with magic link (clickable) and OTP (6-digit code) in the same email
 - [x] **AUTH-02**: User session persists across browser refresh via cookie-based auth tokens
 - [x] **AUTH-03**: Protected routes (/chat, /projects) redirect unauthenticated users to sign-in
-- [ ] **AUTH-04**: User can sign out, clearing session and redirecting to landing page
+- [x] **AUTH-04**: User can sign out, clearing session and redirecting to landing page
 
 ### Chat Persistence
 
@@ -78,10 +78,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 9 | Pending |
+| AUTH-01 | Phase 9 | Complete |
 | AUTH-02 | Phase 9 | Complete |
 | AUTH-03 | Phase 9 | Complete |
-| AUTH-04 | Phase 9 | Pending |
+| AUTH-04 | Phase 9 | Complete |
 | PERS-01 | Phase 10 | Pending |
 | PERS-02 | Phase 10 | Pending |
 | PERS-03 | Phase 11 | Pending |

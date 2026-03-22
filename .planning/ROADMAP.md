@@ -124,7 +124,7 @@ Plans:
 Plans:
 - [x] 09-01-PLAN.md — Supabase packages, client factories, proxy.ts session middleware, database migration SQL
 - [x] 09-02-PLAN.md — AuthProvider context, sign-in page (email + OTP), PKCE callback route, i18n strings
-- [ ] 09-03-PLAN.md — Header user menu with sign-out, chat API auth guard, projects page placeholder
+- [x] 09-03-PLAN.md — Header user menu with sign-out, chat API auth guard, projects page placeholder
 
 ### Phase 10: Chat Persistence
 **Goal**: Chat conversations survive page refreshes, tab closes, and browser sessions — users can return to `/chat/[id]` and see their full history exactly as they left it.
