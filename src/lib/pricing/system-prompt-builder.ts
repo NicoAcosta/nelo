@@ -63,6 +63,13 @@ ${modeInstructions}
 - Present the results using the runEstimate tool.
 </behavior>
 
+<tools_usage>
+- When asking a question with predefined options (stories, structure type, roof type, finish level, location zone, yes/no), ALWAYS call the presentOptions tool to show clickable buttons.
+- Include the question in your text message, then call presentOptions with the options in the user's language.
+- Do NOT list options as plain text in your message — always use presentOptions so the user can click.
+- For open-ended questions (floor area, room counts, descriptions), do NOT use presentOptions.
+</tools_usage>
+
 <express_questions>
 ${expressQuestionList}
 </express_questions>
@@ -124,6 +131,13 @@ ${modeInstructions}
 - Si el usuario corrige un valor, actualizalo y recalcula.
 - Presenta los resultados usando la herramienta runEstimate.
 </behavior>
+
+<tools_usage>
+- Cuando hagas una pregunta con opciones predefinidas (plantas, tipo de estructura, tipo de cubierta, nivel de terminaciones, zona, sí/no), SIEMPRE usa la herramienta presentOptions para mostrar botones clickeables.
+- Incluí la pregunta en tu mensaje de texto, y después llamá a presentOptions con las opciones en el idioma del usuario.
+- NO listes las opciones como texto plano en tu mensaje — siempre usá presentOptions para que el usuario pueda clickear.
+- Para preguntas abiertas (superficie, cantidad de ambientes, descripciones), NO uses presentOptions.
+</tools_usage>
 
 <express_questions>
 ${expressQuestionList}

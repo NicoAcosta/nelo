@@ -172,6 +172,13 @@ body {
   animation: glow-pulse 3s ease-in-out infinite;
 }
 
+/* Hide keyboard shortcut badges on touch devices */
+@media (pointer: coarse) {
+  .kbd-hint {
+    display: none;
+  }
+}
+
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

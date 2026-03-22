@@ -10,9 +10,11 @@ import { Header } from "@/components/header";
 import { MobileNav } from "@/components/mobile-nav";
 import { ChatMessage } from "@/components/chat-message";
 import { ChatInput } from "@/components/chat-input";
+import { ChatOptions } from "@/components/chat-options";
 import { CostBreakdown } from "@/components/cost-breakdown";
 import { FloorPlanPanel } from "@/components/floor-plan-panel";
 import { IconNelo } from "@/components/icons";
+import { getSelectedValue } from "./get-selected-value";
 import { useLocale } from "@/lib/i18n/use-locale";
 import type { Estimate, FloorPlanExtraction } from "@/lib/estimate/types";
 
@@ -94,7 +96,7 @@ function ChatContent() {
     const textParts: string[] = [];
     const toolResults: React.ReactNode[] = [];
 
-    const toolNames = ["runEstimate", "analyzeFloorPlan", "collectProjectData"] as const;
+    const toolNames = ["runEstimate", "analyzeFloorPlan", "collectProjectData", "presentOptions"] as const;
 
     for (const part of message.parts) {
       if (part.type === "text") {
@@ -103,13 +105,29 @@ function ChatContent() {
         // AI SDK v6: tool parts use tool-<toolName> pattern
         for (const toolName of toolNames) {
           if (part.type === `tool-${toolName}` && "state" in part && part.state === "output-available") {
-            const rendered = renderToolResult(toolName, (part as { output: unknown }).output);
-            if (rendered) {
+            if (toolName === "presentOptions") {
+              const data = (part as { output: { questionId: string; options: Array<{ value: string; label: string }> } }).output;
+              const selected = getSelectedValue(message, messages);
               toolResults.push(
-                <div key={`${message.id}-${toolName}-${toolResults.length}`} className="mt-4">
-                  {rendered}
+                <div key={`${message.id}-options-${toolResults.length}`} className="mt-4">
+                  <ChatOptions
+                    questionId={data.questionId}
+                    options={data.options}
+                    onSelect={(label) => handleSend(label)}
+                    disabled={isStreaming || selected !== null}
+                    selectedValue={selected}
+                  />
                 </div>
               );
+            } else {
+              const rendered = renderToolResult(toolName, (part as { output: unknown }).output);
+              if (rendered) {
+                toolResults.push(
+                  <div key={`${message.id}-${toolName}-${toolResults.length}`} className="mt-4">
+                    {rendered}
+                  </div>
+                );
+              }
             }
           }
         }

@@ -190,10 +190,37 @@ export function createChatTools(locale: Locale = "en") {
     },
   });
 
+  const presentOptions = tool({
+    description:
+      "Present clickable options to the user. Call this when asking a question that has predefined choices (structure type, roof type, finish level, location zone, stories, yes/no). Include the question in your text message, then call this tool with the options.",
+    inputSchema: z.object({
+      questionId: z
+        .string()
+        .describe("Unique ID for this question, e.g. 'structureType'"),
+      options: z
+        .array(
+          z.object({
+            value: z.string().describe("Machine value, e.g. 'hormigon_armado'"),
+            label: z
+              .string()
+              .describe("Human-readable label in the user's language"),
+          }),
+        )
+        .min(2)
+        .max(9)
+        .describe("The options to present. 2-9 items."),
+    }),
+    execute: async (input) => ({
+      questionId: input.questionId,
+      options: input.options,
+    }),
+  });
+
   return {
     collectProjectData,
     runEstimate,
     analyzeFloorPlan,
+    presentOptions,
   };
 }
 
