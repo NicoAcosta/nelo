@@ -128,17 +128,28 @@ describe("loadConversation", () => {
     mockUpdateEq2.mockResolvedValue({ error: null });
   });
 
-  it("returns messages array from an existing conversation row", async () => {
-    const storedMessages: UIMessage[] = [makeUserMessage("Tell me about costs")];
-    let callCount = 0;
+  // Helper: mock the single query pattern: from("projects").select("id, conversations(messages)").eq(...).single()
+  function mockProjectsQuery(data: unknown) {
     mockFrom.mockImplementation((table: string) => {
       if (table === "projects") {
-        return { select: vi.fn(() => ({ eq: vi.fn(() => ({ single: vi.fn().mockResolvedValue({ data: { id: "proj-123" }, error: null }) })) })) };
-      }
-      if (table === "conversations") {
-        return { select: vi.fn(() => ({ eq: vi.fn(() => ({ single: vi.fn().mockResolvedValue({ data: { messages: storedMessages }, error: null }) })) })) };
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              single: vi.fn().mockResolvedValue({ data, error: null }),
+            })),
+          })),
+          update: mockUpdate,
+        };
       }
       return { select: mockSelect };
+    });
+  }
+
+  it("returns messages array from an existing conversation row", async () => {
+    const storedMessages: UIMessage[] = [makeUserMessage("Tell me about costs")];
+    mockProjectsQuery({
+      id: "proj-123",
+      conversations: [{ messages: storedMessages }],
     });
 
     const result = await loadConversation("proj-123", "user-456");
@@ -147,15 +158,7 @@ describe("loadConversation", () => {
   });
 
   it("returns [] when project exists but no conversation row", async () => {
-    mockFrom.mockImplementation((table: string) => {
-      if (table === "projects") {
-        return { select: vi.fn(() => ({ eq: vi.fn(() => ({ single: vi.fn().mockResolvedValue({ data: { id: "proj-123" }, error: null }) })) })) };
-      }
-      if (table === "conversations") {
-        return { select: vi.fn(() => ({ eq: vi.fn(() => ({ single: vi.fn().mockResolvedValue({ data: null, error: null }) })) })) };
-      }
-      return { select: mockSelect };
-    });
+    mockProjectsQuery({ id: "proj-123", conversations: [] });
 
     const result = await loadConversation("proj-123", "user-456");
 
@@ -163,12 +166,7 @@ describe("loadConversation", () => {
   });
 
   it("returns null when project does not exist (RLS blocks or no row)", async () => {
-    mockFrom.mockImplementation((table: string) => {
-      if (table === "projects") {
-        return { select: vi.fn(() => ({ eq: vi.fn(() => ({ single: vi.fn().mockResolvedValue({ data: null, error: null }) })) })) };
-      }
-      return { select: mockSelect };
-    });
+    mockProjectsQuery(null);
 
     const result = await loadConversation("nonexistent-proj", "user-456");
 
