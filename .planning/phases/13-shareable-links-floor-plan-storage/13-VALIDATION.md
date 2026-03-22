@@ -38,10 +38,11 @@ created: 2026-03-22
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 13-01-01 | 01 | 1 | SHARE-01 | unit | `npx vitest run src/lib/__tests__/share-links.test.ts` | ❌ W0 | ⬜ pending |
-| 13-01-02 | 01 | 1 | SHARE-02 | unit | `npx vitest run src/lib/__tests__/share-links.test.ts` | ❌ W0 | ⬜ pending |
-| 13-02-01 | 02 | 2 | SHARE-01 | manual | Browser navigate to /share/{token} | N/A | ⬜ pending |
-| 13-02-02 | 02 | 2 | SHARE-03 | unit | `npx vitest run src/lib/__tests__/floor-plan-storage.test.ts` | ❌ W0 | ⬜ pending |
+| 13-01-01 | 01 | 1 | SHARE-01, SHARE-02 | unit | `npx vitest run src/lib/db/__tests__/share-links.test.ts` | ❌ W0 | ⬜ pending |
+| 13-01-02 | 01 | 1 | SHARE-03 | unit | `npx vitest run src/lib/documents/__tests__/storage-path.test.ts` | ❌ W0 | ⬜ pending |
+| 13-02-01 | 02 | 2 | SHARE-01 | unit + manual | `npx vitest run src/components/estimate/__tests__/share-popover.test.tsx` | ❌ W0 | ⬜ pending |
+| 13-02-02 | 02 | 2 | SHARE-01, SHARE-02 | manual | Browser navigate to /share/{token} | N/A | ⬜ pending |
+| 13-02-03 | 02 | 2 | - | checkpoint | Human e2e verification | N/A | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -49,10 +50,11 @@ created: 2026-03-22
 
 ## Wave 0 Requirements
 
-- [ ] `src/lib/__tests__/share-links.test.ts` — stubs for SHARE-01, SHARE-02
-- [ ] `src/lib/__tests__/floor-plan-storage.test.ts` — stubs for SHARE-03
+- [ ] `src/lib/db/__tests__/share-links.test.ts` — stubs for SHARE-01, SHARE-02
+- [ ] `src/lib/documents/__tests__/storage-path.test.ts` — stubs for SHARE-03
+- [ ] `src/components/estimate/__tests__/share-popover.test.tsx` — stubs for SHARE-01 UI
 - [ ] `npx shadcn@latest add popover` — UI primitive for share flow
-- [ ] `npm install nanoid` — token generation (or use crypto.randomUUID)
+- [ ] `npm install nanoid` — token generation
 
 *Existing vitest infrastructure covers test runner needs.*
 
