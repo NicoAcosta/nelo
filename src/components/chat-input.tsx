@@ -113,7 +113,7 @@ export function ChatInput({
           </button>
         </div>
       </div>
-      <p className="text-center text-[9px] text-on-surface/30 mt-4 tracking-widest font-bold uppercase">
+      <p className="text-center text-[10px] text-on-surface/40 mt-4 tracking-wider font-bold uppercase">
         {t("chatInput.disclaimer")}
       </p>
       <UploadDialog

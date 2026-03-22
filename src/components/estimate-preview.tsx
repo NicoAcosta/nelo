@@ -31,7 +31,7 @@ export function EstimatePreview({ estimate, chatId }: EstimatePreviewProps) {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M3 2h6l6 10V2h6v20h-6L9 12v10H3z" fill="#ccff00" stroke="#000" strokeWidth="1.5" strokeLinejoin="round" />
           </svg>
-          <span className="text-[10px] font-black tracking-[0.2em] text-[#ccff00] uppercase">
+          <span className="text-xs font-bold tracking-wider text-[#ccff00] uppercase">
             {t("costBreakdown.estimatedBudget")}
           </span>
         </div>
@@ -68,7 +68,7 @@ export function EstimatePreview({ estimate, chatId }: EstimatePreviewProps) {
                 style={{ width: `${(cat.subtotal / maxCost) * 100}%` }}
               />
             </div>
-            <span className="font-mono text-[10px] text-[#666] w-[50px] text-right flex-shrink-0 tabular-nums">
+            <span className="font-mono text-[11px] text-[#888] w-[50px] text-right flex-shrink-0 tabular-nums">
               {cat.incidencePercent.toFixed(1)}%
             </span>
           </div>

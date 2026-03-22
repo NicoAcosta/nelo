@@ -63,11 +63,11 @@ export function FloorPlanPanel({
             <path d="M3 12h18" />
             <path d="M12 3v18" />
           </svg>
-          <span className="text-[10px] font-black tracking-[0.2em] text-[#ccff00] uppercase">
+          <span className="text-xs font-bold tracking-wider text-[#ccff00] uppercase">
             {t("floorPlanPanel.analysisComplete")}
           </span>
         </div>
-        <span className="text-[10px] font-bold text-[#888] uppercase tracking-wider">
+        <span className="text-xs font-bold text-[#999] uppercase tracking-wider">
           {confidenceLabel}
         </span>
       </div>
@@ -128,17 +128,17 @@ export function FloorPlanPanel({
       {/* Room pills */}
       {extraction.rooms.length > 0 && (
         <div className="px-6 py-3 border-t border-white/5 flex flex-wrap gap-1.5">
-          <span className="text-[10px] font-bold text-[#666] uppercase tracking-wider mr-1 self-center">
+          <span className="text-xs font-bold text-[#999] uppercase tracking-wider mr-1 self-center">
             {t("floorPlanPanel.rooms")}:
           </span>
           {extraction.rooms.map((room, i) => (
             <span
               key={`${room.type}-${i}`}
-              className="text-[11px] font-medium text-[#aaa] bg-white/5 px-2.5 py-1 rounded-full"
+              className="text-xs font-medium text-[#ccc] bg-white/8 px-2.5 py-1 rounded-full capitalize"
             >
               {room.type}
               {room.approximateAreaM2 != null && (
-                <span className="text-[#666] ml-1 font-mono text-[10px]">
+                <span className="text-[#888] ml-1 font-mono text-[11px]">
                   {room.approximateAreaM2}m²
                 </span>
               )}
@@ -150,7 +150,7 @@ export function FloorPlanPanel({
       {/* Notes */}
       {extraction.rawNotes && (
         <div className="px-6 py-3 border-t border-white/5">
-          <p className="text-[11px] text-[#666] leading-relaxed">
+          <p className="text-xs text-[#999] leading-relaxed">
             {extraction.rawNotes}
           </p>
         </div>
@@ -162,7 +162,7 @@ export function FloorPlanPanel({
           type="button"
           onClick={handleConfirm}
           disabled={area <= 0}
-          className="w-full bg-[#ccff00] text-black py-2.5 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] hover:brightness-95 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-[#ccff00] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]"
+          className="w-full bg-[#ccff00] text-black py-3 rounded-lg font-bold text-xs uppercase tracking-wider hover:brightness-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-[#ccff00] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]"
         >
           {area <= 0
             ? t("floorPlanPanel.enterArea")
@@ -195,7 +195,7 @@ function CompactField({
     <div>
       <label
         htmlFor={inputId}
-        className="text-[10px] font-bold text-[#666] uppercase tracking-wider block mb-1.5"
+        className="text-xs font-bold text-[#999] uppercase tracking-wider block mb-1.5"
       >
         {label}
       </label>

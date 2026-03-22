@@ -34,7 +34,7 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
                 {files.map((file, i) => (
                   <span
                     key={`${file.name}-${i}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-black/60 bg-black/8 px-2.5 py-1 rounded-lg"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-black/70 bg-black/10 px-2.5 py-1 rounded-lg"
                   >
                     <svg
                       aria-hidden="true"
@@ -50,8 +50,8 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
                       <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
                     </svg>
                     <span className="truncate max-w-[180px]">{file.name}</span>
-                    <span className="text-black/30">·</span>
-                    <span className="text-black/40">{file.type}</span>
+                    <span className="text-black/40">·</span>
+                    <span className="text-black/50">{file.type}</span>
                   </span>
                 ))}
               </div>

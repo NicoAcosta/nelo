@@ -330,7 +330,7 @@ export function UploadDialog({ open, onClose, onConfirm, initialFiles = [] }: Up
           </div>
 
           {/* File type cards */}
-          <div className="px-6 grid grid-cols-3 gap-3">
+          <div className="px-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
             {fileTypeCards.map(({ Icon, label, formats, limit }) => (
               <div
                 key={label}
@@ -359,7 +359,7 @@ export function UploadDialog({ open, onClose, onConfirm, initialFiles = [] }: Up
               <button
                 type="button"
                 onClick={() => setFileError(null)}
-                className="text-error/70 hover:text-error text-xs font-bold transition-colors"
+                className="text-error hover:text-error/80 text-xs font-bold transition-colors"
                 aria-label="Dismiss error"
               >
                 &times;
