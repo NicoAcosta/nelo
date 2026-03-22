@@ -470,7 +470,7 @@ function Slide7() {
           </div>
           <div>
             <div className="text-2xl font-black text-[#1a1a1a]/70 mb-1" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>Closed beta &rarr; $14/mo</div>
-            <p className="text-xs text-[#1a1a1a]/60">Free beta with partner architects. Launching with individual and team plans.</p>
+            <p className="text-xs text-[#1a1a1a]/60">Free beta with partner architects. Launching with individual and studio plans.</p>
           </div>
         </div>
       </div>

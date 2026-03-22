@@ -195,7 +195,7 @@ Nelo handles two critical stages of construction estimation:
 - **Built from real pain** — Our architect co-founder has spent his career dealing with this problem
 - **Waitlist ready** — Architects we've talked to want to use it
 - **400+ line items** — Real Argentine pricing across 26 construction categories, vision analysis, bilingual UI
-- **Closed beta → $14/mo** — Free beta with partner architects. Launching with individual and team plans.
+- **Closed beta → $14/mo** — Free beta with partner architects. Launching with individual and studio plans.
 
 Right side: QR code to try it live, or the app URL.
 
