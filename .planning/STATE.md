@@ -2,13 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Persistence & Sharing
-status: roadmap_ready
-last_updated: "2026-03-22T00:00:00.000Z"
+status: unknown
+stopped_at: Roadmap created for v1.1 (Phases 9-13). Ready to plan Phase 9.
+last_updated: "2026-03-22T05:54:50.600Z"
 progress:
   total_phases: 5
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 3
+  completed_plans: 1
 ---
 
 # Project State: Nelo
@@ -17,20 +18,17 @@ progress:
 
 See: .planning/PROJECT.md (updated 2026-03-21)
 **Core value:** Accurate, transparent construction cost estimation through natural conversation
-**Current focus:** Milestone v1.1 — Persistence & Sharing, starting Phase 9 (Supabase Auth)
+**Current focus:** Phase 09 — supabase-auth-infrastructure
 
 ## Current Position
 
-Phase: 9 of 13 (Supabase Auth Infrastructure)
-Plan: — (not started)
-Status: Ready to plan Phase 9
-Last activity: 2026-03-22 — v1.1 roadmap created (Phases 9-13)
-
-Progress: [░░░░░░░░░░] 0% (v1.1)
+Phase: 09 (supabase-auth-infrastructure) — EXECUTING
+Plan: 2 of 3
 
 ## Performance Metrics
 
 **Velocity:**
+
 - Total plans completed: 0 (v1.1)
 - v1.0 completed: 9 plans across 8 phases
 
@@ -41,6 +39,7 @@ Progress: [░░░░░░░░░░] 0% (v1.1)
 | v1.0 total | 9 | - | - |
 
 *Updated after each plan completion*
+| Phase 09-supabase-auth-infrastructure P01 | 5 | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -55,6 +54,8 @@ Progress: [░░░░░░░░░░] 0% (v1.1)
 - v1.1: `consumeStream()` (no await) before returning stream — ensures onFinish fires on tab close
 - v1.1: Always `getUser()` not `getSession()` in server code — session cannot be spoofed
 - v1.1: `/share/**` excluded from auth middleware — pre-wired in Phase 9
+- 09-01: proxy.ts (not middleware.ts) at src root per Next.js 16 naming, exports proxy() and config
+- 09-01: Always return supabaseResponse from updateSession — never create new NextResponse.next() to preserve Set-Cookie headers
 
 ### Pending Todos
 
@@ -69,5 +70,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-22
-Stopped at: Roadmap created for v1.1 (Phases 9-13). Ready to plan Phase 9.
+Stopped at: Completed 09-01-PLAN.md — Supabase client factories, proxy.ts, and database migration
 Resume file: None

@@ -122,7 +122,7 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 09-01-PLAN.md — Supabase packages, client factories, proxy.ts session middleware, database migration SQL
+- [x] 09-01-PLAN.md — Supabase packages, client factories, proxy.ts session middleware, database migration SQL
 - [ ] 09-02-PLAN.md — AuthProvider context, sign-in page (email + OTP), PKCE callback route, i18n strings
 - [ ] 09-03-PLAN.md — Header user menu with sign-out, chat API auth guard, projects page placeholder
 
