@@ -126,8 +126,8 @@ function SlideWrap({ children, index, active }: { children: React.ReactNode; ind
 
 function Slide1() {
   return (
-    <div className="w-screen h-screen flex-shrink-0 bg-[#f2f2f0] text-[#1a1a1a] flex items-center">
-      <div className="w-full max-w-6xl mx-auto px-10 md:px-20 grid md:grid-cols-[1.4fr_1fr] gap-16 items-center">
+    <div className="w-screen h-screen flex-shrink-0 bg-[#f2f2f0] text-[#1a1a1a] flex flex-col justify-center">
+      <div className="w-full max-w-6xl mx-auto px-10 md:px-20 grid md:grid-cols-[1.4fr_1fr] gap-16 items-start">
         {/* Left — statement */}
         <div>
           <p className="text-[11px] uppercase tracking-[0.3em] text-[#6b8a00] font-semibold mb-8">The problem</p>
@@ -144,7 +144,7 @@ function Slide1() {
         </div>
 
         {/* Right — two pain points stacked */}
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-10 md:mt-12">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-[#1a1a1a]/50 font-bold mb-3">Early stage</p>
             <p className="text-[15px] text-[#1a1a1a]/65 leading-relaxed">
@@ -158,12 +158,15 @@ function Slide1() {
               Real numbers mean suppliers, subcontractors, price research, spreadsheets. Weeks of work &mdash; on every single project.
             </p>
           </div>
-          <div className="h-px bg-[#1a1a1a]/[0.08]" />
-          <div className="flex items-baseline gap-4">
-            <span className="text-2xl md:text-3xl font-black text-[#1a1a1a]/15 line-through decoration-2 decoration-[#1a1a1a]/20">2-3 weeks</span>
-            <span className="text-[#1a1a1a]/25 text-lg">&rarr;</span>
-            <span className="text-2xl md:text-3xl font-black text-[#4d7a00]">5 minutes</span>
-          </div>
+        </div>
+      </div>
+
+      {/* Before/after — full width, dominant */}
+      <div className="w-full max-w-6xl mx-auto px-10 md:px-20 mt-14">
+        <div className="flex items-baseline gap-5 md:gap-8">
+          <span className="text-4xl md:text-6xl font-black text-[#1a1a1a]/12 line-through decoration-2 decoration-[#1a1a1a]/15">2-3 weeks</span>
+          <span className="text-[#1a1a1a]/20 text-2xl">&rarr;</span>
+          <span className="text-4xl md:text-6xl font-black text-[#4d7a00]">5 minutes</span>
         </div>
       </div>
     </div>
@@ -191,7 +194,10 @@ function Slide2() {
       <p className="text-sm text-white/55 text-center max-w-md mt-3 leading-relaxed">
         Describe your project. Upload your plan. Get a detailed estimate in minutes.
       </p>
-      <p className="mt-12 text-[10px] text-white/25 uppercase tracking-[0.25em]">
+      <p className="mt-10 text-sm text-white/40 text-center italic">
+        Think TurboTax for construction budgets.
+      </p>
+      <p className="mt-6 text-[10px] text-white/25 uppercase tracking-[0.25em]">
         Built by architects, for architects
       </p>
     </div>
@@ -306,8 +312,12 @@ function Slide5() {
             <br />
             time.
           </h2>
-          <p className="text-sm text-white/55 leading-relaxed max-w-sm">
+          <p className="text-sm text-white/55 leading-relaxed max-w-sm mb-6">
             Not a ChatGPT wrapper. A tool that replaces hours of professional work with a 5-minute conversation.
+          </p>
+          <p className="text-xs text-[#ccff00]/50 uppercase tracking-[0.2em] font-bold">Why now</p>
+          <p className="text-sm text-white/45 leading-relaxed max-w-sm mt-2">
+            AI vision can finally interpret floor plans accurately. Real-time pricing data makes static spreadsheets obsolete.
           </p>
         </div>
 
