@@ -1,4 +1,12 @@
 {
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "demo.nelo.archi" }],
+      "destination": "https://www.loom.com/share/8f74b168f8294331b649c6477889e514",
+      "permanent": false
+    }
+  ],
   "crons": [
     {
       "path": "/api/cron/refresh-prices",
