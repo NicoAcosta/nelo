@@ -29,11 +29,27 @@ import type { Locale } from "@/lib/i18n/types";
 import { translations } from "@/lib/i18n/translations";
 
 /**
+ * Applies smart defaults to inputs before processing.
+ * Mutates nothing — returns a new object.
+ */
+function applyInputDefaults(inputs: ProjectInputs): ProjectInputs {
+  const result = { ...inputs };
+
+  // Default slabType to vigueta_ceramica for hormigon_armado when not specified
+  if (result.structureType === "hormigon_armado" && result.slabType === undefined) {
+    result.slabType = "vigueta_ceramica";
+  }
+
+  return result;
+}
+
+/**
  * Produces all line items with quantities and costs applied.
  */
 export function applyUnitCosts(inputs: ProjectInputs): LineItem[] {
-  const base = deriveBaseQuantities(inputs);
-  const zoneMultiplier = ZONE_MULTIPLIERS[inputs.locationZone ?? "caba"] ?? 1.0;
+  const effectiveInputs = applyInputDefaults(inputs);
+  const base = deriveBaseQuantities(effectiveInputs);
+  const zoneMultiplier = ZONE_MULTIPLIERS[effectiveInputs.locationZone ?? "caba"] ?? 1.0;
   const iccCurrent = getLatestICC().generalValue;
 
   const lineItems: LineItem[] = [];
@@ -41,7 +57,7 @@ export function applyUnitCosts(inputs: ProjectInputs): LineItem[] {
   for (const category of CATEGORIES) {
     for (const sub of category.subcategories) {
       for (const item of sub.items) {
-        const isActive = evaluateConditions(item.conditions, inputs);
+        const isActive = evaluateConditions(item.conditions, effectiveInputs);
         const quantity = isActive
           ? resolveItemQuantity(item.quantityCoefficient, base)
           : 0;
@@ -162,14 +178,25 @@ function collectAssumptions(inputs: ProjectInputs, locale: Locale = "en"): Assum
   } else if (inputs.perimeterMl === undefined) {
     assumptions.push({ field: "perimeterMl", label: t["engine.assumptionPerimeter"], assumedValue: t["engine.assumptionEstimatedSquare"], source: "default" });
   }
+  // Smart defaults: estimate counts from floor area
+  const floorArea = inputs.totalFloorAreaM2 ?? 0;
   if (inputs.doorCount === undefined) {
-    assumptions.push({ field: "doorCount", label: t["engine.assumptionDoors"], assumedValue: `0 (${t["engine.assumptionNotSpecified"]})`, source: "default" });
+    const estimated = Math.max(3, Math.round(floorArea / 15));
+    assumptions.push({ field: "doorCount", label: t["engine.assumptionDoors"], assumedValue: `${estimated} (${t["engine.assumptionEstimatedFromArea"]})`, source: "default" });
   }
   if (inputs.windowCount === undefined) {
-    assumptions.push({ field: "windowCount", label: t["engine.assumptionWindows"], assumedValue: `0 (${t["engine.assumptionNotSpecified"]})`, source: "default" });
+    const estimated = Math.max(2, Math.round(floorArea / 12));
+    assumptions.push({ field: "windowCount", label: t["engine.assumptionWindows"], assumedValue: `${estimated} (${t["engine.assumptionEstimatedFromArea"]})`, source: "default" });
   }
   if (inputs.bathroomCount === undefined) {
-    assumptions.push({ field: "bathroomCount", label: t["engine.assumptionBathrooms"], assumedValue: `0 (${t["engine.assumptionNotSpecified"]})`, source: "default" });
+    const estimated = Math.max(1, Math.round(floorArea / 50));
+    assumptions.push({ field: "bathroomCount", label: t["engine.assumptionBathrooms"], assumedValue: `${estimated} (${t["engine.assumptionEstimatedFromArea"]})`, source: "default" });
+  }
+  if (inputs.kitchenCount === undefined) {
+    assumptions.push({ field: "kitchenCount", label: t["engine.assumptionKitchens"] ?? "Kitchens", assumedValue: `1 (${t["engine.assumptionDefault"]})`, source: "default" });
+  }
+  if (inputs.structureType === "hormigon_armado" && inputs.slabType === undefined) {
+    assumptions.push({ field: "slabType", label: t["engine.assumptionSlabType"] ?? "Slab type", assumedValue: "vigueta_ceramica", source: "default" });
   }
 
   return assumptions;
@@ -180,9 +207,10 @@ function collectAssumptions(inputs: ProjectInputs, locale: Locale = "en"): Assum
  * ProjectInputs → LineItems → CategoryTotals → Cost Structure → Estimate
  */
 export function computeEstimate(inputs: ProjectInputs, locale: Locale = "en"): Estimate {
-  const lineItems = applyUnitCosts(inputs);
+  const effectiveInputs = applyInputDefaults(inputs);
+  const lineItems = applyUnitCosts(effectiveInputs);
   const categories = sumByCategory(lineItems, locale);
-  const confidence = computeConfidence(inputs);
+  const confidence = computeConfidence(effectiveInputs);
   const assumptions = collectAssumptions(inputs, locale);
 
   const activeItems = lineItems.filter((i) => i.isActive);

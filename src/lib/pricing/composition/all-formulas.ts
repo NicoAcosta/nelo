@@ -625,29 +625,46 @@ const CAT14_TO_24_FORMULAS: CompositionFormula[] = [
     ],
   },
 
-  // Cat 21: Instalaciones Sanitarias — per punto/artefacto
+  // Cat 21: Instalaciones Sanitarias — per COMPLETE bathroom
+  // Includes all fixtures (inodoro, lavatorio, bidet, ducha), piping, drainage
   {
     itemCode: "21.0",
-    description: "Instalaciones sanitarias (baño estándar) — por punto",
-    // plumbing_point: 3.0 hr oficial + 1.5 hr ayudante
-    crewType: "plumbing_point",
+    description: "Instalaciones sanitarias (baño completo) — por baño",
+    // Complete bathroom: ~24 hr oficial + 12 hr ayudante total
+    crewType: { oficialHours: 24.0, ayudanteHours: 12.0 },
     materials: [
-      { name: "Caño termofusión 25mm barra 4m (2 barras/punto)", quantity: 2, retailPricePerUnit: 8000, wholesaleCategory: "specialty" },
-      { name: "Caño PVC desagüe 110mm (3ml/punto)", quantity: 3, retailPricePerUnit: 4500, wholesaleCategory: "specialty" },
-      { name: "Accesorios codos/tees", quantity: 4, retailPricePerUnit: 850, wholesaleCategory: "specialty" },
-      { name: "Artefacto inodoro/lavatorio (prorrata/punto)", quantity: 0.5, retailPricePerUnit: 75000, wholesaleCategory: "specialty" },
+      { name: "Inodoro con mochila (calidad media)", quantity: 1, retailPricePerUnit: 180000, wholesaleCategory: "specialty" },
+      { name: "Lavatorio con pedestal", quantity: 1, retailPricePerUnit: 120000, wholesaleCategory: "specialty" },
+      { name: "Bidet", quantity: 1, retailPricePerUnit: 130000, wholesaleCategory: "specialty" },
+      { name: "Grifería monocomando lavatorio", quantity: 1, retailPricePerUnit: 85000, wholesaleCategory: "specialty" },
+      { name: "Grifería ducha completa (lluvia + transfer)", quantity: 1, retailPricePerUnit: 95000, wholesaleCategory: "specialty" },
+      { name: "Grifería bidet", quantity: 1, retailPricePerUnit: 55000, wholesaleCategory: "specialty" },
+      { name: "Caño termofusión 25mm barra 4m", quantity: 8, retailPricePerUnit: 8000, wholesaleCategory: "specialty" },
+      { name: "Caño PVC desagüe 110mm (barras)", quantity: 6, retailPricePerUnit: 4500, wholesaleCategory: "specialty" },
+      { name: "Accesorios codos/tees/llaves de paso", quantity: 15, retailPricePerUnit: 1200, wholesaleCategory: "specialty" },
+      { name: "Receptáculo de ducha 80×80", quantity: 1, retailPricePerUnit: 85000, wholesaleCategory: "specialty" },
+      { name: "Mampara de ducha vidrio templado", quantity: 1, retailPricePerUnit: 180000, wholesaleCategory: "specialty" },
     ],
   },
 
-  // Cat 22: Instalación de Gas — per boca gas
+  // Cat 22: Instalación de Gas — per COMPLETE house installation (global)
+  // Includes main run, branches to kitchen/calefón/estufas, medidor connection
   {
     itemCode: "22.0",
-    description: "Instalación de gas — por boca",
-    crewType: { oficialHours: 2.5, ayudanteHours: 1.0 },
+    description: "Instalación de gas completa — global",
+    // Full house gas: ~40 hr oficial + 16 hr ayudante
+    crewType: { oficialHours: 40.0, ayudanteHours: 16.0 },
     materials: [
-      { name: "Caño gas semirígido 3/4 pulgada (5ml/boca)", quantity: 5, retailPricePerUnit: 3200, wholesaleCategory: "specialty" },
-      { name: "Llave de paso 3/4 pulgada", quantity: 1, retailPricePerUnit: 6500, wholesaleCategory: "specialty" },
-      { name: "Uniones y accesorios", quantity: 3, retailPricePerUnit: 1800, wholesaleCategory: "specialty" },
+      { name: "Caño gas semirígido 3/4 pulgada (30ml total)", quantity: 30, retailPricePerUnit: 3200, wholesaleCategory: "specialty" },
+      { name: "Caño gas semirígido 1/2 pulgada (15ml ramales)", quantity: 15, retailPricePerUnit: 2400, wholesaleCategory: "specialty" },
+      { name: "Llave de paso 3/4 pulgada", quantity: 5, retailPricePerUnit: 6500, wholesaleCategory: "specialty" },
+      { name: "Válvula esférica 1/2 pulgada", quantity: 4, retailPricePerUnit: 4500, wholesaleCategory: "specialty" },
+      { name: "Regulador de presión", quantity: 1, retailPricePerUnit: 18000, wholesaleCategory: "specialty" },
+      { name: "Medidor de gas (contribución)", quantity: 1, retailPricePerUnit: 350000, wholesaleCategory: "specialty" },
+      { name: "Flexible conexión artefactos", quantity: 4, retailPricePerUnit: 8500, wholesaleCategory: "specialty" },
+      { name: "Uniones, accesorios y selladores", quantity: 20, retailPricePerUnit: 1800, wholesaleCategory: "specialty" },
+      { name: "Ventilaciones reglamentarias", quantity: 3, retailPricePerUnit: 12000, wholesaleCategory: "specialty" },
+      { name: "Habilitación y certificación gasista matriculado", quantity: 1, retailPricePerUnit: 250000, wholesaleCategory: "specialty" },
     ],
   },
 

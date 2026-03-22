@@ -304,7 +304,7 @@ export interface QuantityCoefficient {
 
 export interface ItemCondition {
   field: keyof ProjectInputs;
-  operator: "equals" | "not_equals" | "exists" | "not_exists";
+  operator: "equals" | "not_equals" | "exists" | "not_exists" | "greater_than";
   value?: string | number | boolean;
 }
 

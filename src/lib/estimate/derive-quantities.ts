@@ -13,10 +13,6 @@ import type { ProjectInputs, ItemCondition } from "./types";
 const DEFAULTS = {
   ceilingHeightM: 2.6,
   stories: 1,
-  doorCount: 0,
-  windowCount: 0,
-  bathroomCount: 0,
-  kitchenCount: 0,
   /** Default door opening size for wall area deduction */
   doorWidthM: 0.80,
   doorHeightM: 2.10,
@@ -24,6 +20,23 @@ const DEFAULTS = {
   windowWidthM: 1.20,
   windowHeightM: 1.50,
 };
+
+/**
+ * Smart defaults: estimate counts from floor area when not provided.
+ * Based on typical Argentine residential construction ratios.
+ */
+function smartDefaultDoorCount(floorAreaM2: number): number {
+  return Math.max(3, Math.round(floorAreaM2 / 15));
+}
+function smartDefaultWindowCount(floorAreaM2: number): number {
+  return Math.max(2, Math.round(floorAreaM2 / 12));
+}
+function smartDefaultBathroomCount(floorAreaM2: number): number {
+  return Math.max(1, Math.round(floorAreaM2 / 50));
+}
+function smartDefaultKitchenCount(): number {
+  return 1;
+}
 
 /** Base quantities derived from project inputs */
 export interface BaseQuantities {
@@ -48,10 +61,12 @@ export function deriveBaseQuantities(inputs: ProjectInputs): BaseQuantities {
   const stories = inputs.stories ?? DEFAULTS.stories;
   const ceilingHeightM = inputs.ceilingHeightM ?? DEFAULTS.ceilingHeightM;
   const floorAreaM2 = inputs.totalFloorAreaM2 ?? 0;
-  const doorCount = inputs.doorCount ?? DEFAULTS.doorCount;
-  const windowCount = inputs.windowCount ?? DEFAULTS.windowCount;
-  const bathroomCount = inputs.bathroomCount ?? DEFAULTS.bathroomCount;
-  const kitchenCount = inputs.kitchenCount ?? DEFAULTS.kitchenCount;
+
+  // Smart defaults: estimate counts from floor area when not provided
+  const doorCount = inputs.doorCount ?? smartDefaultDoorCount(floorAreaM2);
+  const windowCount = inputs.windowCount ?? smartDefaultWindowCount(floorAreaM2);
+  const bathroomCount = inputs.bathroomCount ?? smartDefaultBathroomCount(floorAreaM2);
+  const kitchenCount = inputs.kitchenCount ?? smartDefaultKitchenCount();
 
   // Footprint: ground floor area. If not provided, divide total by stories.
   const footprintM2 = inputs.footprintM2 ?? (stories > 0 ? floorAreaM2 / stories : floorAreaM2);
@@ -135,6 +150,8 @@ export function evaluateConditions(
         return value !== undefined && value !== null;
       case "not_exists":
         return value === undefined || value === null;
+      case "greater_than":
+        return typeof value === "number" && typeof cond.value === "number" && value > cond.value;
       default:
         return true;
     }

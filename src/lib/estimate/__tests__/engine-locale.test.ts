@@ -36,22 +36,22 @@ describe("computeEstimate locale support", () => {
     expect(ceilingAssumption!.label).toBe("Floor-to-ceiling height");
   });
 
-  it("uses English 'not specified' text when locale is 'en'", () => {
+  it("uses English 'estimated from floor area' text when locale is 'en'", () => {
     const estimate = computeEstimate(minimalInputs, "en");
     const doorAssumption = estimate.assumptions.find(
       (a) => a.field === "doorCount",
     );
     expect(doorAssumption).toBeDefined();
-    expect(doorAssumption!.assumedValue).toContain("not specified");
+    expect(doorAssumption!.assumedValue).toContain("estimated from floor area");
   });
 
-  it("uses Spanish 'no especificado' text when locale is 'es'", () => {
+  it("uses Spanish 'estimado segun superficie' text when locale is 'es'", () => {
     const estimate = computeEstimate(minimalInputs, "es");
     const doorAssumption = estimate.assumptions.find(
       (a) => a.field === "doorCount",
     );
     expect(doorAssumption).toBeDefined();
-    expect(doorAssumption!.assumedValue).toContain("no especificado");
+    expect(doorAssumption!.assumedValue).toContain("estimado segun superficie");
   });
 
   it("uses English category names in sumByCategory when locale is 'en'", () => {

@@ -107,8 +107,12 @@ const en: Translations = {
   "engine.assumptionWindows": "Window count",
   "engine.assumptionBathrooms": "Bathroom count",
   "engine.assumptionNotSpecified": "not specified",
+  "engine.assumptionEstimatedFromArea": "estimated from floor area",
   "engine.assumptionEstimatedSquare": "estimated from square footprint",
   "engine.assumptionTotalDivStories": "total / stories",
+  "engine.assumptionKitchens": "Kitchen count",
+  "engine.assumptionSlabType": "Slab type",
+  "engine.assumptionDefault": "default",
 
   // categories (26 from categories-config.ts)
   "category.trabajos_preliminares": "Preliminary Work",
@@ -258,8 +262,12 @@ const es: Translations = {
   "engine.assumptionWindows": "Cantidad de ventanas",
   "engine.assumptionBathrooms": "Cantidad de banos",
   "engine.assumptionNotSpecified": "no especificado",
+  "engine.assumptionEstimatedFromArea": "estimado segun superficie",
   "engine.assumptionEstimatedSquare": "estimado de planta cuadrada",
   "engine.assumptionTotalDivStories": "total / plantas",
+  "engine.assumptionKitchens": "Cantidad de cocinas",
+  "engine.assumptionSlabType": "Tipo de losa",
+  "engine.assumptionDefault": "por defecto",
 
   // categories (26 from categories-config.ts)
   "category.trabajos_preliminares": "Trabajos Preliminares",
