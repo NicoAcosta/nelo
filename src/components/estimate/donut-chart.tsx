@@ -68,7 +68,7 @@ export function DonutChart({ categories }: DonutChartProps) {
   return (
     <div className="bg-[#111113] p-8 flex flex-col items-center justify-center gap-6">
       <div className="w-[260px] h-[260px] relative">
-        <svg viewBox="0 0 200 200" className="w-full h-full -rotate-90" role="img" aria-label={t("estimate.donutAriaLabel")}>
+        <svg viewBox="0 0 200 200" className="w-full h-full -rotate-90" role="list" aria-label={t("estimate.donutAriaLabel")}>
           {segmentData.map((seg) => (
             <circle
               key={seg.id}
@@ -80,15 +80,20 @@ export function DonutChart({ categories }: DonutChartProps) {
               strokeWidth={hoveredId === seg.id ? HOVER_STROKE : STROKE_WIDTH}
               strokeDasharray={`${seg.dashLen} ${seg.gapLen}`}
               strokeDashoffset={seg.offset}
-              className="transition-[stroke-dasharray,stroke-dashoffset,filter] duration-200 cursor-pointer"
+              className="transition-[stroke-dasharray,stroke-dashoffset,filter] duration-200 cursor-pointer outline-none"
               style={{
                 filter:
                   hoveredId === seg.id
                     ? `brightness(1.3) drop-shadow(0 0 6px ${seg.color})`
                     : "none",
               }}
+              tabIndex={0}
+              role="listitem"
+              aria-label={`${seg.name}: ${formatPercent(seg.percent)}`}
               onMouseEnter={() => setHoveredId(seg.id)}
               onMouseLeave={() => setHoveredId(null)}
+              onFocus={() => setHoveredId(seg.id)}
+              onBlur={() => setHoveredId(null)}
             />
           ))}
         </svg>
@@ -106,11 +111,16 @@ export function DonutChart({ categories }: DonutChartProps) {
         {segments.map((seg) => (
           <div
             key={seg.id}
-            className={`flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
+            tabIndex={0}
+            role="button"
+            aria-label={`${seg.name}: ${formatPercent(seg.percent)}`}
+            className={`flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-colors outline-none focus-visible:ring-1 focus-visible:ring-[#ccff00] ${
               hoveredId === seg.id ? "bg-white/[0.03]" : ""
             }`}
             onMouseEnter={() => setHoveredId(seg.id)}
             onMouseLeave={() => setHoveredId(null)}
+            onFocus={() => setHoveredId(seg.id)}
+            onBlur={() => setHoveredId(null)}
           >
             <span
               className="w-2 h-2 rounded-[3px] flex-shrink-0"

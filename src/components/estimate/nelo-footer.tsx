@@ -11,7 +11,7 @@ export function NeloFooter({ chatId }: NeloFooterProps) {
 
   return (
     <>
-      <div className="relative px-8 pt-16 pb-12 text-center overflow-hidden border-t border-white/[0.06] mx-8">
+      <div className="relative px-4 md:px-8 pt-16 pb-12 text-center overflow-hidden border-t border-white/[0.06] mx-4 md:mx-8">
         {/* Subtle glow */}
         <div className="absolute w-[500px] h-[200px] bottom-0 left-1/2 -translate-x-1/2 bg-[radial-gradient(ellipse,rgba(204,255,0,0.04)_0%,transparent_70%)] blur-[60px] pointer-events-none" />
 

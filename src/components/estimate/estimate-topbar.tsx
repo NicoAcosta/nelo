@@ -32,7 +32,7 @@ export function EstimateTopbar({
     : projectName;
 
   return (
-    <div className="sticky top-0 z-50 flex items-center justify-between px-8 py-2.5 bg-[#08080a]/85 backdrop-blur-xl border-b border-white/[0.06]">
+    <div className="sticky top-0 z-50 flex items-center justify-between px-4 md:px-8 py-2.5 bg-[#08080a]/85 backdrop-blur-xl border-b border-white/[0.06]">
       <div className="flex items-center gap-3.5">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M3 2h6l6 10V2h6v20h-6L9 12v10H3z" fill="#ccff00" stroke="#000" strokeWidth="1.5" strokeLinejoin="round" />

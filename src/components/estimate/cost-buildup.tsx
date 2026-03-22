@@ -24,7 +24,7 @@ export function CostBuildUp({ estimate }: CostBuildUpProps) {
       <div className="flex flex-col gap-1.5">
         {rows.map((row) => (
           <div key={row.label} className="flex items-center gap-3.5">
-            <span className="text-[13px] text-[#a1a1aa] w-[110px] flex-shrink-0">{row.label}</span>
+            <span className="text-[13px] text-[#a1a1aa] w-[110px] flex-shrink-0 truncate">{row.label}</span>
             <div
               className={`h-[30px] rounded-md flex items-center px-3 font-mono text-xs font-semibold tabular-nums ${row.color} ${row.textColor}`}
               style={{ width: `${Math.max((row.value / maxVal) * 100, 8)}%` }}

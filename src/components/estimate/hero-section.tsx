@@ -120,8 +120,8 @@ export function HeroSection({ estimate }: HeroSectionProps) {
           </span>
         </div>
         <div className="flex justify-between mt-1.5 text-[10px] font-mono text-[#52525b] tabular-nums">
-          <span>${formatARS(lowPrice)} {t("estimate.rangeLow")}</span>
-          <span>${formatARS(highPrice)} {t("estimate.rangeHigh")}</span>
+          <span>ARS {formatARS(lowPrice)} {t("estimate.rangeLow")}</span>
+          <span>ARS {formatARS(highPrice)} {t("estimate.rangeHigh")}</span>
         </div>
       </div>
     </div>

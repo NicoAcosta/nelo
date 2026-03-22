@@ -6,6 +6,7 @@ import {
   extractEstimateFromMessages,
 } from "@/lib/db/conversations";
 import { EstimateDashboard } from "./estimate-dashboard";
+import { NoEstimateFallback } from "./no-estimate-fallback";
 
 export async function generateMetadata({
   params,
@@ -40,22 +41,7 @@ export default async function EstimatePage({
 
   const estimateData = extractEstimateFromMessages(messages);
   if (!estimateData) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-[#08080a] text-[#fafafa]">
-        <div className="text-center">
-          <p className="text-lg font-medium mb-2">No estimate found</p>
-          <p className="text-sm text-[#71717a] mb-6">
-            This conversation doesn&apos;t have a completed estimate yet.
-          </p>
-          <a
-            href={`/chat/${id}`}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#ccff00] text-black font-semibold text-sm hover:brightness-95 transition focus-visible:ring-2 focus-visible:ring-[#ccff00] focus-visible:ring-offset-2"
-          >
-            ← Back to Chat
-          </a>
-        </div>
-      </div>
-    );
+    return <NoEstimateFallback chatId={id} />;
   }
 
   const projectName = project.title || "Construction Estimate";
