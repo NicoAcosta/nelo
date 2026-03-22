@@ -116,7 +116,7 @@ Nelo handles two critical stages of construction estimation:
 | Column 1 | Column 2 | Column 3 |
 |-----------|----------|----------|
 | **Chat** | **Upload** | **Estimate** |
-| Describe your project naturally. Nelo asks the right questions. | Drop a floor plan (image, PDF, CAD). AI extracts rooms, dimensions, doors. | 26-category cost breakdown. Price/m2 in ARS and USD. Confidence level. |
+| Describe your project naturally. Nelo asks the right questions. | AutoCAD, Revit, PDFs, spreadsheets, or photos. AI extracts rooms, dimensions, doors. | 26-category cost breakdown. Price/m2 in ARS and USD. Confidence level. |
 
 **Visual direction:** Three app screenshots cropped to show (1) the chat with option buttons, (2) a floor plan being analyzed, (3) the cost breakdown component. Consistent sizing, subtle borders.
 
@@ -159,7 +159,7 @@ Nelo handles two critical stages of construction estimation:
 | Capability | Description |
 |-----------|------------|
 | **Conversational reasoning** | Collects data through dialogue. Fills gaps with smart defaults. Shows what it assumed. |
-| **Vision understanding** | Reads floor plans in any format. Extracts rooms, dimensions, openings. Asks to confirm. |
+| **Vision understanding** | Reads AutoCAD, Revit IFC, PDFs, spreadsheets, and photos. Extracts rooms, dimensions, openings. Asks to confirm. |
 | **Domain-expert computation** | 400+ line items. 26 categories. UOCRA labor, MercadoLibre + supplier pricing, blue-rate USD, INDEC inflation-adjusted. Updated daily. |
 
 **Visual direction:** Could use icons for each row (chat bubble, eye, calculator). Keep it scannable — judges should get this in 3 seconds of looking at the slide.
@@ -250,7 +250,7 @@ Right side: QR code to try it live, or the app URL.
 >
 > First, you chat. Describe your project in plain language — Nelo asks the right follow-up questions. Structure type, finishes, location.
 >
-> Second, you upload. Drop a floor plan — an image, a PDF, even a CAD file. AI vision extracts the rooms, dimensions, doors, and windows automatically.
+> Second, you upload. Drop a floor plan — AutoCAD, Revit, PDF, a spreadsheet, even a photo from your phone. AI extracts the rooms, dimensions, doors, and windows automatically.
 >
 > Third, you get your estimate. A full 26-category cost breakdown with price per square meter in pesos and dollars, and a confidence level based on how much data Nelo has.
 >
@@ -292,7 +292,7 @@ Right side: QR code to try it live, or the app URL.
 >
 > First — conversational reasoning. Nelo doesn't throw a form at you. It collects data through dialogue, fills gaps with smart defaults, and tells you exactly what it assumed.
 >
-> Second — vision understanding. Upload a floor plan in any format and AI extracts the layout. Rooms, doors, windows, dimensions.
+> Second — vision understanding. Upload from AutoCAD, Revit, PDF, spreadsheets, or just a photo. AI extracts the layout — rooms, doors, windows, dimensions.
 >
 > Third — domain-expert computation. Over four hundred line items across twenty-six construction categories, with real Argentine pricing — UOCRA labor rates, MercadoLibre and supplier pricing, blue-rate dollar, INDEC inflation-adjusted. Updated daily. This is the same budget structure architects actually use.
 

@@ -235,7 +235,7 @@ function Slide3() {
           <div className="text-[#ccff00]/60 text-5xl md:text-6xl font-black mb-4" style={{ fontFamily: "var(--font-geist-mono, monospace)" }}>02</div>
           <h3 className="text-xl font-black uppercase tracking-tight mb-3 text-white/90">Upload</h3>
           <p className="text-sm text-white/50 leading-relaxed max-w-[240px] md:mx-auto">
-            Drop a floor plan &mdash; image, PDF, or CAD file. AI vision extracts rooms, dimensions, doors.
+            AutoCAD (DWG, DXF), Revit (IFC), PDFs, spreadsheets, or photos. AI vision extracts rooms, dimensions, doors.
           </p>
         </div>
 
@@ -337,7 +337,7 @@ function Slide5() {
               <h3 className="text-lg font-black uppercase tracking-tight text-white/90">Vision Understanding</h3>
             </div>
             <p className="text-[15px] text-white/50 leading-relaxed pl-5">
-              Reads floor plans in any format &mdash; image, PDF, DXF, DWG. Extracts rooms, doors, windows, dimensions. Asks you to confirm.
+              Reads AutoCAD, Revit IFC, PDFs, spreadsheets, and photos. Extracts rooms, doors, windows, dimensions. Asks you to confirm.
             </p>
           </div>
           <div>
