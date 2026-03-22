@@ -142,7 +142,7 @@ export function createChatTools(locale: Locale = "en") {
 
   const analyzeFloorPlan = tool({
     description:
-      "Analyze an uploaded floor plan image. When the user uploads an image, describe what you see and call this tool with extracted data. The user will confirm or correct.",
+      "Analyze a floor plan. If a Document Analysis preamble is present in the conversation with extracted dimensions and room data, USE THOSE EXACT MEASUREMENTS rather than estimating from the image. The image confirms spatial layout; the preamble provides precise numbers. When no preamble exists, estimate from the image as before.",
     inputSchema: z.object({
       imageDataUrl: z
         .string()

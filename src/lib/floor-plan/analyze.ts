@@ -12,6 +12,7 @@ import { generateText, Output } from "ai";
 import { z } from "zod";
 import { visionModel } from "@/lib/ai/models";
 import type { FloorPlanExtraction } from "@/lib/estimate/types";
+import type { ExtractedData } from "@/lib/documents/types";
 
 export const floorPlanExtractionSchema = z.object({
   rooms: z.array(
@@ -83,14 +84,42 @@ IMPORTANTE:
  */
 export async function analyzeFloorPlanImage(
   imageData: string, // base64 data URL or URL
+  preExtracted?: ExtractedData | null,
 ): Promise<FloorPlanExtraction> {
+  let prompt = ANALYSIS_PROMPT;
+
+  if (preExtracted) {
+    const parts: string[] = ["\n\nDatos extraídos programáticamente del archivo CAD:"];
+
+    if (preExtracted.roomLabels.length > 0) {
+      const rooms = preExtracted.roomLabels
+        .map((r) => r.areaM2 ? `${r.name} (${r.areaM2} m²)` : r.name)
+        .join(", ");
+      parts.push(`- Ambientes: ${rooms}`);
+    }
+
+    if (preExtracted.dimensions.length > 0) {
+      const dims = preExtracted.dimensions
+        .map((d) => `${d.value}${d.unit}${d.label ? ` (${d.label})` : ""}`)
+        .join(", ");
+      parts.push(`- Dimensiones: ${dims}`);
+    }
+
+    const s = preExtracted.summary;
+    if (s.doorCount > 0) parts.push(`- Puertas: ${s.doorCount}`);
+    if (s.windowCount > 0) parts.push(`- Ventanas: ${s.windowCount}`);
+
+    parts.push("\nUsá estos valores exactos. Solo estimá los valores que no están cubiertos por la extracción.");
+    prompt += parts.join("\n");
+  }
+
   const { output } = await generateText({
     model: visionModel,
     messages: [
       {
         role: "user",
         content: [
-          { type: "text", text: ANALYSIS_PROMPT },
+          { type: "text", text: prompt },
           {
             type: "image",
             image: imageData,
