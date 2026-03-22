@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Persistence & Sharing
 status: unknown
-stopped_at: Phase 12 UI-SPEC approved
-last_updated: "2026-03-22T08:55:21.115Z"
-last_activity: "2026-03-22 - Completed quick task 260322-85r: Create SummaryCards component at src/components/estimate/summary-cards.tsx and commit"
+stopped_at: Completed 12-estimate-versioning/12-01-PLAN.md
+last_updated: "2026-03-22T09:29:25.879Z"
+last_activity: 2026-03-22
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 9
+  completed_plans: 8
 ---
 
 # Project State: Nelo
@@ -19,12 +19,12 @@ progress:
 
 See: .planning/PROJECT.md (updated 2026-03-21)
 **Core value:** Accurate, transparent construction cost estimation through natural conversation
-**Current focus:** Phase 11 — project-management
+**Current focus:** Phase 12 — estimate-versioning
 
 ## Current Position
 
-Phase: 12
-Plan: Not started
+Phase: 12 (estimate-versioning) — EXECUTING
+Plan: 2 of 2
 
 ## Performance Metrics
 
@@ -47,6 +47,7 @@ Plan: Not started
 | Phase 10-chat-persistence P02 | 30 | 2 tasks | 4 files |
 | Phase 11-project-management P01 | 2 | 2 tasks | 5 files |
 | Phase 11-project-management P02 | 20 | 3 tasks | 4 files |
+| Phase 12-estimate-versioning P01 | 5 | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,9 @@ Plan: Not started
 - 09-02: AuthProvider wraps outside LocaleProvider — auth is app-global, locale preference is within auth scope
 - 11-01: listProjects() takes no userId — RLS on projects table scopes results to authenticated user automatically
 - 11-01: Server actions in src/lib/actions/ separated from DB query functions in src/lib/db/
+- 12-01: Migration 0004 (not 0003) for estimates index — 0003 already created idx_estimates_conversation_id; used IF NOT EXISTS
+- 12-01: Estimate persistence in tool execute (not onFinish) — fires even on tab close mid-stream (D-01)
+- 12-01: saveEstimate callback bound at route handler — supabase client never created inside tool execute
 
 ### Pending Todos
 
@@ -89,8 +93,8 @@ None yet.
 
 ## Session Continuity
 
-Last activity: 2026-03-22 - Completed quick task 260322-88d: Create NeloFooter component at src/components/estimate/nelo-footer.tsx and commit
+Last activity: 2026-03-22
 
-Last session: 2026-03-22T08:55:21.111Z
-Stopped at: Phase 12 UI-SPEC approved
-Resume file: .planning/phases/12-estimate-versioning/12-UI-SPEC.md
+Last session: 2026-03-22T09:29:25.874Z
+Stopped at: Completed 12-estimate-versioning/12-01-PLAN.md
+Resume file: None
