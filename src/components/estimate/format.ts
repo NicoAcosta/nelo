@@ -1,3 +1,12 @@
+import type { LocationZone } from "@/lib/estimate/types";
+
+export const ZONE_LABELS: Record<LocationZone, string> = {
+  caba: "CABA",
+  gba_norte: "GBA Norte",
+  gba_sur: "GBA Sur",
+  gba_oeste: "GBA Oeste",
+};
+
 /** Format ARS with dots as thousands separator, no decimals */
 export function formatARS(value: number): string {
   return new Intl.NumberFormat("es-AR", {
@@ -28,7 +37,7 @@ export function formatCompact(value: number): string {
   }
   if (value >= 1_000) {
     const k = value / 1_000;
-    return `$${k % 1 === 0 ? k.toFixed(0) : k.toFixed(0)}K`;
+    return `$${k % 1 === 0 ? k.toFixed(0) : k.toFixed(1)}K`;
   }
   return `$${value}`;
 }

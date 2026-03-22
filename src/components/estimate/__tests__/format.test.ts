@@ -32,4 +32,7 @@ describe("formatCompact", () => {
   it("formats thousands as $850K", () => {
     expect(formatCompact(850000)).toBe("$850K");
   });
+  it("formats non-round thousands with one decimal as $1.5K", () => {
+    expect(formatCompact(1500)).toBe("$1.5K");
+  });
 });

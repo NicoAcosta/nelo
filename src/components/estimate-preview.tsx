@@ -1,7 +1,7 @@
 "use client";
 
 import type { Estimate } from "@/lib/estimate/types";
-import { formatARS } from "@/components/estimate/format";
+import { formatARS, formatUSD } from "@/components/estimate/format";
 import { useLocale } from "@/lib/i18n/use-locale";
 
 interface EstimatePreviewProps {
@@ -49,7 +49,7 @@ export function EstimatePreview({ estimate, chatId }: EstimatePreviewProps) {
               {confidencePercent}% {t("estimate.confidence").toLowerCase()}
             </div>
             <div className="font-mono text-sm text-[#666] mt-0.5 tabular-nums">
-              ≈ USD {formatARS(estimate.totalPriceUsd)}
+              ≈ USD {formatUSD(estimate.totalPriceUsd)}
             </div>
           </div>
         </div>
