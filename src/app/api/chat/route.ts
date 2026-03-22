@@ -2,6 +2,7 @@ import { streamText, convertToModelMessages, stepCountIs } from "ai";
 import type { UIMessage } from "ai";
 import { chatModel } from "@/lib/ai/models";
 import { createChatTools } from "@/lib/ai/tools";
+import { fixDataUrlFileParts } from "@/lib/ai/fix-data-url-file-parts";
 import { buildSystemPrompt } from "@/lib/pricing/system-prompt-builder";
 import type { Locale } from "@/lib/i18n/types";
 import { createClient } from "@/lib/supabase/server";
@@ -30,13 +31,13 @@ export async function POST(req: Request) {
   }
 
   let messages: UIMessage[];
-  let conversationId: string | undefined;
+  let projectId: string | undefined;
   const headerLocale = req.headers.get("x-locale");
   const locale: Locale = headerLocale === "es" ? "es" : "en";
   try {
     const body = await req.json();
     messages = body.messages;
-    conversationId = body.conversationId; // passed by chat-content.tsx transport
+    projectId = body.projectId; // passed by chat-content.tsx transport
   } catch {
     return Response.json({ error: "Invalid JSON body" }, { status: 400 });
   }
@@ -57,6 +58,7 @@ export async function POST(req: Request) {
 
   const userMode = detectUserMode(messages);
   const modelMessages = await convertToModelMessages(messages);
+  fixDataUrlFileParts(modelMessages);
 
   try {
     const result = streamText({
@@ -73,8 +75,12 @@ export async function POST(req: Request) {
     return result.toUIMessageStreamResponse({
       originalMessages: messages,
       onFinish: async ({ messages: allMessages }) => {
-        if (conversationId && user) {
-          await saveConversation(conversationId, user.id, allMessages);
+        try {
+          if (projectId && user) {
+            await saveConversation(projectId, user.id, allMessages);
+          }
+        } catch (err) {
+          console.error("Failed to persist conversation:", err);
         }
       },
     });

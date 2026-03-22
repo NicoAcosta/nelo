@@ -24,6 +24,6 @@ export default async function NewChatPage({
   }
 
   const params = await searchParams;
-  const q = params.q;
+  const q = params.q?.slice(0, 500);
   redirect(q ? `/chat/${id}?q=${encodeURIComponent(q)}` : `/chat/${id}`);
 }

@@ -86,6 +86,7 @@ const en: Translations = {
   "chat.promptSuggestion1": "Estimate a 120m2 house",
   "chat.promptSuggestion2": "Price per m2 in CABA",
   "chat.typing": "Nelo is typing...",
+  "chat.processingDocument": "Processing document...",
 
   // error
   "error.title": "Something went wrong",
@@ -283,6 +284,7 @@ const es: Translations = {
   "chat.promptSuggestion1": "Estimar una casa de 120m2",
   "chat.promptSuggestion2": "Precio por m2 en CABA",
   "chat.typing": "Nelo esta escribiendo...",
+  "chat.processingDocument": "Procesando documento...",
 
   // error
   "error.title": "Algo salio mal",

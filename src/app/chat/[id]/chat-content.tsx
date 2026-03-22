@@ -64,7 +64,7 @@ export function ChatContent({ id, initialMessages }: ChatContentProps) {
     () =>
       new DefaultChatTransport({
         api: "/api/chat",
-        body: { conversationId: id },
+        body: { projectId: id },
         headers: () => ({ "x-locale": localeRef.current }),
       }),
   );

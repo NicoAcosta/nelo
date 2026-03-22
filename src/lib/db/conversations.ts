@@ -73,16 +73,21 @@ export async function saveConversation(
   if (firstUserMsg) {
     const titleText = getTextFromMessage(firstUserMsg).slice(0, 60);
     if (titleText) {
-      await supabase
+      // updated_at handled by DB trigger (BEFORE UPDATE)
+      const { error: titleError } = await supabase
         .from("projects")
-        .update({ title: titleText, updated_at: new Date().toISOString() })
+        .update({ title: titleText })
         .eq("id", projectId)
         .eq("title", "New Project"); // Only update if still the default
+      if (titleError) {
+        console.error(`Failed to update project title for ${projectId}:`, titleError.message);
+      }
     }
   }
 
   // Upsert conversations row (one row per project)
-  await supabase
+  // updated_at included for INSERT case; DB trigger overwrites on UPDATE
+  const { error: upsertError } = await supabase
     .from("conversations")
     .upsert(
       {
@@ -92,6 +97,10 @@ export async function saveConversation(
       },
       { onConflict: "project_id" },
     );
+  if (upsertError) {
+    console.error(`saveConversation upsert failed for project ${projectId}:`, upsertError.message);
+    throw new Error(`saveConversation failed: ${upsertError.message}`);
+  }
 }
 
 /**
