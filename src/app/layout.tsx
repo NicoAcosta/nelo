@@ -7,6 +7,7 @@ import { Providers } from "@/components/providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://nelo.archi"),
   title: "Nelo — AI Construction Cost Estimator",
   description:
     "Estimate your construction costs in seconds with AI. Detailed budgets based on real AMBA pricing and advanced analytics.",
