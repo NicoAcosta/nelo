@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { processDocument } from "../processor";
 
 // Mock pipelines to isolate router logic
@@ -52,5 +52,22 @@ describe("processDocument", () => {
 
   it("throws on unsupported file type", async () => {
     await expect(processDocument(new ArrayBuffer(10), "model.rvt")).rejects.toThrow("Unsupported");
+  });
+
+  it("throws a timeout error when processing takes longer than 30s", async () => {
+    const { extractFromDxf } = await import("../cad-pipeline");
+    vi.mocked(extractFromDxf).mockImplementationOnce(
+      () => new Promise<never>(() => {}), // never resolves
+    );
+
+    vi.useFakeTimers();
+
+    const resultPromise = processDocument(new ArrayBuffer(10), "plan.dxf");
+
+    vi.advanceTimersByTime(30_001);
+
+    await expect(resultPromise).rejects.toThrow("timed out");
+
+    vi.useRealTimers();
   });
 });

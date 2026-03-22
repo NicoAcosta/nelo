@@ -78,4 +78,69 @@ describe("buildPreamble", () => {
     const preamble = buildPreamble(mockAnalysis, { degraded: true });
     expect(preamble).toContain("visual inspection only");
   });
+
+  it("includes staircase in elements when hasStairs is true", () => {
+    const withStairs: DocumentAnalysis = {
+      ...mockAnalysis,
+      structuredData: {
+        ...mockAnalysis.structuredData!,
+        summary: {
+          ...mockAnalysis.structuredData!.summary,
+          hasStairs: true,
+        },
+      },
+    };
+    const preamble = buildPreamble(withStairs);
+    expect(preamble).toContain("staircase");
+  });
+
+  it("shows a single value instead of a range when min equals max", () => {
+    const singleDimension: DocumentAnalysis = {
+      ...mockAnalysis,
+      structuredData: {
+        ...mockAnalysis.structuredData!,
+        dimensions: [{ value: 5.0, unit: "m", label: "Wall A" }],
+      },
+    };
+    const preamble = buildPreamble(singleDimension);
+    expect(preamble).toContain("5");
+    expect(preamble).not.toContain("5 –");
+    expect(preamble).not.toContain("– 5");
+  });
+
+  it("shows room name without parenthetical when areaM2 is absent", () => {
+    const noAreaRooms: DocumentAnalysis = {
+      ...mockAnalysis,
+      structuredData: {
+        ...mockAnalysis.structuredData!,
+        roomLabels: [{ name: "Storage" }],
+      },
+    };
+    const preamble = buildPreamble(noAreaRooms);
+    expect(preamble).toContain("Storage");
+    expect(preamble).not.toContain("Storage (");
+  });
+
+  it("omits rooms, dimensions, and elements lines when all are empty", () => {
+    const empty: DocumentAnalysis = {
+      ...mockAnalysis,
+      structuredData: {
+        roomLabels: [],
+        dimensions: [],
+        summary: {
+          layerNames: [],
+          wallSegmentCount: 0,
+          doorCount: 0,
+          windowCount: 0,
+          hasStairs: false,
+          hasFurniture: false,
+        },
+      },
+    };
+    const preamble = buildPreamble(empty);
+    expect(preamble).not.toContain("Rooms found");
+    expect(preamble).not.toContain("Dimensions");
+    expect(preamble).not.toContain("Elements");
+    expect(preamble).not.toContain("Layers");
+  });
 });
