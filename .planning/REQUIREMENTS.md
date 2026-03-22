@@ -21,7 +21,7 @@ Requirements for Persistence & Sharing milestone. Each maps to roadmap phases.
 ### Chat Persistence
 
 - [x] **PERS-01**: Conversation auto-saves to Supabase after each assistant response completes (onFinish + consumeStream)
-- [ ] **PERS-02**: User can resume a previous conversation from /chat/[id] with full message history loaded
+- [x] **PERS-02**: User can resume a previous conversation from /chat/[id] with full message history loaded
 - [ ] **PERS-03**: User sees a project list page (/projects) showing all past conversations
 - [ ] **PERS-04**: Projects get auto-generated titles from the first user message, editable later
 
@@ -83,7 +83,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-03 | Phase 9 | Complete |
 | AUTH-04 | Phase 9 | Complete |
 | PERS-01 | Phase 10 | Complete |
-| PERS-02 | Phase 10 | Pending |
+| PERS-02 | Phase 10 | Complete |
 | PERS-03 | Phase 11 | Pending |
 | PERS-04 | Phase 11 | Pending |
 | VERS-01 | Phase 12 | Pending |

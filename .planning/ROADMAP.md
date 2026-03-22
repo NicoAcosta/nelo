@@ -135,11 +135,11 @@ Plans:
   2. If a user closes the tab mid-stream (while the assistant is still generating), the partial response is still saved when the stream finishes on the server.
   3. Navigating directly to a `/chat/[id]` URL for a previous conversation loads the full message history via `initialMessages` before the first user interaction.
   4. Floor plan images in messages are stored as Supabase Storage paths — not as multi-megabyte base64 strings in the database.
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [x] 10-01-PLAN.md — DB migration (unique index), conversations.ts save/load layer with tests, route handler onFinish + consumeStream
-- [ ] 10-02-PLAN.md — Route restructure: /chat redirect, /chat/[id] Server+Client Component split, end-to-end verification
+- [x] 10-02-PLAN.md — Route restructure: /chat redirect, /chat/[id] Server+Client Component split, end-to-end verification
 
 ### Phase 11: Project Management
 **Goal**: Returning users see all their past projects in one place and can give them meaningful names so they can find and resume the right conversation.
@@ -189,7 +189,7 @@ Plans:
 | 7. Bilingual i18n | v1.0 | 4/4 | Complete | 2026-03-21 |
 | 8. Real Pricing Data Pipeline | v1.0 | 5/5 | Complete | 2026-03-21 |
 | 9. Supabase Auth Infrastructure | v1.1 | 3/3 | Complete |  |
-| 10. Chat Persistence | v1.1 | 1/2 | In Progress|  |
+| 10. Chat Persistence | v1.1 | 2/2 | Complete   | 2026-03-22 |
 | 11. Project Management | v1.1 | 0/TBD | Not started | - |
 | 12. Estimate Versioning | v1.1 | 0/TBD | Not started | - |
 | 13. Shareable Links and Floor Plan Storage | v1.1 | 0/TBD | Not started | - |
