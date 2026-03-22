@@ -1,5 +1,29 @@
-import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
 import type { DocumentAnalysis, ExtractedData } from "./types";
+
+// Polyfill browser globals that pdfjs-dist expects at module load time.
+// We only use pdfjs for text extraction (no rendering), so stubs are fine.
+function ensurePdfjsPolyfills() {
+  if (typeof globalThis.DOMMatrix === "undefined") {
+    globalThis.DOMMatrix = class DOMMatrix {
+      a: number; b: number; c: number; d: number; e: number; f: number;
+      constructor(init?: string | number[]) {
+        const v = Array.isArray(init) ? init : [1, 0, 0, 1, 0, 0];
+        this.a = v[0] ?? 1; this.b = v[1] ?? 0;
+        this.c = v[2] ?? 0; this.d = v[3] ?? 1;
+        this.e = v[4] ?? 0; this.f = v[5] ?? 0;
+      }
+    } as unknown as typeof DOMMatrix;
+  }
+  if (typeof globalThis.Path2D === "undefined") {
+    globalThis.Path2D = class Path2D { constructor(_d?: string) {} } as unknown as typeof Path2D;
+  }
+}
+
+async function loadPdfjs() {
+  ensurePdfjsPolyfills();
+  const mod = await import("pdfjs-dist/legacy/build/pdf.mjs");
+  return mod.getDocument;
+}
 
 /** Room-type keywords to match in PDF text items — same as CAD pipeline */
 const ROOM_KEYWORDS = [
@@ -94,6 +118,7 @@ export async function extractFromPdf(
   pdfBuffer: ArrayBuffer,
   fileName: string,
 ): Promise<DocumentAnalysis> {
+  const getDocument = await loadPdfjs();
   const loadingTask = getDocument({ data: pdfBuffer });
   const pdf = await loadingTask.promise;
   const numPages = pdf.numPages;
